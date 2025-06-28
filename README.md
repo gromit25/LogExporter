@@ -1,0 +1,14 @@
+### 특정 로그 파일을 읽어서 kafka로 전송
+
+- 모니터링 대상 파일 지정 환경 변수(LE_MONITOR_FILES)
+  LE_MONITOR_FILES=was1_agent.log, was2_agent.log
+  
+- 로드할 Exporter 설정 환경 변수(LE_EXPORTER_TYPE)
+  LE_EXPORTER_TYPE=KAFKA # 현재는 KAFKA만 지원
+  
+- kafka 연결정보 환경변수
+  KAFKA_BROKER_ID: 1
+  KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+  KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
