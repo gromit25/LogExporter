@@ -28,5 +28,10 @@ public class LogExporterApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		System.out.println("DEBUG 100");
+		// tracking 시작
+		this.logExporter.run();
+		System.out.println("DEBUG 200");
 	}
 }
