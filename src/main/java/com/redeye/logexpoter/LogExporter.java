@@ -85,14 +85,17 @@ public class LogExporter implements Runnable {
 					}
 				}
 			});
+
+			// 스레드 목록에 추가
+			threadList.add(trackingThread);
 			
 			// tracker 스레드 설정 및 시작
 			trackingThread.start();
 		}
 
 		// 스레드 종료까지 대기
-		for(Thread thread : threadList) {
-			thread.join();
+		for(Thread trackingThread : threadList) {
+			trackingThread.join();
 		}
 	}
 	
