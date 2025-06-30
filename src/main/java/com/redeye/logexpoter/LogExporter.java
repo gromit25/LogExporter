@@ -59,6 +59,8 @@ public class LogExporter implements Runnable {
 		}
 		
 		//
+		List<Thread> threadList = new ArrayList<>();
+		
 		for(FileTracker tracker : this.trackerList) {
 			
 			// tracker 변수가 Thread 객체 생성시 문제를 일으킬 수 있기 때문에 final 변수로 참조하도록 변경
@@ -85,8 +87,12 @@ public class LogExporter implements Runnable {
 			});
 			
 			// tracker 스레드 설정 및 시작
-			trackingThread.setDaemon(true);
 			trackingThread.start();
+		}
+
+		// 스레드 종료까지 대기
+		for(Thread thread : threadList) {
+			thread.join();
 		}
 	}
 	
