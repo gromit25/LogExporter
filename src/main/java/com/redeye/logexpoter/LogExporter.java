@@ -51,7 +51,7 @@ public class LogExporter implements Runnable {
 	}
 	
 	@Override
-	public synchronized void run() {
+	public void run() {
 		
 		// 설정된 tracker 가 없으면 반환
 		if(this.trackerList == null || this.trackerList.size() == 0) {
@@ -92,7 +92,7 @@ public class LogExporter implements Runnable {
 	/**
 	 * 현재 수행 중인 작업들을 모두 종료 시킴
 	 */
-	public synchronized void stop() {
+	public void stop() {
 		
 		// 설정된 tracker 가 없으면 반환
 		if(this.trackerList == null || this.trackerList.size() == 0) {
