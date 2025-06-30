@@ -13,6 +13,8 @@ import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexpoter.exporter.Exporter;
 import com.redeye.logexpoter.exporter.ExporterType;
+import com.redeye.logexpoter.exporter.kafka.KafkaExporter;
+import com.redeye.logexpoter.filter.DefaultScriptFilter;
 import com.redeye.logexpoter.filter.LogFilter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -65,9 +67,11 @@ public class LogExporter implements Runnable {
 			this.trackerList.add(tracker);
 		}
 
-		// 로그 필터 객체 생성
+		// 로그 필터링 객체 생성
+		this.filter = new DefaultScriptFilter();
 
 		// 로그 반출 객체 생성
+		this.exporter = new KafkaExporter();
 
 		// tracker -> filter 큐 생성
 		this.toFilterQueue = new LinkedBlockingQueue<>();
@@ -84,6 +88,21 @@ public class LogExporter implements Runnable {
 			return;
 		}
 		
+		// 파일 트랙킹 스레드 시작
+		this.startTracking();
+		
+		// 필터링 스레드 시작
+		this.startFiltering();
+		
+		// 로그 반출 스레드 시작
+		this.startExporting();
+	}
+	
+	/**
+	 * 파일 트랙킹 스레드 생성 및 시작
+	 */
+	private void startTracking() {
+		
 		//
 		for(FileTracker tracker : this.trackerList) {
 			
@@ -99,9 +118,13 @@ public class LogExporter implements Runnable {
 					try {
 						
 						// 파일 트랙킹 수행
-						currentTracker.tracking(log -> {
-							System.out.println("### DEBUG:" + currentTracker.getPath() +" ###");
-							System.out.println(log);
+						currentTracker.tracking(message -> {
+							
+							try {
+								toFilterQueue.put(message);
+							} catch(Exception ex) {
+								log.error("when put to filter.", ex);
+							}
 						});
 						
 					} catch(Exception ex) {
@@ -113,6 +136,60 @@ public class LogExporter implements Runnable {
 			// tracker 스레드 설정 및 시작
 			trackingThread.start();
 		}
+	}
+	
+	/**
+	 * 필터링 스레드 생성 및 시작
+	 */
+	private void startFiltering() {
+		
+		Thread filterThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				while(true) {
+					try {
+						
+						String message = toFilterQueue.take();
+						if(filter.shouldBeExported(message) == true) {
+							toExporterQueue.put(message);
+						}
+						
+					} catch(Exception ex) {
+						log.error("filter error.", ex);
+					}
+				}
+			}
+		});
+		
+		filterThread.start();
+	}
+	
+	/**
+	 * 로그 반출 스레드 생성 및 시작
+	 */
+	private void startExporting() {
+		
+		Thread exporterThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				while(true) {
+					try {
+						
+						String message = toExporterQueue.take();
+						System.out.println(message);
+						
+					} catch(Exception ex) {
+						log.error("filter error.", ex);
+					}
+				}
+			}
+		});
+
+		exporterThread.start();
 	}
 	
 	/**

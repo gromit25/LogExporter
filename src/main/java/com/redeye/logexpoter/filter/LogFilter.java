@@ -11,7 +11,7 @@ public interface LogFilter {
 	 * 로그 메시지를 필터링할 것인지 여부 반환
 	 * 
 	 * @param log 로그 메시지
-	 * @return 필터링 여부 (true: 필터되어 export 퇴지 않음, false: export 됨)
+	 * @return 필터링 여부 (true: export 됨, false: export 안됨)
 	 */
-	boolean isFilterTarget(String log);
+	boolean shouldBeExported(String log);
 }
