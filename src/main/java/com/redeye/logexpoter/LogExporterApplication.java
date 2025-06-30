@@ -30,8 +30,14 @@ public class LogExporterApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		
 		System.out.println("DEBUG 100");
-		// tracking 시작
-		this.logExporter.run();
+
+		// log tracking 시작
+		Thread thread = new Thread(this.logExporter);
+		thread.start();
+
+		// 인터럽트가 발생할 떄까지 대기
+		LockSupport.park();
+		
 		System.out.println("DEBUG 200");
 	}
 }
