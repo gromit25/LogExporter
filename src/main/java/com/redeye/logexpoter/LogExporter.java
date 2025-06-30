@@ -24,6 +24,18 @@ public class LogExporter implements Runnable {
 	
 	/** 모니터링할 파일 tracker 목록 */
 	private List<FileTracker> trackerList;
+
+	/** 로그 필터 객체 */
+	private Filter filter;
+
+	/** 로그 반출 객체 */
+	private Exporter exporter;
+	
+	/** tracker -> filter 큐 */
+	private BlockingQueue<String> toFilterQueue;
+
+	/** filter -> exporter 큐 */
+	private BlockingQueue<String> toExporterQueue;
 	
 	/**
 	 * 생성자
@@ -48,6 +60,14 @@ public class LogExporter implements Runnable {
 			FileTracker tracker = FileTracker.create(new File(targetFileName));
 			this.trackerList.add(tracker);
 		}
+
+		// 로그 필터 객체 생성
+
+		// 로그 반출 객체 생성
+
+		// tracker -> filter 큐 생성
+		
+		// filter -> exporter 큐 생성
 	}
 	
 	@Override
