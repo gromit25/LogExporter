@@ -5,7 +5,7 @@ package com.redeye.logexpoter.filter;
  * 
  * @author jmsohn
  */
-public interface Filter {
+public interface LogFilter {
 	
 	/**
 	 * 로그 메시지를 필터링할 것인지 여부 반환

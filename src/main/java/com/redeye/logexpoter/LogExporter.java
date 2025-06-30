@@ -3,13 +3,17 @@ package com.redeye.logexpoter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
+import com.redeye.logexpoter.exporter.Exporter;
 import com.redeye.logexpoter.exporter.ExporterType;
+import com.redeye.logexpoter.filter.LogFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +30,7 @@ public class LogExporter implements Runnable {
 	private List<FileTracker> trackerList;
 
 	/** 로그 필터 객체 */
-	private Filter filter;
+	private LogFilter filter;
 
 	/** 로그 반출 객체 */
 	private Exporter exporter;
@@ -66,8 +70,10 @@ public class LogExporter implements Runnable {
 		// 로그 반출 객체 생성
 
 		// tracker -> filter 큐 생성
+		this.toFilterQueue = new LinkedBlockingQueue<>();
 		
 		// filter -> exporter 큐 생성
+		this.toExporterQueue = new LinkedBlockingQueue<>();
 	}
 	
 	@Override
@@ -119,7 +125,7 @@ public class LogExporter implements Runnable {
 			return;
 		}
 		
-		//
+		// 
 		for(FileTracker tracker : this.trackerList) {
 			tracker.setStop(true);
 		}
