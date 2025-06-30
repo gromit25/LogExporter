@@ -51,7 +51,7 @@ public class LogExporter implements Runnable {
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		
 		// 설정된 tracker 가 없으면 반환
 		if(this.trackerList == null || this.trackerList.size() == 0) {
@@ -59,8 +59,6 @@ public class LogExporter implements Runnable {
 		}
 		
 		//
-		List<Thread> threadList = new ArrayList<>();
-		
 		for(FileTracker tracker : this.trackerList) {
 			
 			// tracker 변수가 Thread 객체 생성시 문제를 일으킬 수 있기 때문에 final 변수로 참조하도록 변경
@@ -86,23 +84,15 @@ public class LogExporter implements Runnable {
 				}
 			});
 
-			// 스레드 목록에 추가
-			threadList.add(trackingThread);
-			
 			// tracker 스레드 설정 및 시작
 			trackingThread.start();
-		}
-
-		// 스레드 종료까지 대기
-		for(Thread trackingThread : threadList) {
-			trackingThread.join();
 		}
 	}
 	
 	/**
 	 * 현재 수행 중인 작업들을 모두 종료 시킴
 	 */
-	public void stop() {
+	public synchronized void stop() {
 		
 		// 설정된 tracker 가 없으면 반환
 		if(this.trackerList == null || this.trackerList.size() == 0) {
