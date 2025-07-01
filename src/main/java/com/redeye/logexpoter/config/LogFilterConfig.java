@@ -1,6 +1,10 @@
-package com.redeye.logexporter.config;
+package com.redeye.logexpoter.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.redeye.logexpoter.filter.DefaultScriptFilter;
+import com.redeye.logexpoter.filter.LogFilter;
 
 /**
  *
@@ -11,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class LogFilterConfig {
 
   @Bean("logFilter")
-  public LogFilter logFilter() {
+  LogFilter logFilter() {
     return new DefaultScriptFilter();
   }
 }

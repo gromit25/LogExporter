@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +15,6 @@ import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexpoter.exporter.Exporter;
 import com.redeye.logexpoter.exporter.ExporterType;
-import com.redeye.logexpoter.exporter.kafka.KafkaExporter;
-import com.redeye.logexpoter.filter.DefaultScriptFilter;
 import com.redeye.logexpoter.filter.LogFilter;
 
 import lombok.extern.slf4j.Slf4j;
