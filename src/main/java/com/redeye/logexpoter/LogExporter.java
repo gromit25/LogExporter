@@ -32,9 +32,13 @@ public class LogExporter implements Runnable {
 	private List<FileTracker> trackerList;
 
 	/** 로그 필터 객체 */
+	@Autowired
+	@Qualifier("logFilter")
 	private LogFilter filter;
 
 	/** 로그 반출 객체 */
+	@Autowired
+	@Qualifier("exporter")
 	private Exporter exporter;
 	
 	/** tracker -> filter 큐 */
@@ -66,12 +70,6 @@ public class LogExporter implements Runnable {
 			FileTracker tracker = FileTracker.create(new File(targetFileName));
 			this.trackerList.add(tracker);
 		}
-
-		// 로그 필터링 객체 생성
-		this.filter = new DefaultScriptFilter();
-
-		// 로그 반출 객체 생성
-		this.exporter = new KafkaExporter();
 
 		// tracker -> filter 큐 생성
 		this.toFilterQueue = new LinkedBlockingQueue<>();
