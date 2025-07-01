@@ -1,5 +1,7 @@
 package com.redeye.logexpoter.filter;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 
  * 
