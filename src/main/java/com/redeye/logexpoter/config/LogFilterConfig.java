@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration;
  * @author jmsohn
  */
 @Configuration
-public LogFilterConfig {
+public class LogFilterConfig {
 
 }
