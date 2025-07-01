@@ -10,4 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ExporterConfig {
 
+  @Bean("exporter")
+  public Exporter exporter() {
+    return new KafkaExporter();
+  }
 }
