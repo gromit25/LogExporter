@@ -10,4 +10,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LogFilterConfig {
 
+  @Bean("logFilter")
+  public LogFilter logFilter() {
+    return new DefaultScriptFilter();
+  }
 }
