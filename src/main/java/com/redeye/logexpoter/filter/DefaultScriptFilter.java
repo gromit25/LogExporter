@@ -5,6 +5,7 @@ package com.redeye.logexpoter.filter;
  * 
  * @author jmsohn
  */
+@Component
 public class DefaultScriptFilter implements LogFilter {
 
 	@Override
