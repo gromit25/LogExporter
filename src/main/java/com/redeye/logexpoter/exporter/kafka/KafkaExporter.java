@@ -11,5 +11,7 @@ import com.redeye.logexpoter.exporter.Exporter;
  */
 @Component
 public class KafkaExporter extends Exporter {
-
+  
+  @Autowired
+  private KafkaTemplate<String, String> kafkaTemplate;
 }
