@@ -5,7 +5,7 @@
   LE_MONITOR_FILES=was1_agent.log, was2_agent.log    
   
 - **로드할 Exporter 설정 환경 변수(Mandatory)**    
-  LE_EXPORTER_TYPE=KAFKA # 현재는 KAFKA만 지원(소문자 인식 안됨)    
+  LE_EXPORTER_TYPE=KAFKA # PRINT, KAFKA 지원(소문자 인식 안됨)    
     
 - **필터의 필드 구분자 설정(Optional)**    
   LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, 실제로 String.split 메소드의 파라미터로 사용    
