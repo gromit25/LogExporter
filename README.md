@@ -8,7 +8,8 @@
   LE_EXPORTER_TYPE=KAFKA # 현재는 KAFKA만 지원(소문자 인식 안됨)    
     
 - 필터의 필드 구분자 설정(Optional)    
-  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, 실제로 String.split 메소드의 파라미터로 사용    
+  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, 실제로 String.split 메소드의 파라미터로 사용
+  미설정 시 "[ \t]+" 로 설정됨
   
 - 필터 표현식(Optional)    
   LE_FILTER_SCRIPT=match(fields[0], 'abc')  # 0 번째 필드가 abc 일 경우 export 실행    
