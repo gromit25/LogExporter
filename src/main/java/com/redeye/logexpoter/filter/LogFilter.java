@@ -10,8 +10,8 @@ public interface LogFilter {
 	/**
 	 * 로그 메시지를 필터링할 것인지 여부 반환
 	 * 
-	 * @param log 로그 메시지
+	 * @param message 로그 메시지
 	 * @return 필터링 여부 (true: export 됨, false: export 안됨)
 	 */
-	boolean shouldBeExported(String log);
+	boolean shouldBeExported(String message) throws Exception;
 }
