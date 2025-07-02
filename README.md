@@ -16,6 +16,5 @@
   미설정 시 모든 로그 export 됨    
     
 - **kafka 연결정보 환경변수**     
-  LE_EXPORTER_TYPE=KAFKA 일 경우에만    
-  
-  SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:9092    
+  LE_EXPORTER_TYPE=KAFKA 일 경우에만,    
+  SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:9092     
