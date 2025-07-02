@@ -7,15 +7,22 @@ import com.redeye.logexpoter.exporter.Exporter;
 import com.redeye.logexpoter.exporter.kafka.KafkaExporter;
 
 /**
- * 
+ * Exporter 생성 컴포넌트
  * 
  * @author jmsohn
  */
 @Configuration
 public class ExporterConfig {
 
+  /**
+   * Expoert 컴포넌트를 생성하여 반환
+   *
+   * @param typeStr 환경 변수에 설정된 Exporter 의 타입
+   * @return  생성된 Exporter 컴포넌트
+   */
   @Bean("exporter")
-  Exporter exporter() {
-    return new KafkaExporter();
+  Exporter exporter(@Value("${app.exporter.type}") String typeStr) {
+    NodeType type = NodeType.valueOf(typeStr);
+    return type.create();
   }
 }
