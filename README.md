@@ -6,12 +6,9 @@
 - 로드할 Exporter 설정 환경 변수(Mandatory)   
   LE_EXPORTER_TYPE=KAFKA # 현재는 KAFKA만 지원   
   
-- 필터 표현식(Optional)   
-  LE_FILTER_SCRIPT=$1 == Name   
-  
-- 필터 클래스 설정(Optional)   
-  설정되지 않을 경우 모든 로그 메시지를 전송    
-  LE_FILTER_CLASS=com.redeye.builtin.Filter   
+- 필터 표현식(Optional)    
+  LE_FILTER_SCRIPT=match(F[0], 'abc')   
+  미설정 시 모든 로그 export 됨   
     
 - kafka 연결정보 환경변수    
   LE_EXPORTER_TYPE=KAFKA 일 경우에만    
