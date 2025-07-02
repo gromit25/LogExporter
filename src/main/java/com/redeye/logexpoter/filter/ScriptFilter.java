@@ -1,6 +1,8 @@
 package com.redeye.logexpoter.filter;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -39,25 +41,22 @@ public class ScriptFilter implements LogFilter {
 	@Override
 	public boolean shouldBeExported(String message) throws Exception {
 		
-		System.out.println("### DEBUG ###");
-		System.out.println(message);
+		// 스크립트 설정이 없는 경우 무조건 export 시킴
+		if(this.script == null) {
+			return true;
+		}
 		
-		//
+		// log 메시지를 분해하여 values 에 추가
 		Map<String, Object> values = new HashMap<>();
 		if(StringUtil.isBlank(message) == false) {
 			
 			String[] fieldArray = message.split("[ \\t]+");
+			List<String> fieldList = Arrays.asList(fieldArray);
 			
-			for(int index = 0; index < fieldArray.length; index++) {
-				
-				//
-				String fieldName = "F" + (index + 1);
-				values.put(fieldName, fieldArray[index]);
-			}
-			
-			values.put("NF", fieldArray.length);
+			values.put("fields", fieldList);
 		}
 		
+		// 스크립트 실행 후 결과 반환
 		return this.script.execute(values).pop(Boolean.class);
 	}
 }
