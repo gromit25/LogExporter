@@ -1,7 +1,7 @@
 ### 특정 로그 파일을 읽어서 필터링 후 외부저장소(kafka 등)로 전송     
     
 ### 환경변수 목록    
-- ** 모니터링 대상 파일 지정 환경 변수(Mandatory) **    
+- **모니터링 대상 파일 지정 환경 변수(Mandatory)**    
   LE_MONITOR_FILES=was1_agent.log, was2_agent.log    
   
 - 로드할 Exporter 설정 환경 변수(Mandatory)    
