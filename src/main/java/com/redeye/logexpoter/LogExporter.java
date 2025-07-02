@@ -178,7 +178,7 @@ public class LogExporter implements Runnable {
 					try {
 						
 						String message = toExporterQueue.take();
-						System.out.println(message);
+						exporter.send(message);
 						
 					} catch(Exception ex) {
 						log.error("filter error.", ex);
