@@ -4,7 +4,7 @@
   LE_MONITOR_FILES=was1_agent.log, was2_agent.log    
   
 - 로드할 Exporter 설정 환경 변수(Mandatory)   
-  LE_EXPORTER_TYPE=KAFKA # 현재는 KAFKA만 지원   
+  LE_EXPORTER_TYPE=KAFKA # 현재는 KAFKA만 지원(소문자 인식 안됨)   
   
 - 필터 표현식(Optional)    
   LE_FILTER_SCRIPT=match(F[0], 'abc')   
