@@ -14,4 +14,17 @@ public class KafkaExporter extends Exporter {
   
   @Autowired
   private KafkaTemplate<String, String> kafkaTemplate;
+
+  @Value("${}")
+  private String topicName;
+
+  @Override
+  public void send(String message) throws Exception {
+    
+    if(message == null) {
+      throw new IllegalArgumentException("message is null.");
+    }
+    
+    this.kafkaTemplate.send(message);
+  }
 }
