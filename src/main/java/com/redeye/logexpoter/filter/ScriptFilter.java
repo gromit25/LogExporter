@@ -17,7 +17,7 @@ import jakarta.annotation.PostConstruct;
  * @author jmsohn
  */
 @Component
-public class DefaultScriptFilter implements LogFilter {
+public class ScriptFilter implements LogFilter {
 	
 	/** */
 	@Value("${app.filter.script}")

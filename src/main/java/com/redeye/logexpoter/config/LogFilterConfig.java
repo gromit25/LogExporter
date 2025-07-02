@@ -3,7 +3,7 @@ package com.redeye.logexpoter.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.redeye.logexpoter.filter.DefaultScriptFilter;
+import com.redeye.logexpoter.filter.ScriptFilter;
 import com.redeye.logexpoter.filter.LogFilter;
 
 /**
@@ -14,8 +14,8 @@ import com.redeye.logexpoter.filter.LogFilter;
 @Configuration
 public class LogFilterConfig {
 
-  @Bean("logFilter")
-  LogFilter logFilter() {
-    return new DefaultScriptFilter();
-  }
+	@Bean("logFilter")
+	LogFilter logFilter() {
+		return new ScriptFilter();
+	}
 }
