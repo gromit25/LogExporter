@@ -44,6 +44,9 @@ public class LogExporterApplication implements CommandLineRunner {
 		// stop 파일이 생성될 때까지 대기
 		waitForFileCreated(this.stopFile, 1000L);
 
+		// stop 파일 생성시 logExporter 중지
+		this.logExporter.stop();
+
 		System.out.println("DEBUG 200");
 	}
 
