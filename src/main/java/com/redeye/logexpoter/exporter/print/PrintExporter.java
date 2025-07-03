@@ -1,7 +1,5 @@
 package com.redeye.logexpoter.exporter.print;
 
-import org.springframework.stereotype.Component;
-
 import com.redeye.logexpoter.exporter.Exporter;
 
 /**
