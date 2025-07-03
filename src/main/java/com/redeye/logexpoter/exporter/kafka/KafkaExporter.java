@@ -15,7 +15,6 @@ import jakarta.annotation.PostConstruct;
  * 
  * @author jmsohn
  */
-@Component
 public class KafkaExporter implements Exporter {
   
 	/** Kafka client id */
