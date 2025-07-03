@@ -14,7 +14,7 @@ import com.redeye.logexpoter.filter.LogFilter;
 @Configuration
 public class LogFilterConfig {
 
-	@Bean("logFilter")
+	@Bean("filter")
 	LogFilter logFilter() {
 		return new ScriptFilter();
 	}
