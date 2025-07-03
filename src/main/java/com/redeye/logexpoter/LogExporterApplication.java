@@ -65,14 +65,17 @@ public class LogExporterApplication implements CommandLineRunner {
 		}
 		
 		// 파일 생성 이벤트 수신을 위한 Watch 서비스 생성 및 등록
-		Path parentPath = stopFile.getPath().getParent();
+		Path parentPath = stopFile.toPath().getParent();
 		WatchService parentWatchService = parentPath.getFileSystem().newWatchService();
 		parentPath.register(parentWatchService, StandardWatchEventKinds.ENTRY_CREATE);
 
 		while(true) {
 			
 			// WatchKey에 이벤트 들어올 때 까지 대기
-			WatchKey watchKey = watchService.poll(pollingPeriod, TimeUnit.MILLISECONDS);
+			WatchKey watchKey = parentWatchService.poll(pollingPeriod, TimeUnit.MILLISECONDS);
+			if(watchKey == null) {
+				continue;
+			}
 
 			try {
 				// 생성 이벤트 대기
