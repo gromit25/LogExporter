@@ -80,7 +80,7 @@ public class LogExporterApplication implements CommandLineRunner {
 
 		while(true) {
 			
-			// WatchKey에 이벤트 들어올 때 까지 대기
+			// WatchKey에 이벤트 들어올 때까지 대기
 			WatchKey watchKey = parentWatchService.poll(pollingPeriod, TimeUnit.MILLISECONDS);
 			if(watchKey == null) {
 				continue;
@@ -88,7 +88,7 @@ public class LogExporterApplication implements CommandLineRunner {
 
 			try {
 				
-				// 생성 및 업데이트 이벤트 대기
+				// 생성 및 업데이트 이벤트 목록 확인
 				List<WatchEvent<?>> eventList = watchKey.pollEvents();
 				for (WatchEvent<?> event : eventList) {
 			
