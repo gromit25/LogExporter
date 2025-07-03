@@ -46,16 +46,19 @@ public class LogExporter implements Runnable {
 
 	/** filter -> exporter 큐 */
 	private BlockingQueue<String> toExporterQueue;
+
+	/** 중단 여부 */
+	@Getter
+	@Setter
+	private volatile boolean stop;
 	
 	/**
 	 * 생성자
 	 * 
 	 * @param targetFileNames 로그 추적 대상 파일이름 목록
-	 * @param exporterType exporter 타입
 	 */
 	public LogExporter(
-		@Value("${app.monitor.files}") String targetFileNames,
-		@Value("${app.exporter.type}") ExporterType exporterType
+		@Value("${app.monitor.files}") String targetFileNames
 	) throws Exception {
 		
 		// 입력값 검증
@@ -80,6 +83,9 @@ public class LogExporter implements Runnable {
 	
 	@Override
 	public void run() {
+
+		// 중단 여부 설정
+		this.setStop(false);
 		
 		// 설정된 tracker 가 없으면 반환
 		if(this.trackerList == null || this.trackerList.size() == 0) {
@@ -146,7 +152,7 @@ public class LogExporter implements Runnable {
 			@Override
 			public void run() {
 				
-				while(true) {
+				while(stop == false) {
 					try {
 						
 						String message = toFilterQueue.take();
@@ -174,7 +180,7 @@ public class LogExporter implements Runnable {
 			@Override
 			public void run() {
 				
-				while(true) {
+				while(stop == false) {
 					try {
 						
 						String message = toExporterQueue.take();
@@ -195,12 +201,10 @@ public class LogExporter implements Runnable {
 	 */
 	public void stop() {
 		
-		// 설정된 tracker 가 없으면 반환
-		if(this.trackerList == null || this.trackerList.size() == 0) {
-			return;
-		}
+		// 중단 여부 설정
+		this.setStop(true);
 		
-		// 
+		// 파일 tracker 중단
 		for(FileTracker tracker : this.trackerList) {
 			tracker.setStop(true);
 		}
