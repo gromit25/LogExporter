@@ -20,7 +20,8 @@ import com.redeye.logexpoter.filter.LogFilter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 
+ * 로그 파일을 트랙킹하여 특정 로그만 exporter를 통해 외부 반출 및 저장 수행
+ * 파일 트렉커 -> 필터 -> 반출(exporter)
  * 
  * @author jmsohn
  */
