@@ -27,6 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class LogExporter implements Runnable {
+
+	/** 큐에서 데이터 취득시 대기 시간 */
+	private static long POLLING_PERIOD = 1000L
 	
 	/** 모니터링할 파일 tracker 목록 */
 	private List<FileTracker> trackerList;
@@ -155,7 +158,7 @@ public class LogExporter implements Runnable {
 				while(stop == false) {
 					try {
 						
-						String message = toFilterQueue.take();
+						String message = toFilterQueue.poll(POLLING_PERIOD);
 						if(filter.shouldBeExported(message) == true) {
 							toExporterQueue.put(message);
 						}
@@ -183,7 +186,7 @@ public class LogExporter implements Runnable {
 				while(stop == false) {
 					try {
 						
-						String message = toExporterQueue.take();
+						String message = toExporterQueue.poll(POLLING_PERIOD);
 						exporter.send(message);
 						
 					} catch(Exception ex) {
