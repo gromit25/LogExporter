@@ -39,10 +39,16 @@ public class LogExporter implements Runnable {
 	@Qualifier("logFilter")
 	private LogFilter filter;
 
+	/** 필터 스레드 객체 */
+	private Thread filterThread;
+
 	/** 로그 반출 객체 */
 	@Autowired
 	@Qualifier("exporter")
 	private Exporter exporter;
+
+	/** 반출 스레드 객체 */
+	private Thread exporterThread;
 	
 	/** tracker -> filter 큐 */
 	private BlockingQueue<String> toFilterQueue;
@@ -150,7 +156,7 @@ public class LogExporter implements Runnable {
 	 */
 	private void startFiltering() {
 		
-		Thread filterThread = new Thread(new Runnable() {
+		this.filterThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -178,7 +184,7 @@ public class LogExporter implements Runnable {
 	 */
 	private void startExporting() {
 		
-		Thread exporterThread = new Thread(new Runnable() {
+		this.exporterThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -205,13 +211,17 @@ public class LogExporter implements Runnable {
 	 * 현재 수행 중인 작업들을 모두 종료 시킴
 	 */
 	public void stop() {
-		
-		// 중단 여부 설정
-		this.setStop(true);
-		
+
 		// 파일 tracker 중단
 		for(FileTracker tracker : this.trackerList) {
 			tracker.setStop(true);
 		}
+		
+		// 중단 여부 설정
+		this.setStop(true);
+
+		// 종료 대기
+		this.filterThread.join();
+		this.exporterThread.join();
 	}
 }
