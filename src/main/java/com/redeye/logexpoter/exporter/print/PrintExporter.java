@@ -8,7 +8,12 @@ import com.redeye.logexpoter.exporter.Exporter;
  * @author jmsohn
  */
 public class PrintExporter implements Exporter {
-  
+
+	/**
+	 * 화면 출력
+	 *
+	 * @param message 출력할 메시지
+	 */
 	@Override
 	public void send(String message) throws Exception {
 		System.out.println("RECEIVED: " + message);
