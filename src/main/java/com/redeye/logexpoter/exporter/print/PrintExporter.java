@@ -9,7 +9,6 @@ import com.redeye.logexpoter.exporter.Exporter;
  *
  * @author jmsohn
  */
-@Component
 public class PrintExporter implements Exporter {
   
 	@Override
