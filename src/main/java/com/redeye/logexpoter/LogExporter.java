@@ -159,7 +159,7 @@ public class LogExporter implements Runnable {
 					try {
 						
 						String message = toFilterQueue.poll(POLLING_PERIOD);
-						if(filter.shouldBeExported(message) == true) {
+						if(message != null && filter.shouldBeExported(message) == true) {
 							toExporterQueue.put(message);
 						}
 						
@@ -187,7 +187,9 @@ public class LogExporter implements Runnable {
 					try {
 						
 						String message = toExporterQueue.poll(POLLING_PERIOD);
-						exporter.send(message);
+						if(message != null) {
+							exporter.send(message);
+						}
 						
 					} catch(Exception ex) {
 						log.error("filter error.", ex);
