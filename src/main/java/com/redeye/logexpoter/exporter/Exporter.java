@@ -12,5 +12,5 @@ public interface Exporter {
    *
    * @param message 전송할 메시지 
    */
-  public void send(String message) throws Exception;
+  void send(String message) throws Exception;
 }
