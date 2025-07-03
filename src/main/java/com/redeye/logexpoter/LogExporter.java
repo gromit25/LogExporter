@@ -144,7 +144,7 @@ public class LogExporter implements Runnable {
 						log.error("file tracking error:" + currentTracker.getPath(), ex);
 					}
 				}
-			});
+			}, "Tracker-Thread:" + currentTracker.getPath());
 
 			// tracker 스레드 설정 및 시작
 			trackingThread.start();
@@ -174,7 +174,7 @@ public class LogExporter implements Runnable {
 					}
 				}
 			}
-		});
+		}, "Filter-Thread");
 		
 		filterThread.start();
 	}
@@ -202,7 +202,7 @@ public class LogExporter implements Runnable {
 					}
 				}
 			}
-		});
+		}, "Export-Thread");
 
 		exporterThread.start();
 	}
