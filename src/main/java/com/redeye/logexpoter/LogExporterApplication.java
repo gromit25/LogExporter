@@ -88,7 +88,7 @@ public class LogExporterApplication implements CommandLineRunner {
 
 			try {
 				
-				// 생성 이벤트 대기
+				// 생성 및 업데이트 이벤트 대기
 				List<WatchEvent<?>> eventList = watchKey.pollEvents();
 				for (WatchEvent<?> event : eventList) {
 			
