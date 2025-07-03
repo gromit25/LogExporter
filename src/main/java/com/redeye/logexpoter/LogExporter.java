@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,9 +15,10 @@ import org.springframework.stereotype.Component;
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexpoter.exporter.Exporter;
-import com.redeye.logexpoter.exporter.ExporterType;
 import com.redeye.logexpoter.filter.LogFilter;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -169,7 +171,7 @@ public class LogExporter implements Runnable {
 				while(stop == false) {
 					try {
 						
-						String message = toFilterQueue.poll(POLLING_PERIOD);
+						String message = toFilterQueue.poll(POLLING_PERIOD, TimeUnit.MILLISECONDS);
 						if(message != null && filter.shouldBeExported(message) == true) {
 							toExporterQueue.put(message);
 						}
@@ -197,7 +199,7 @@ public class LogExporter implements Runnable {
 				while(stop == false) {
 					try {
 						
-						String message = toExporterQueue.poll(POLLING_PERIOD);
+						String message = toExporterQueue.poll(POLLING_PERIOD, TimeUnit.MILLISECONDS);
 						if(message != null) {
 							exporter.send(message);
 						}
@@ -215,7 +217,7 @@ public class LogExporter implements Runnable {
 	/**
 	 * 현재 수행 중인 작업들을 모두 종료 시킴
 	 */
-	public void stop() {
+	public void stop() throws Exception {
 
 		// 파일 tracker 중단
 		for(FileTracker tracker : this.trackerList) {

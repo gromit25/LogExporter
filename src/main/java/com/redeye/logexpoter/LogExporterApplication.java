@@ -1,8 +1,16 @@
 package com.redeye.logexpoter;
 
-import java.util.concurrent.locks.LockSupport;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -42,7 +50,7 @@ public class LogExporterApplication implements CommandLineRunner {
 		thread.start();
 
 		// stop 파일이 생성되거 업데이트 될때까지 대기
-		waitForFileCreated(this.stopFile, 1000L);
+		waitForFileTouched(this.stopFile, 1000L);
 
 		// stop 파일 생성시 logExporter 중지
 		this.logExporter.stop();
