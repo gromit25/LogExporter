@@ -38,7 +38,7 @@ public class LogExporter implements Runnable {
 
 	/** 로그 필터 객체 */
 	@Autowired
-	@Qualifier("logFilter")
+	@Qualifier("filter")
 	private LogFilter filter;
 
 	/** 필터 스레드 객체 */
