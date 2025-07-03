@@ -66,11 +66,17 @@ public class LogExporterApplication implements CommandLineRunner {
 		if(pollingPeriod < 100L) {
 			throw new IllegalArgumentException("polling period must be greater than 100: " + pollingPeriod);
 		}
+
+		// stop 파일명
+		String stopFileName = stopFile.getName();
 		
 		// 파일 생성 이벤트 수신을 위한 Watch 서비스 생성 및 등록
 		Path parentPath = stopFile.toPath().getParent();
 		WatchService parentWatchService = parentPath.getFileSystem().newWatchService();
-		parentPath.register(parentWatchService, StandardWatchEventKinds.ENTRY_CREATE);
+		parentPath.register(parentWatchService
+			, StandardWatchEventKinds.ENTRY_CREATE
+			, StandardWatchEventKinds.ENTRY_MODIFY
+			);
 
 		while(true) {
 			
@@ -89,10 +95,11 @@ public class LogExporterApplication implements CommandLineRunner {
 					WatchEvent.Kind<?> kind = event.kind();   // 이벤트 종류
 					Path eventFile = (Path) event.context();  // 이벤트가 발생한 파일
 
-					// 파일이 새로 생성되거나 재생성되면 중지
-					// 기존에 파일이 있었다면 신경쓰지 않음
-					if(kind == StandardWatchEventKinds.ENTRY_CREATE && stopFile.exists() == true) {
-						return;
+					// 파일이 새로 생성되거나 업데이트(ex. touch 명령어)되면 중지
+					if(kind == StandardWatchEventKinds.ENTRY_CREATE || kind == StandardWatchEventKinds.ENTRY_MODIFY) {
+						if(stopFileName.equals(eventFile.toFile().getName()) == true) {
+							return;
+						}
 					}
 				}
 				
