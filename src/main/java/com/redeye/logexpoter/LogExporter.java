@@ -90,6 +90,9 @@ public class LogExporter implements Runnable {
 		
 		// filter -> exporter 큐 생성
 		this.toExporterQueue = new LinkedBlockingQueue<>();
+
+		// 중단 여부 설정
+		this.setStop(true);
 	}
 	
 	@Override
