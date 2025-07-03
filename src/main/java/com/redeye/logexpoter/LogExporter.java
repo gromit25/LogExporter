@@ -198,7 +198,7 @@ public class LogExporter implements Runnable {
 						}
 						
 					} catch(Exception ex) {
-						log.error("filter error.", ex);
+						log.error("exporter error.", ex);
 					}
 				}
 			}
