@@ -60,7 +60,7 @@ public class LogExporter implements Runnable {
 		
 		// 입력값 검증
 		if(StringUtil.isBlank(targetFileNames) == true) {
-			throw new IllegalArgumentException("LE_MONITOR_FILES is null or blank.");
+			throw new IllegalArgumentException("monitor file list(LE_MONITOR_FILES) is null or blank.");
 		}
 		
 		// 로그 파일별 tracker 생성 및 저장
