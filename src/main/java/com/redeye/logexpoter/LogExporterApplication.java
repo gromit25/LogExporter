@@ -61,7 +61,7 @@ public class LogExporterApplication implements CommandLineRunner {
 		}
 
 		if(pollingPeriod < 100L) {
-			throw new IllegalArgumentException("polling period must be greater then 100: " + pollingPeriod);
+			throw new IllegalArgumentException("polling period must be greater than 100: " + pollingPeriod);
 		}
 		
 		// 파일 생성 이벤트 수신을 위한 Watch 서비스 생성 및 등록
