@@ -116,15 +116,16 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<packageName>com.redeye.dbspec</packageName>
+							<packageName>com.redeye.logexporter</packageName>
 							<classpathPrefix>lib/</classpathPrefix>
 							<mainClass>
-								com.redeye.dbspec.SchemaExporterApplication
+								com.redeye.logexporter.LogExporterApplication
 							</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
+			
 
 			<!-- 의존성 관리 (별도 lib 에 복사)  -->
 			<plugin>
