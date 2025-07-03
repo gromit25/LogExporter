@@ -41,7 +41,7 @@ public class LogExporterApplication implements CommandLineRunner {
 		Thread thread = new Thread(this.logExporter);
 		thread.start();
 
-		// stop 파일이 생성될 때까지 대기
+		// stop 파일이 생성되거 업데이트 될때까지 대기
 		waitForFileCreated(this.stopFile, 1000L);
 
 		// stop 파일 생성시 logExporter 중지
@@ -51,7 +51,7 @@ public class LogExporterApplication implements CommandLineRunner {
 	}
 
 	/**
-	 * stop 파일이 생성될 때까지 대기
+	 * stop 파일이 생성되거나 업데이트 될때까지 대기
 	 *
 	 * @param stopFile stop 파일
 	 * @param pollingPeriod 폴링 시간
