@@ -51,6 +51,11 @@ public class KafkaExporter implements Exporter {
 		}
 	}
 
+	/**
+	 * Kafka 로 메시지 전송
+	 * 
+	 * @param message 전송할 메시지
+	 */
 	@Override
 	public void send(String message) throws Exception {
 		
