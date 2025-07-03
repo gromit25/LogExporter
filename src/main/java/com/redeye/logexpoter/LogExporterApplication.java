@@ -95,7 +95,7 @@ public class LogExporterApplication implements CommandLineRunner {
 					WatchEvent.Kind<?> kind = event.kind();   // 이벤트 종류
 					Path eventFile = (Path) event.context();  // 이벤트가 발생한 파일
 
-					// 파일이 새로 생성되거나 업데이트(ex. touch 명령어)되면 중지
+					// 파일이 새로 생성되거나 업데이트(ex. touch 명령어)되면 대기 중지
 					if(kind == StandardWatchEventKinds.ENTRY_CREATE || kind == StandardWatchEventKinds.ENTRY_MODIFY) {
 						if(stopFileName.equals(eventFile.toFile().getName()) == true) {
 							return;
