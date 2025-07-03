@@ -28,8 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class LogExporter implements Runnable {
 
-	/** 큐에서 데이터 취득시 대기 시간 */
-	private static long POLLING_PERIOD = 1000L
+	/** 큐에서 데이터 취득시 대기 시간(1초) */
+	private static long POLLING_PERIOD = 1000L;
 	
 	/** 모니터링할 파일 tracker 목록 */
 	private List<FileTracker> trackerList;
