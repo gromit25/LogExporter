@@ -56,7 +56,7 @@ public class LogExporterApplication implements CommandLineRunner {
 	 * @param stopFile stop 파일
 	 * @param pollingPeriod 폴링 시간
 	 */
-	private static void waitForFileCreated(File stopFile, long pollingPeriod) throws Exception {
+	private static void waitForFileTouched(File stopFile, long pollingPeriod) throws Exception {
 
 		// 입력값 검증
 		if(stopFile == null) {
@@ -70,7 +70,7 @@ public class LogExporterApplication implements CommandLineRunner {
 		// stop 파일명
 		String stopFileName = stopFile.getName();
 		
-		// 파일 생성 이벤트 수신을 위한 Watch 서비스 생성 및 등록
+		// 파일 생성 및 업데이트 이벤트 수신을 위한 Watch 서비스 생성 및 등록
 		Path parentPath = stopFile.toPath().getParent();
 		WatchService parentWatchService = parentPath.getFileSystem().newWatchService();
 		parentPath.register(parentWatchService
