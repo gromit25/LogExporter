@@ -4,7 +4,7 @@
     
 ### 환경변수 목록    
 - **프로그램 중지 파일 환경 변수(Optional) - 해당 파일이 새로 생성 되거나 touch 되면 Log Exporter는 중지됨**     
-  디폴트 값 : ./log_exporter.stop
+  디폴트 값 : ./log_exporter.stop    
   주의) 파일명은 아래의 예와 같이 항상 디렉토리가 같이 설정되어야 함    
         가능하면 전체 경로를 모두 설정하는 것이 좋음    
   LE_STOP_FILE:./log_exporter.stop
@@ -17,7 +17,7 @@
     
 - **필터의 필드 구분자 설정(Optional)**   
   디폴트 값 : "[ \t]+"   
-  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, 실제로 String.split 메소드의 파라미터로 사용    
+  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, String.split 메소드의 파라미터로 사용    
   
 - **필터 표현식(Optional)**    
   LE_FILTER_SCRIPT=match(fields[0], 'abc')  # 0 번째 필드가 abc 일 경우 export 실행    
