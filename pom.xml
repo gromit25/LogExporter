@@ -116,7 +116,6 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<packageName>com.redeye.logexporter</packageName>
 							<classpathPrefix>lib/</classpathPrefix>
 							<mainClass>
 								com.redeye.logexporter.LogExporterApplication
