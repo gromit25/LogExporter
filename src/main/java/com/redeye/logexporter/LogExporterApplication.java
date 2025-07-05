@@ -11,18 +11,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.jutools.FileUtil;
 
 /**
- * 
+ * 로그 출력기 어플리케이션
  * 
  * @author jmsohn
  */
 @SpringBootApplication
 public class LogExporterApplication implements CommandLineRunner {
 	
-	/** */
+	/** 로그 출력기 */
 	@Autowired
 	private LogExporter logExporter;
 
-	/** */
+	/** 중단 파일 */
 	@Value("${app.stop.file}")
 	private File stopFile;
 	
@@ -38,14 +38,19 @@ public class LogExporterApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		// log tracking 시작
-		Thread thread = new Thread(this.logExporter);
-		thread.start();
+		try {
+			
+			// log tracking 시작
+			Thread thread = new Thread(this.logExporter);
+			thread.start();
+	
+			// stop 파일이 생성되거 업데이트 될때까지 대기
+			FileUtil.waitForFileTouched(this.stopFile);
+			
+		} finally {
 
-		// stop 파일이 생성되거 업데이트 될때까지 대기
-		FileUtil.waitForFileTouched(this.stopFile);
-
-		// stop 파일 생성시 logExporter 중지
-		this.logExporter.stop();
+			// stop 파일 생성시 logExporter 중지
+			this.logExporter.stop();
+		}
 	}
 }

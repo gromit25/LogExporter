@@ -228,7 +228,12 @@ public class LogExporter implements Runnable {
 		this.setStop(true);
 
 		// 종료 대기
-		this.filterThread.join();
-		this.exporterThread.join();
+		if(this.filterThread.isAlive() == true) {
+			this.filterThread.join();
+		}
+		
+		if(this.exporterThread.isAlive() == true) {
+			this.exporterThread.join();
+		}
 	}
 }
