@@ -1,11 +1,11 @@
-package com.redeye.logexpoter.exporter.kafka;
+package com.redeye.logexporter.exporter.kafka;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import com.jutools.StringUtil;
-import com.redeye.logexpoter.exporter.Exporter;
+import com.redeye.logexporter.exporter.Exporter;
 
 import jakarta.annotation.PostConstruct;
 

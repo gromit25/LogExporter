@@ -1,4 +1,4 @@
-package com.redeye.logexpoter.exporter;
+package com.redeye.logexporter.exporter;
 
 /**
  * exporter

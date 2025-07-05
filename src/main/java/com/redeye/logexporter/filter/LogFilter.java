@@ -1,4 +1,4 @@
-package com.redeye.logexpoter.filter;
+package com.redeye.logexporter.filter;
 
 /**
  * 로그 필터 인터페이스

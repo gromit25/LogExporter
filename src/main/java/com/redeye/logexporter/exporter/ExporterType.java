@@ -1,7 +1,7 @@
-package com.redeye.logexpoter.exporter;
+package com.redeye.logexporter.exporter;
 
-import com.redeye.logexpoter.exporter.kafka.KafkaExporter;
-import com.redeye.logexpoter.exporter.print.PrintExporter;
+import com.redeye.logexporter.exporter.kafka.KafkaExporter;
+import com.redeye.logexporter.exporter.print.PrintExporter;
 
 /**
  * exporter 타입

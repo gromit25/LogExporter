@@ -1,6 +1,6 @@
-package com.redeye.logexpoter.exporter.print;
+package com.redeye.logexporter.exporter.print;
 
-import com.redeye.logexpoter.exporter.Exporter;
+import com.redeye.logexporter.exporter.Exporter;
 
 /**
  * 화면 출력 Exporter (테스트용)

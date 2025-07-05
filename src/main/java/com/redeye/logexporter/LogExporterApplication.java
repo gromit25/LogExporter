@@ -1,4 +1,4 @@
-package com.redeye.logexpoter;
+package com.redeye.logexporter;
 
 import java.io.File;
 
