@@ -28,5 +28,15 @@
     "name": "app.exporter.kafka.url",
     "type": "java.lang.String",
     "description": "A description for 'app.exporter.kafka.url'"
+  },
+  {
+    "name": "app.filter.delimiter",
+    "type": "java.lang.String",
+    "description": "A description for 'app.filter.delimiter'"
+  },
+  {
+    "name": "app.stop.file",
+    "type": "java.lang.String",
+    "description": "A description for 'app.stop.file'"
   }
 ]}
