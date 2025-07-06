@@ -3,8 +3,8 @@ package com.redeye.logexporter.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.redeye.logexporter.filter.LogFilter;
-import com.redeye.logexporter.filter.ScriptFilter;
+import com.redeye.logexporter.handler.filter.LogFilter;
+import com.redeye.logexporter.handler.filter.ScriptFilter;
 
 /**
  *

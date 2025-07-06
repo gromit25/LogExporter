@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexporter.exporter.Exporter;
-import com.redeye.logexporter.filter.LogFilter;
+import com.redeye.logexporter.handler.filter.LogFilter;
 
 import lombok.Getter;
 import lombok.Setter;
