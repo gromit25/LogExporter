@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.jutools.BytesUtil;
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexporter.exporter.Exporter;
@@ -140,6 +141,8 @@ public class LogExporter implements Runnable {
 						currentTracker.tracking(message -> {
 							
 							try {
+								
+								System.out.println("|" + BytesUtil.bytesToStr(message.getBytes()) + "|");
 								toFilterQueue.put(message);
 							} catch(Exception ex) {
 								log.error("when put to filter.", ex);

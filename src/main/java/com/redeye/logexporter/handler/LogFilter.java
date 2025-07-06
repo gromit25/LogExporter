@@ -58,10 +58,18 @@ public class LogFilter {
 		
 		// 스크립트 실행
 		log.info("script : " + this.scriptStr);
-		if(this.debug == true) {
-			return this.script.executeForDebug(values).pop(Boolean.class);
-		} else {
-			return this.script.execute(values).pop(Boolean.class);
+		
+		try {
+			
+			if(this.debug == true) {
+				return this.script.executeForDebug(values).pop(Boolean.class);
+			} else {
+				return this.script.execute(values).pop(Boolean.class);
+			}
+			
+		} catch(Exception ex) {
+			log.error("filter script error.", ex);
+			return false; 
 		}
 	}
 }

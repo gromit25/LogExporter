@@ -30,6 +30,11 @@ public class LogHandler {
 	@Qualifier("filter")
 	private LogFilter filter;
 	
+	/** 메시지 변환 객체 */
+	@Autowired
+	@Qualifier("transformer")
+	private LogTransformer transformer;
+	
 
 	/**
 	 * 로그 메시지 처리
@@ -51,9 +56,10 @@ public class LogHandler {
 		if(this.filter.shouldBeExported(values) == true) {
 			
 			// 메시지 포맷 변경
+			String newMessage = this.transformer.transform(values);
 			
 			// 메시지 전송
-			toExporterQueue.put(message);
+			toExporterQueue.put(newMessage);
 		}
 	}
 	
