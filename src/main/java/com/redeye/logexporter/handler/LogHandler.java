@@ -18,7 +18,7 @@ import com.jutools.StringUtil;
  * 
  * @author jmsohn
  */
-@Component
+@Component("handler")
 public class LogHandler {
 	
 	/** 메시지 구분자 */

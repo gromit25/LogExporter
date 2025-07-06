@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.jutools.BytesUtil;
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexporter.exporter.Exporter;
@@ -23,8 +22,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 로그 파일을 트랙킹하여 특정 로그만 exporter를 통해 외부 반출 및 저장 수행
- * 워크플로우 : 파일 트렉커 -> 필터 -> 반출(exporter)
+ * 로그 파일을 트랙킹하여 특정 로그만 exporter를 통해 외부 반출 및 저장 수행<br>
+ * 워크플로우 : 파일 트렉커 -> 필터 -> 반출(exporter)<br>
  * 각 컴포넌트의 연결은 큐를 사용
  * 
  * @author jmsohn
@@ -41,6 +40,7 @@ public class LogExporter implements Runnable {
 
 	/** 로그 핸들러 객체 */
 	@Autowired
+	@Qualifier("handler")
 	private LogHandler logHandler;
 
 	/** 필터 스레드 객체 */
@@ -141,8 +141,6 @@ public class LogExporter implements Runnable {
 						currentTracker.tracking(message -> {
 							
 							try {
-								
-								System.out.println("|" + BytesUtil.bytesToStr(message.getBytes()) + "|");
 								toFilterQueue.put(message);
 							} catch(Exception ex) {
 								log.error("when put to filter.", ex);
