@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.jutools.StringUtil;
-import com.redeye.logexporter.handler.filter.LogFilter;
 
 /**
  * 메시지 필터링 처리 및 변환 작업(포맷팅) 수행
