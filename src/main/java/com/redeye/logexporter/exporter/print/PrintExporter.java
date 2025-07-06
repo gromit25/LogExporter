@@ -16,6 +16,11 @@ public class PrintExporter implements Exporter {
 	 */
 	@Override
 	public void send(String message) throws Exception {
+		
+		if(message == null) {
+			return;
+		}
+		
 		System.out.println("RECEIVED: " + message);
 	}
 }

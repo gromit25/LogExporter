@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexporter.exporter.Exporter;
-import com.redeye.logexporter.handler.filter.LogFilter;
+import com.redeye.logexporter.handler.LogHandler;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,13 +38,12 @@ public class LogExporter implements Runnable {
 	/** 모니터링할 파일 tracker 목록 */
 	private List<FileTracker> trackerList;
 
-	/** 로그 필터 객체 */
+	/** 로그 핸들러 객체 */
 	@Autowired
-	@Qualifier("filter")
-	private LogFilter filter;
+	private LogHandler logHandler;
 
 	/** 필터 스레드 객체 */
-	private Thread filterThread;
+	private Thread handlerThread;
 
 	/** 로그 반출 객체 */
 	@Autowired
@@ -109,19 +108,19 @@ public class LogExporter implements Runnable {
 		}
 		
 		// 파일 트랙킹 스레드 시작
-		this.startTracking();
+		this.startTrackingComponent();
 		
 		// 필터링 스레드 시작
-		this.startFiltering();
+		this.startHandlerComponent();
 		
 		// 로그 반출 스레드 시작
-		this.startExporting();
+		this.startExporterComponent();
 	}
 	
 	/**
 	 * 파일 트랙킹 스레드 생성 및 시작
 	 */
-	private void startTracking() {
+	private void startTrackingComponent() {
 		
 		//
 		for(FileTracker tracker : this.trackerList) {
@@ -161,9 +160,9 @@ public class LogExporter implements Runnable {
 	/**
 	 * 필터링 스레드 생성 및 시작
 	 */
-	private void startFiltering() {
+	private void startHandlerComponent() {
 		
-		this.filterThread = new Thread(new Runnable() {
+		this.handlerThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -171,25 +170,24 @@ public class LogExporter implements Runnable {
 				while(stop == false) {
 					try {
 						
+						// 필터링 수행
 						String message = toFilterQueue.poll(POLLING_PERIOD, TimeUnit.MILLISECONDS);
-						if(message != null && filter.shouldBeExported(message) == true) {
-							toExporterQueue.put(message);
-						}
+						logHandler.handle(message, toExporterQueue);
 						
 					} catch(Exception ex) {
 						log.error("filter error.", ex);
 					}
 				}
 			}
-		}, "Filter-Thread");
+		}, "Handler-Thread");
 		
-		filterThread.start();
+		handlerThread.start();
 	}
 	
 	/**
 	 * 로그 반출 스레드 생성 및 시작
 	 */
-	private void startExporting() {
+	private void startExporterComponent() {
 		
 		this.exporterThread = new Thread(new Runnable() {
 			
@@ -198,18 +196,17 @@ public class LogExporter implements Runnable {
 				
 				while(stop == false) {
 					try {
-						
+
+						// exporter를 통해 출력
 						String message = toExporterQueue.poll(POLLING_PERIOD, TimeUnit.MILLISECONDS);
-						if(message != null) {
-							exporter.send(message);
-						}
+						exporter.send(message);
 						
 					} catch(Exception ex) {
 						log.error("exporter error.", ex);
 					}
 				}
 			}
-		}, "Export-Thread");
+		}, "Exporter-Thread");
 
 		exporterThread.start();
 	}
@@ -228,8 +225,8 @@ public class LogExporter implements Runnable {
 		this.setStop(true);
 
 		// 종료 대기
-		if(this.filterThread.isAlive() == true) {
-			this.filterThread.join();
+		if(this.handlerThread.isAlive() == true) {
+			this.handlerThread.join();
 		}
 		
 		if(this.exporterThread.isAlive() == true) {

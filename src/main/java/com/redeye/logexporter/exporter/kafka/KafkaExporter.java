@@ -61,8 +61,9 @@ public class KafkaExporter implements Exporter {
 	@Override
 	public void send(String message) throws Exception {
 		
+		// 메시지가 null 인 경우 반환
 		if(message == null) {
-			throw new IllegalArgumentException("message is null.");
+			return;
 		}
 		
 		log.info("send to kafka:" + message);

@@ -1,8 +1,5 @@
 package com.redeye.logexporter.handler.filter;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -23,19 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 public class ScriptFilter implements LogFilter {
 	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
-	@Value("${app.filter.debug}")
+	@Value("${app.handler.filter.debug}")
 	private boolean debug;
 	
 	/** 스크립트 문자열 */
-	@Value("${app.filter.script}")
+	@Value("${app.handler.filter.script}")
 	private String scriptStr;
 	
 	/** 스크립트 실행 객체 */
 	private OLExp script;
-	
-	/** 메시지 구분자 */
-	@Value("${app.filter.delimiter}")
-	private String delimiter;
 	
 	/**
 	 * 초기화 수행
@@ -48,7 +41,7 @@ public class ScriptFilter implements LogFilter {
 	}
 
 	@Override
-	public boolean shouldBeExported(String message) throws Exception {
+	public boolean shouldBeExported(String message, Map<String, Object> values) throws Exception {
 		
 		// 입력값 검증
 		if(message == null) {
@@ -58,23 +51,7 @@ public class ScriptFilter implements LogFilter {
 		
 		// 스크립트 설정이 없는 경우 무조건 export 시킴
 		if(this.script == null) {
-			log.info("script is null. message exported");
 			return true;
-		}
-		
-		// log 메시지를 분해하여 values 에 추가
-		Map<String, Object> values = new HashMap<>();
-		if(StringUtil.isBlank(message) == false) {
-			
-			String[] fieldArray = null;
-			if(StringUtil.isEmpty(this.delimiter) == true) {
-				fieldArray = new String[] {message};
-			} else {
-				fieldArray = message.split(this.delimiter);
-			}
-			
-			List<String> fieldList = Arrays.asList(fieldArray);
-			values.put("fields", fieldList);
 		}
 		
 		// 스크립트 실행
