@@ -3,6 +3,7 @@ package com.redeye.logexporter.handler;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.jutools.StringUtil;
 import com.jutools.script.olexp.OLExp;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author jmsohn
  */
 @Slf4j
+@Component("filter")
 public class LogFilter {
 	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
@@ -41,18 +43,13 @@ public class LogFilter {
 	}
 
 	/**
+	 * export 대상 여부 반환<br>
+	 * true 일 경우 export 대상
 	 * 
-	 * @param message
-	 * @param values
-	 * @return
+	 * @param values 로그 메시지의 values 객체
+	 * @return export 대상 여부
 	 */
-	public boolean shouldBeExported(String message, Map<String, Object> values) throws Exception {
-		
-		// 입력값 검증
-		if(message == null) {
-			log.info("message is null.");
-			return false;
-		}
+	public boolean shouldBeExported(Map<String, Object> values) throws Exception {
 		
 		// 스크립트 설정이 없는 경우 무조건 export 시킴
 		if(this.script == null) {

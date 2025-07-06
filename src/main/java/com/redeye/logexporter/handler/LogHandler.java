@@ -25,7 +25,7 @@ public class LogHandler {
 	@Value("${app.handler.delimiter}")
 	private String delimiter;
 	
-	/** */
+	/** 필터 객체 */
 	@Autowired
 	@Qualifier("filter")
 	private LogFilter filter;
@@ -44,11 +44,11 @@ public class LogHandler {
 			return;
 		}
 		
-		// log 메시지를 분해하여 values 컨테이너 생성
+		// log 메시지를 분해하여 values 객체 생성
 		Map<String, Object> values = this.makeValues(message);
 		
 		// 필터링 대상 여부 확인
-		if(this.filter.shouldBeExported(message, values) == true) {
+		if(this.filter.shouldBeExported(values) == true) {
 			
 			// 메시지 포맷 변경
 			
@@ -58,14 +58,19 @@ public class LogHandler {
 	}
 	
 	/**
+	 * 로그 메시지(message)에서 values 객체를 생성 및 반환
 	 * 
-	 * 
-	 * @param message
-	 * @return
+	 * @param message 로그 메시지
+	 * @return 생성된 values 객체
 	 */
 	private Map<String, Object> makeValues(String message) {
 		
 		Map<String, Object> values = new HashMap<>();
+		
+		// 로그 메시지 원본 추가
+		values.put("log", message);
+		
+		// 구분자(delimiter)에 따라 분리 후 values에 추가
 		if(StringUtil.isBlank(message) == false) {
 			
 			String[] fieldArray = null;
