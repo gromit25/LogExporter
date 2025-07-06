@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author jmsohn
  */
 @Slf4j
-public class ScriptFilter implements LogFilter {
+public class LogFilter {
 	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
 	@Value("${app.handler.filter.debug}")
@@ -40,7 +40,12 @@ public class ScriptFilter implements LogFilter {
 				? OLExp.compile(this.scriptStr) : null;
 	}
 
-	@Override
+	/**
+	 * 
+	 * @param message
+	 * @param values
+	 * @return
+	 */
 	public boolean shouldBeExported(String message, Map<String, Object> values) throws Exception {
 		
 		// 입력값 검증
