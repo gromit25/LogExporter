@@ -8,12 +8,14 @@ import com.jutools.StringUtil;
 import com.redeye.logexporter.exporter.Exporter;
 
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Kafka 출력 Exporter
  * 
  * @author jmsohn
  */
+@Slf4j
 public class KafkaExporter implements Exporter {
   
 	/** Kafka client id */
@@ -63,6 +65,7 @@ public class KafkaExporter implements Exporter {
 			throw new IllegalArgumentException("message is null.");
 		}
 		
+		log.info("send to kafka:" + message);
 		this.kafkaTemplate.send(this.topicName, message);
 	}
 }

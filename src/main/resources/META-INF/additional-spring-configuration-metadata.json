@@ -5,11 +5,6 @@
     "description": "A description for 'app.monitor.files'"
   },
   {
-    "name": "app.filter.script",
-    "type": "java.lang.String",
-    "description": "A description for 'app.filter.script'"
-  },
-  {
     "name": "app.exporter.type",
     "type": "java.lang.String",
     "description": "A description for 'app.exporter.type'"
@@ -30,18 +25,28 @@
     "description": "A description for 'app.exporter.kafka.url'"
   },
   {
-    "name": "app.filter.delimiter",
-    "type": "java.lang.String",
-    "description": "A description for 'app.filter.delimiter'"
-  },
-  {
     "name": "app.stop.file",
     "type": "java.lang.String",
     "description": "A description for 'app.stop.file'"
   },
   {
-    "name": "app.filter.debug",
+    "name": "app.handler.delimiter",
     "type": "java.lang.String",
-    "description": "A description for 'app.filter.debug'"
+    "description": "A description for 'app.handler.delimiter'"
+  },
+  {
+    "name": "app.handler.filter.script",
+    "type": "java.lang.String",
+    "description": "A description for 'app.handler.filter.script'"
+  },
+  {
+    "name": "app.handler.filter.debug",
+    "type": "java.lang.String",
+    "description": "A description for 'app.handler.filter.debug'"
+  },
+  {
+    "name": "app.handler.transformer.format",
+    "type": "java.lang.String",
+    "description": "A description for 'app.handler.transformer.format'"
   }
 ]}

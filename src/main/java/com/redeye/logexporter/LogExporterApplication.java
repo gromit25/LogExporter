@@ -10,11 +10,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.jutools.FileUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 로그 출력기 어플리케이션
  * 
  * @author jmsohn
  */
+@Slf4j
 @SpringBootApplication
 public class LogExporterApplication implements CommandLineRunner {
 	
@@ -41,6 +44,7 @@ public class LogExporterApplication implements CommandLineRunner {
 		try {
 			
 			// log tracking 시작
+			log.info("start log exporter.");
 			Thread thread = new Thread(this.logExporter);
 			thread.start();
 	
@@ -50,6 +54,7 @@ public class LogExporterApplication implements CommandLineRunner {
 		} finally {
 
 			// stop 파일 생성시 logExporter 중지
+			log.info("stop log exporter.");
 			this.logExporter.stop();
 		}
 	}
