@@ -16,6 +16,7 @@ import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexporter.exporter.Exporter;
 import com.redeye.logexporter.handler.LogHandler;
+import com.redeye.logexporter.tracker.SplitReaderType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +35,9 @@ public class LogExporter implements Runnable {
 
 	/** 큐에서 데이터 취득시 대기 시간(1초) */
 	private static long POLLING_PERIOD = 1000L;
+	
+	@Value("${app.tracker.reader.type}")
+	private SplitReaderType readerType;
 	
 	/** 모니터링할 파일 tracker 목록 */
 	private List<FileTracker> trackerList;
@@ -54,8 +58,8 @@ public class LogExporter implements Runnable {
 	/** 반출 스레드 객체 */
 	private Thread exporterThread;
 	
-	/** tracker -> filter 큐 */
-	private BlockingQueue<String> toFilterQueue;
+	/** tracker -> handler 큐 */
+	private BlockingQueue<String> toHandlerQueue;
 
 	/** filter -> exporter 큐 */
 	private BlockingQueue<String> toExporterQueue;
@@ -71,7 +75,7 @@ public class LogExporter implements Runnable {
 	 * @param targetFileNames 로그 추적 대상 파일이름 목록
 	 */
 	public LogExporter(
-		@Value("${app.monitor.files}") String targetFileNames
+		@Value("${app.tracker.files}") String targetFileNames
 	) throws Exception {
 		
 		// 입력값 검증
@@ -87,8 +91,8 @@ public class LogExporter implements Runnable {
 			this.trackerList.add(tracker);
 		}
 
-		// tracker -> filter 큐 생성
-		this.toFilterQueue = new LinkedBlockingQueue<>();
+		// tracker -> handler 큐 생성
+		this.toHandlerQueue = new LinkedBlockingQueue<>();
 		
 		// filter -> exporter 큐 생성
 		this.toExporterQueue = new LinkedBlockingQueue<>();
@@ -108,22 +112,24 @@ public class LogExporter implements Runnable {
 			return;
 		}
 		
-		// 파일 트랙킹 스레드 시작
-		this.startTrackingComponent();
-		
-		// 필터링 스레드 시작
-		this.startHandlerComponent();
+		// 실행 순서를 반출 -> 핸들러 -> 트렉커로 함
 		
 		// 로그 반출 스레드 시작
 		this.startExporterComponent();
+
+		// 필터링 스레드 시작
+		this.startHandlerComponent();
+		
+		// 파일 트랙커 스레드 시작
+		this.startTrackerComponent();
 	}
 	
 	/**
-	 * 파일 트랙킹 스레드 생성 및 시작
+	 * 파일 트랙커 스레드 생성 및 시작
 	 */
-	private void startTrackingComponent() {
+	private void startTrackerComponent() {
 		
-		//
+		// 각 파일들의 트랙커 별로 스레드 생성 및 실행
 		for(FileTracker tracker : this.trackerList) {
 			
 			// tracker 변수가 Thread 객체 생성시 문제를 일으킬 수 있기 때문에 final 변수로 참조하도록 변경
@@ -141,7 +147,7 @@ public class LogExporter implements Runnable {
 						currentTracker.tracking(message -> {
 							
 							try {
-								toFilterQueue.put(message);
+								toHandlerQueue.put(message);
 							} catch(Exception ex) {
 								log.error("when put to filter.", ex);
 							}
@@ -155,7 +161,8 @@ public class LogExporter implements Runnable {
 
 			// tracker 스레드 설정 및 시작
 			trackingThread.start();
-		}
+			
+		} // End of for
 	}
 	
 	/**
@@ -172,7 +179,7 @@ public class LogExporter implements Runnable {
 					try {
 						
 						// 필터링 수행
-						String message = toFilterQueue.poll(POLLING_PERIOD, TimeUnit.MILLISECONDS);
+						String message = toHandlerQueue.poll(POLLING_PERIOD, TimeUnit.MILLISECONDS);
 						logHandler.handle(message, toExporterQueue);
 						
 					} catch(Exception ex) {

@@ -1,10 +1,5 @@
 {"properties": [
   {
-    "name": "app.monitor.files",
-    "type": "java.lang.String",
-    "description": "A description for 'app.monitor.files'"
-  },
-  {
     "name": "app.exporter.type",
     "type": "java.lang.String",
     "description": "A description for 'app.exporter.type'"
@@ -48,5 +43,15 @@
     "name": "app.handler.transformer.format",
     "type": "java.lang.String",
     "description": "A description for 'app.handler.transformer.format'"
+  },
+  {
+    "name": "app.tracker.files",
+    "type": "java.lang.String",
+    "description": "A description for 'app.tracker.files'"
+  },
+  {
+    "name": "app.tracker.reader.type",
+    "type": "java.lang.String",
+    "description": "A description for 'app.tracker.reader.type'"
   }
 ]}
