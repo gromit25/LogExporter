@@ -19,8 +19,12 @@
    
   
 - **필터의 필드 구분자 설정(Optional)**   
+  필터 및 메시지 변환에서 사용할 변수 목록을 생성용으로 사용
   디폴트 값 : "[ \t]+"   
-  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, String.split 메소드의 파라미터로 사용    
+  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, String.split 메소드의 파라미터로 사용
+  필터 및 메시지 변환에서 사용 가능한 변수   
+  - log : log 메시지 전체    
+  - fields : log를 LE_FILTER_DELIMITER 로 나누어진 변수 목록    
   
 - **필터 표현식(Optional)**    
   LE_FILTER_SCRIPT=match(fields[0], 'abc')  # 0 번째 필드가 abc 일 경우 export 실행    
@@ -29,12 +33,10 @@
 
 - **메시지 변환(Optional)**   
   디폴트 값 : %{log}    
-  LE_TRANSFORMER_FORMAT=%{log}    
-  사용 가능한 변수   
-  - log : log 메시지 전체    
-  - fields : log를 LE_FILTER_DELIMITER 로 나누어진 변수 목록    
-             ex) %{fields[0]}    
-             ex) {"time":%{fields[0]}, "type":"%{fields[2]}"}   
+  LE_TRANSFORMER_FORMAT=%{log}
+  사용 예)
+  - %{fields[0]}    
+  - {"time":%{fields[0]}, "type":"%{fields[2]}"}   
   
   
 - **로드할 Exporter 설정 환경 변수(Optional)**    
