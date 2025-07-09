@@ -25,7 +25,6 @@
   미설정 시 모든 로그 export 됨    
     
 - **kafka 연결정보 환경변수(LE_EXPORTER_TYPE=KAFKA 인 경우, Mandatory)**     
-  LE_EXPORTER_TYPE=KAFKA 일 경우에만,    
   LE_EXPORTER_KAFKA_CLIENT_ID=1    
   LE_EXPORTER_KAFKA_TOPIC_NAME=test_topic     
   LE_EXPORTER_KAFKA_URL=localhost:9092    
