@@ -16,13 +16,23 @@ public enum SplitReaderType {
 		public SplitReader create() throws Exception {
 			return new LineSplitReader();
 		}
+
+		@Override
+		public String defaultFormat() {
+			return "%{log}";
+		}
 	},
 	
-	AGENT_READER {
+	APPAGENT_READER {
 		
 		@Override
 		public SplitReader create() throws Exception {
 			return null;
+		}
+
+		@Override
+		public String defaultFormat() {
+			return "%{log}";
 		}
 	};
 	
@@ -32,4 +42,12 @@ public enum SplitReaderType {
 	 * @return 생성된 Reader 객체
 	 */
 	public abstract SplitReader create() throws Exception;
+	
+	/**
+	 * Reader 별 export용 디폴트 메시지 포맷 반환<br>
+	 * 사용자 지정 포맷이 없는 경우 사용
+	 * 
+	 * @return 디폴트 메시지 포맷
+	 */
+	public abstract String defaultFormat();
 }

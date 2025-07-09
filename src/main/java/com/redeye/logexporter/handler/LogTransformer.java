@@ -29,7 +29,11 @@ public class LogTransformer {
 	 */
 	@PostConstruct
 	public void init() throws Exception {
-		this.generator = TextGen.compile(this.format, '%');
+		this.generator = TextGen.compile(
+			this.format,
+			true,	// Escape 기능 사용
+			'%'		// 표현식 시작 문자 지정
+		);
 	}
 	
 	/**
