@@ -34,9 +34,11 @@
 - **메시지 변환(Optional)**   
   디폴트 값 : %{log}    
   LE_TRANSFORMER_FORMAT=%{log}   
-  사용 예)   
-  - %{fields[0]}    
-  - {"time":%{fields[0]}, "type":"%{fields[2]}"}   
+  사용 예)
+  ```
+  LE_TRANSFORMER_FORMAT=%{fields[0]}    
+  LE_TRANSFORMER_FORMAT={"time":%{fields[0]}, "type":"%{fields[2]}"}
+  ```
   
   
 - **로드할 Exporter 설정 환경 변수(Optional)**    
