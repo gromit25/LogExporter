@@ -25,6 +25,15 @@
 - **필터 표현식(Optional)**    
   LE_FILTER_SCRIPT=match(fields[0], 'abc')  # 0 번째 필드가 abc 일 경우 export 실행    
   미설정 시 모든 로그 export 됨
+
+
+- **메시지 변환(Optional)**   
+  디폴트 값 : %{log}    
+  LE_TRANSFORMER_FORMAT=%{log}    
+  사용 가능한 변수   
+  - log : log 메시지 전체    
+  - fields : log를 LE_FILTER_DELIMITER 로 나누어진 변수, ex) fields[0]    
+             ex) {"time":%{fields[0]}, "type":"%{fields[2]}"}   
   
   
 - **로드할 Exporter 설정 환경 변수(Optional)**    
