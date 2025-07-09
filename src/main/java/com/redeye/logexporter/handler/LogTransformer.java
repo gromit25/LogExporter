@@ -31,7 +31,7 @@ public class LogTransformer {
 	public void init() throws Exception {
 		this.generator = TextGen.compile(
 			this.format,
-			true,	// Escape 기능 사용
+			true,	// Escape 문자 치환 기능
 			'%'		// 표현식 시작 문자 지정
 		);
 	}
