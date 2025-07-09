@@ -41,7 +41,7 @@
   ```
   
   
-- **로드할 Exporter 설정 환경 변수(Optional)**    
+- **Exporter 설정 환경 변수(Optional)**    
   디폴트 값 : PRINT    
   LE_EXPORTER_TYPE=KAFKA # PRINT, KAFKA 지원(소문자 인식 안됨)     
        
