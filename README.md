@@ -33,8 +33,8 @@
 
 - **메시지 변환(Optional)**   
   디폴트 값 : %{log}    
-  LE_TRANSFORMER_FORMAT=%{log}
-  사용 예)
+  LE_TRANSFORMER_FORMAT=%{log}   
+  사용 예)   
   - %{fields[0]}    
   - {"time":%{fields[0]}, "type":"%{fields[2]}"}   
   
