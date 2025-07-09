@@ -21,7 +21,7 @@
 - **필터의 필드 구분자 설정(Optional)**   
   필터 및 메시지 변환에서 사용할 변수 목록을 생성용으로 사용
   디폴트 값 : "[ \t]+"   
-  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, String.split 메소드의 파라미터로 사용
+  LE_FILTER_DELIMITER=[ \t]+  # 정규표현식 사용, String.split 메소드의 파라미터로 사용   
   필터 및 메시지 변환에서 사용 가능한 변수   
   - log : log 메시지 전체    
   - fields : log를 LE_FILTER_DELIMITER 로 나누어진 변수 목록    
