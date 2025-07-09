@@ -8,7 +8,7 @@
   주의) 파일명은 아래의 예와 같이 항상 디렉토리가 같이 설정되어야 함    
         가능하면 전체 경로를 모두 설정하는 것이 좋음    
   LE_STOP_FILE=./log_exporter.stop
-   
+<br>   
    
 - **모니터링 대상 파일 지정 환경 변수(Mandatory)**    
   LE_MONITOR_FILES=was1_agent.log, was2_agent.log    
@@ -29,7 +29,7 @@
 - **필터 표현식(Optional)**    
   LE_FILTER_SCRIPT=match(fields[0], 'abc')  # 0 번째 필드가 abc 일 경우 export 실행    
   미설정 시 모든 로그 export 됨
-
+<br>
 
 - **메시지 변환(Optional)**   
   디폴트 값 : %{log}    
@@ -37,7 +37,7 @@
   사용 예)   
   - LE_TRANSFORMER_FORMAT=%{fields[0]}    
   - LE_TRANSFORMER_FORMAT={"time":%{fields[0]}, "type":"%{fields[2]}"}   
-  
+<br>  
   
 - **Exporter 설정 환경 변수(Optional)**    
   디폴트 값 : PRINT    
