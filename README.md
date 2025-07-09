@@ -33,7 +33,7 @@
   사용 가능한 변수   
   - log : log 메시지 전체    
   - fields : log를 LE_FILTER_DELIMITER 로 나누어진 변수 목록    
-             ex) fields[0]    
+             ex) %{fields[0]}    
              ex) {"time":%{fields[0]}, "type":"%{fields[2]}"}   
   
   
