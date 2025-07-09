@@ -12,9 +12,9 @@
 - **모니터링 대상 파일 지정 환경 변수(Mandatory)**    
   LE_MONITOR_FILES=was1_agent.log, was2_agent.log    
   
-- **로드할 Exporter 설정 환경 변수(Optional)**
-  디폴트 값 : PRINT
-  LE_EXPORTER_TYPE=KAFKA # PRINT, KAFKA 지원(소문자 인식 안됨)    
+- **로드할 Exporter 설정 환경 변수(Optional)**    
+  디폴트 값 : PRINT    
+  LE_EXPORTER_TYPE=KAFKA # PRINT, KAFKA 지원(소문자 인식 안됨)     
     
 - **필터의 필드 구분자 설정(Optional)**   
   디폴트 값 : "[ \t]+"   
