@@ -16,7 +16,7 @@
 - **모니터링 대상 파일의 Reader 지정 변수(Optional)**    
   디폴트 값 : LINE_READER   
   LE_TRAKCER_READER_TYPE=LINE_READER  # LINE_READER 지원 (소문자 인식 안됨)   
-   
+<br>   
   
 - **필터의 필드 구분자 설정(Optional)**   
   필터 및 메시지 변환에서 사용할 변수 목록을 생성용으로 사용
