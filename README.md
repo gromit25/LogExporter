@@ -1,7 +1,7 @@
 # Log Exporter
 
 ### 특정 로그 파일을 읽어서 필터링 후 외부저장소(kafka 등)로 전송     
-    
+-------    
 ### 환경변수 목록    
 - **프로그램 중지 파일 환경 변수(Optional) - 해당 파일이 새로 생성 되거나 touch 되면 Log Exporter는 중지됨**     
   디폴트 값 : ./log_exporter.stop    
