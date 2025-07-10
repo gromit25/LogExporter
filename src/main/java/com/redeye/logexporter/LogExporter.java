@@ -111,7 +111,8 @@ public class LogExporter implements Runnable {
 		if(this.trackerList == null || this.trackerList.size() == 0) {
 			return;
 		}
-		
+
+		// 후행 스레드가 미리 준비되도록
 		// 실행 순서를 반출 -> 핸들러 -> 트렉커로 함
 		
 		// 로그 반출 스레드 시작
