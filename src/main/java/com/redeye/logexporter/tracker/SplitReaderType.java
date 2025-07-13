@@ -27,7 +27,7 @@ public enum SplitReaderType {
 		
 		@Override
 		public SplitReader create() throws Exception {
-			return null;
+			return new AppAgentSplitReader();
 		}
 
 		@Override
