@@ -64,8 +64,7 @@ public class AppAgentSplitReader implements SplitReader {
 				this.temp = null;
 			}
 
-			// Record Separator 를 통해 잘린 데이터는
-			// 날짜 포맷 후 logMessageArr 에 추가
+			// Record Separator 를 통해 잘린 데이터를 action 에게 전달
 			if(index != messages.size() - 1 || isEndsWithRecordSeparator == true) {
 				
 				// 사용자 처리 메소드에서 데이터를 처리함
