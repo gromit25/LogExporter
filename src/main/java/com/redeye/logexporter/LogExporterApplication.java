@@ -55,7 +55,9 @@ public class LogExporterApplication implements CommandLineRunner {
 
 			// stop 파일 생성시 logExporter 중지
 			log.info("stop log exporter.");
-			this.logExporter.stop();
+			if(this.logExporter.isStop() == false) {
+				this.logExporter.stop();
+			}
 		}
 	}
 }
