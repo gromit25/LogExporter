@@ -11,7 +11,7 @@
 <br>   
    
 - **모니터링 대상 파일 지정 환경 변수(Mandatory)**    
-  **LE_MONITOR_FILES=was1_agent.log, was2_agent.log**    
+  **LE_TRACKER_FILES=./was1_agent.log, /app/log/was2_agent.log**    
 
 - **모니터링 대상 파일의 Reader 지정 변수(Optional)**    
   디폴트 값 : LINE_READER   
