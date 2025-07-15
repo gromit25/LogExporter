@@ -36,9 +36,6 @@ public class LogExporter implements Runnable {
 	/** 큐에서 데이터 취득시 대기 시간(1초) */
 	private static long POLLING_PERIOD = 1000L;
 	
-	@Value("${app.tracker.reader.type}")
-	private SplitReaderType readerType;
-	
 	/** 모니터링할 파일 tracker 목록 */
 	private List<FileTracker> trackerList;
 
@@ -75,7 +72,8 @@ public class LogExporter implements Runnable {
 	 * @param targetFileNames 로그 추적 대상 파일이름 목록
 	 */
 	public LogExporter(
-		@Value("${app.tracker.files}") String targetFileNames
+		@Value("${app.tracker.files}") String targetFileNames,
+		@Value("${app.tracker.reader.type}") SplitReaderType readerType
 	) throws Exception {
 		
 		// 입력값 검증
@@ -87,7 +85,11 @@ public class LogExporter implements Runnable {
 		this.trackerList = new ArrayList<>();
 		for(String targetFileName: targetFileNames.split("[ \\t]*,[ \\t]*")) {
 			
-			FileTracker tracker = FileTracker.create(new File(targetFileName));
+			FileTracker tracker = FileTracker.create(
+				new File(targetFileName),
+				readerType.create()
+			);
+			
 			this.trackerList.add(tracker);
 		}
 
