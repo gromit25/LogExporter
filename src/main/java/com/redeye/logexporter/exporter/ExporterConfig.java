@@ -1,11 +1,8 @@
-package com.redeye.logexporter.config;
+package com.redeye.logexporter.exporter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.redeye.logexporter.exporter.Exporter;
-import com.redeye.logexporter.exporter.ExporterType;
 
 /**
  * Exporter 생성 컴포넌트
