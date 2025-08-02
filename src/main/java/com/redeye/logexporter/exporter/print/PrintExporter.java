@@ -1,5 +1,8 @@
 package com.redeye.logexporter.exporter.print;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
+
 import com.redeye.logexporter.exporter.Exporter;
 
 /**
@@ -7,6 +10,12 @@ import com.redeye.logexporter.exporter.Exporter;
  *
  * @author jmsohn
  */
+@Component("exporter")
+@ConditionalOnProperty
+(
+	value = "app.exporter.type",
+	havingValue = "PRINT"
+)
 public class PrintExporter implements Exporter {
 
 	/**

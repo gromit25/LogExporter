@@ -2,7 +2,9 @@ package com.redeye.logexporter.exporter.kafka;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 
 import com.jutools.StringUtil;
 import com.redeye.logexporter.exporter.Exporter;
@@ -16,19 +18,17 @@ import lombok.extern.slf4j.Slf4j;
  * @author jmsohn
  */
 @Slf4j
+@Component("exporter")
+@ConditionalOnProperty
+(
+	value = "app.exporter.type",
+	havingValue = "KAFKA"
+)
 public class KafkaExporter implements Exporter {
-  
-	/** Kafka client id */
-	@Value("${app.exporter.kafka.clientid}")
-	private String clientId;
 
 	/** Kafka topic name */
 	@Value("${app.exporter.kafka.topicname}")
 	private String topicName;
-
-	/** Kafka url */
-	@Value("${app.exporter.kafka.url}")
-	private String url;
 	
 	/** Kafka 연결 객체 */
 	@Autowired
@@ -40,16 +40,8 @@ public class KafkaExporter implements Exporter {
 	@PostConstruct
 	public void init() throws Exception {
 		
-		if(StringUtil.isBlank(this.clientId) == true) {
-			throw new IllegalArgumentException("clientId(LE_EXPORTER_KAFKA_CLIENT_ID) is null or blank.");
-		}
-		
 		if(StringUtil.isBlank(this.topicName) == true) {
 			throw new IllegalArgumentException("topicName(LE_EXPORTER_KAFKA_TOPIC_NAME) is null or blank.");
-		}
-		
-		if(StringUtil.isBlank(this.url) == true) {
-			throw new IllegalArgumentException("url(LE_EXPORTER_KAFKA_URL) is null or blank.");
 		}
 	}
 
@@ -66,7 +58,7 @@ public class KafkaExporter implements Exporter {
 			return;
 		}
 		
-		log.info("send to kafka:" + message);
+		log.info("SEND:" + message);
 		this.kafkaTemplate.send(this.topicName, message);
 	}
 }
