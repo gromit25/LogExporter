@@ -65,6 +65,7 @@ public class KafkaExporterConfig {
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		configProps.put(ProducerConfig.ACKS_CONFIG, acks);
 
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
