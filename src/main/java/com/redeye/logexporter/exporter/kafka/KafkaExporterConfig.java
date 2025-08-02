@@ -55,8 +55,13 @@ public class KafkaExporterConfig {
 		@Value("${app.exporter.kafka.acks}") String acks
 	) {
 		
+		// 입력값 검증
 		if(StringUtil.isBlank(servers) == true) {
 			throw new IllegalArgumentException("app.exporter.kafka.servers is null or blank.");
+		}
+		
+		if(StringUtil.isBlank(acks) == true) {
+			throw new IllegalArgumentException("app.exporter.kafka.acks is null or blank.");
 		}
 
 		Map<String, Object> configProps = new HashMap<>();
