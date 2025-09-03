@@ -16,7 +16,7 @@
 	<description></description>
 	
 	<properties>
-		<java.version>17</java.version>
+		<java.version>8</java.version>
 		<deploy.target.dir>C:/apps/LogExporter</deploy.target.dir>
 	</properties>
 	
