@@ -57,15 +57,19 @@ public class RestAPIExporter implements Exporter {
 	@Value("${app.exporter.restapi.period}")
 	private String sendPeriod;
 	
-	/** 발송 잡 */
+	/** API 전송용 크론잡 */
 	private CronJob sendJob;
 
 	/** API 클라이언트 */
 	@Autowired
 	private WebClient webClient;
 	
+	/** API 메시지 생성용 publisher */
+	private Publisher publisher;
+	
 	/** 조인 포인트 맵 */
 	private Map<String, Object> joinPointMap = new ConcurrentHashMap<>();
+
 	
 	/**
 	 * 초기화 수행
@@ -73,6 +77,11 @@ public class RestAPIExporter implements Exporter {
 	@PostConstruct
 	public void init() throws Exception {
 		
+	    // API 메시지 생성용 publisher 객체 생성
+		InputStream formatInputStream = FileUtil.getInputStream(FORMAT_FILE);
+		this.publisher = PublisherFactory.create(PublisherType.TEXT_FILE, formatInputStream);
+
+		// API 전송용 크론잡 생성
 		this.sendJob = new CronJob(
 			this.sendPeriod,
 			() -> {
@@ -90,12 +99,12 @@ public class RestAPIExporter implements Exporter {
 		
 		try {
 			
-		    // 출력 format input stream
-			InputStream formatInputStream = FileUtil.getInputStream(FORMAT_FILE);
+			// 통계 데이터 임시 저장 후 신규 생성
+			Map<String, Object> sendJoinPointMap = this.joinPointMap;
+			this.joinPointMap = new ConcurrentHashMap<>();
 			
 			// JSON 출력 실행
-			Publisher publisher = PublisherFactory.create(PublisherType.TEXT_FILE, formatInputStream);
-			String joinPointJSON = publisher.publish(Charset.forName("UTF-8"), this.joinPointMap); 
+			String joinPointJSON = this.publisher.publish(Charset.forName("UTF-8"), sendJoinPointMap); 
 			log.info("API JSON: \n" + joinPointJSON);
 			
 			// API 호출
@@ -110,13 +119,7 @@ public class RestAPIExporter implements Exporter {
 			log.info("RESULT: \n" + result);
 			
 		} catch(Exception ex) {
-			
 			log.error("failed to send request to API server.", ex);
-			
-		} finally {
-			
-			// 조인포인트 정보 삭제
-			this.joinPointMap.clear();
 		}
 	}
 
