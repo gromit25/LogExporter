@@ -2,8 +2,8 @@ package com.redeye.logexporter.exporter.restapi;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +17,7 @@ import com.jutools.publish.Publisher;
 import com.jutools.publish.PublisherFactory;
 import com.jutools.publish.PublisherType;
 import com.redeye.logexporter.exporter.Exporter;
+import com.redeye.logexporter.exporter.restapi.domain.TraceDTO;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -67,8 +68,8 @@ public class RestAPIExporter implements Exporter {
 	/** API 메시지 생성용 publisher */
 	private Publisher publisher;
 	
-	/** 조인 포인트 맵 */
-	private Map<String, Object> joinPointMap = new ConcurrentHashMap<>();
+	/** 조인 포인트 트래이스 객체 */
+	private TraceDTO joinPointTrace;
 
 	
 	/**
@@ -100,11 +101,13 @@ public class RestAPIExporter implements Exporter {
 		try {
 			
 			// 통계 데이터 임시 저장 후 신규 생성
-			Map<String, Object> sendJoinPointMap = this.joinPointMap;
-			this.joinPointMap = new ConcurrentHashMap<>();
+			Map<String, Object> values = new HashMap<>();
+			values.put("joinPointTrace", this.joinPointTrace);
+			
+			this.joinPointTrace = new TraceDTO();
 			
 			// JSON 출력 실행
-			String joinPointJSON = this.publisher.publish(Charset.forName("UTF-8"), sendJoinPointMap); 
+			String joinPointJSON = this.publisher.publish(Charset.forName("UTF-8"), values); 
 			log.info("API JSON: \n" + joinPointJSON);
 			
 			// API 호출
