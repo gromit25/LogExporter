@@ -3,16 +3,16 @@ package com.redeye.logexporter.exporter.restapi.domain;
 import lombok.Data;
 
 /**
+ * 조인 포인트 관계 객체
  * 
- * 
- * 
+ * @author jmsohn
  */
 @Data
 public class LinkDTO {
 	
-	/** */
-	private JoinPointDTO origin;
+	/** 기준 조인 포인트 */
+	private JoinPointDTO base;
 	
-	/** */
+	/** 다음 조인 포인트 */
 	private JoinPointDTO next;
 }
