@@ -8,6 +8,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
+/**
+ * 
+ * 
+ * @author jmsohn
+ */
 @Configuration
 @ConditionalOnProperty
 (
@@ -22,8 +27,8 @@ public class RestAPIExporterConfig {
 	 * @param url 기본 url
   	 * @return 생성된 WebClient 객체
 	 */
-	@Bean("webClient")
-	WebClient webClient(
+	@Bean("apiClient")
+	WebClient apiClient(
 		@Value("app.exporter.restapi.url") String url
 	) {
 		return WebClient.builder()

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<format>
+>{
+<!-- 수집 기준 시간 출력 -->
+>"baseTime": ${baseTime}, 
+
+<!-- 테이블 정보 출력 -->
+>"tableList": [
+<foreach element="table" list="tableList" separator=",">
+	>{
+		>"name": "${table.tableName}",
+		>"description": "${table.description}",
+		>"columnList": [
+		<!-- 테이블명별 컬럼 정보 설정 -->
+		<set name="columnList" exp="tableColumnMap[table.tableName]"/>
+		<foreach element="column" list="columnList" separator=",">
+			>{
+				>"name": "${column.columnName}",
+				>"description": "${column.description}",
+				>"type": "${column.type}",
+				>"size": ${column.size},
+				>"isPrimaryKey": "${column.isPrimaryKey}",
+				>"isUnique": "${column.isUnique}",
+				>"isNullable": "${column.isNullable}",
+				>"isForeignKey": "${column.isForeignKey}",
+				>"refTableName": "${column.refTableName}",
+				>"refColumnName": "${column.refColumnName}"
+			>}
+		</foreach>
+		>]
+	>}
+</foreach> 
+>], 
+
+<!-- 시퀀스 정보 출력 -->
+>"sequenceList": [
+<foreach element="sequence" list="sequenceList" separator=",">
+	>{
+		>"name": "${sequence.sequenceName}",
+		>"startValue": ${sequence.startValue},
+		>"maxValue": ${sequence.maxValue},
+		>"increment": ${sequence.increment},
+		>"isCycle": "${sequence.isCycle}"
+	>}
+</foreach>
+>], 
+
+<!-- 뷰 정보 출력 -->
+>"viewList": [
+<foreach element="view" list="viewList" separator=",">
+	>{
+		>"name": "${view.viewName}",
+		>"query": "${view.query}"
+	>}
+</foreach>
+>]
+
+>}
+</format>

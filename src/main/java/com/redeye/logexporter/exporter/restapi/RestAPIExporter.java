@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RestAPIExporter implements Exporter {
 
 	/** 포맷 파일 명 */
-	private static final String FORMAT_FILE = "format/api/json_format.xml";
+	private static final String FORMAT_FILE = "format/restapi/json_format.xml";
 	
 	/** API 호출 Subpath */
 	private static final String API_SUBPATH = "/api/agentlog/%s/%s/%s";
@@ -63,7 +64,8 @@ public class RestAPIExporter implements Exporter {
 
 	/** API 클라이언트 */
 	@Autowired
-	private WebClient webClient;
+	@Qualifier("apiClient")
+	private WebClient apiClient;
 	
 	/** API 메시지 생성용 publisher */
 	private Publisher publisher;
@@ -111,7 +113,8 @@ public class RestAPIExporter implements Exporter {
 			log.info("API JSON: \n" + joinPointJSON);
 			
 			// API 호출
-			String result = this.webClient.post()
+			String result = this.apiClient
+				.post()
 				.uri(String.format(API_SUBPATH, organCode, domainCode, appCode))
 				.header("Content-Type", "application/json")
 				.bodyValue(joinPointJSON)
