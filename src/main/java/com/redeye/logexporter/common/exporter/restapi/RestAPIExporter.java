@@ -18,7 +18,7 @@ import com.jutools.publish.Publisher;
 import com.jutools.publish.PublisherFactory;
 import com.jutools.publish.PublisherType;
 import com.redeye.logexporter.agentlog.domain.TraceDTO;
-import com.redeye.logexporter.common.exporter.Exporter;
+import com.redeye.logexporter.workflow.Exporter;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
