@@ -1,5 +1,7 @@
 package com.redeye.logexporter.workflow.comp;
 
+import com.redeye.logexporter.workflow.Message;
+
 /**
  * exporter 인터페이스 클래스
  * 
@@ -12,5 +14,5 @@ public interface Exporter extends Component {
 	 *
 	 * @param message 전송할 메시지 
 	 */
-	void send(String message) throws Exception;
+	void export(Message<?> message) throws Exception;
 }

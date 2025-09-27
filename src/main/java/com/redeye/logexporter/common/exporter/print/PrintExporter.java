@@ -3,6 +3,7 @@ package com.redeye.logexporter.common.exporter.print;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.comp.Exporter;
 
 /**
@@ -24,12 +25,18 @@ public class PrintExporter implements Exporter {
 	 * @param message 출력할 메시지
 	 */
 	@Override
-	public void send(String message) throws Exception {
+	public void export(Message<?> message) throws Exception {
 		
 		if(message == null) {
 			return;
 		}
 		
 		System.out.println("RECEIVED: " + message);
+	}
+
+	@Override
+	public String name() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

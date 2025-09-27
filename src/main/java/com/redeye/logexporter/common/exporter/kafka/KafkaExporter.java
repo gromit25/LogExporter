@@ -7,6 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import com.jutools.StringUtil;
+import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.comp.Exporter;
 
 import jakarta.annotation.PostConstruct;
@@ -51,7 +52,7 @@ public class KafkaExporter implements Exporter {
 	 * @param message 전송할 메시지
 	 */
 	@Override
-	public void send(String message) throws Exception {
+	public void export(Message<?> message) throws Exception {
 		
 		// 메시지가 null 인 경우 반환
 		if(message == null) {

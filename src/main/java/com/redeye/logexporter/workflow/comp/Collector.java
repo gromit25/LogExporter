@@ -1,5 +1,9 @@
 package com.redeye.logexporter.workflow.comp;
 
+import java.util.List;
+
+import com.redeye.logexporter.workflow.Message;
+
 /**
  * 처리할 데이터 수집 클래스
  * 
@@ -12,5 +16,5 @@ public interface Collector extends Component {
 	 * 
 	 * @return 수집된 데이터
 	 */
-	String[] collect() throws Exception;
+	List<Message<?>> collect() throws Exception;
 }
