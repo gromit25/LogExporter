@@ -1,6 +1,7 @@
 package com.redeye.logexporter.workflow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -49,11 +50,18 @@ public abstract class AbstractRunner {
 	@Value("${workflow.timeout.sec}")
 	private long timeout;
 	
+	/** 입력 큐 대기 최대치 */
+	@Value("${workflow.log.max}")
+	private int maxLag;
+	
 	/** 입력 큐(Collector의 경우 null) */
 	private BlockingQueue<Message<?>> fromQueue;
 	
 	/** 구독 컴포넌트(Handler의 경우 null) */
 	private List<AbstractRunner> subscriberList;
+	
+	/** 알림 메시지(예외, 상태 변경 등) 구독 컴포넌트 */
+	private List<AbstractRunner> noticeSubscriberList;
 	
 	
 	/**
@@ -83,6 +91,7 @@ public abstract class AbstractRunner {
 						component.exit();
 					} catch (Exception ex) {
 						log.error(component.name(), ex);
+						putNotice(ex);
 					}
 				}
 			};
@@ -135,22 +144,85 @@ public abstract class AbstractRunner {
 	 */
 	protected void put(Message<?> message) throws Exception {
 		
+		// 메시지 전송
+		Map<String, Integer> failMap = this.put(this.subscriberList, message);
+		
+		// lag 초과로 인한 메시지 전송 실패가 있는 경우 알림 메시지 발송
+		if(failMap.size() != 0) {
+			
+			Message<String> notice = new Message<>();
+			notice.setSubject("lag is exceeded.");
+			notice.setBody(failMap.toString());
+			
+			this.putNotice(notice);
+		}
+	}
+	
+	/**
+	 * 알림 메시지 수신 컴포넌트에 메시지 전송
+	 * 
+	 * @param notice 전송할 알림 메시지
+	 */
+	protected void putNotice(Message<?> notice) {
+		
+		try {
+			this.put(this.noticeSubscriberList, notice);
+		} catch(Exception ex) {
+			log.error("notice failed in " + this.component.name(), ex);
+		}
+	}
+	
+	/**
+	 * 예외 알림 발송
+	 * 
+	 * @param ex 발생한 예외 객체
+	 */
+	protected void putNotice(Exception ex) {
+		
+		Message<Exception> notice = new Message<>();
+		notice.setSubject("an exception is raised at " + this.component.name());
+		notice.setBody(ex);
+		
+		this.putNotice(notice);
+	}
+	
+	/**
+	 * 수신 컴포넌트에 메시지 전송
+	 * 
+	 * @param subscriberList 구독 컴포넌트 목록
+	 * @param message 전송할 메시지
+	 * @return lag 초과로 인한 발송 실패 맵 (key: 컴포넌트 명, value: 현재 큐 사이즈)
+	 */
+	private Map<String, Integer> put(List<AbstractRunner> subscriberList, Message<?> message) throws Exception {
+		
+		// 메시지 발송 실패한 구독 컴포넌트 목록
+		Map<String, Integer> failMap = new HashMap<>();
+		
 		// 보낼 메시지가 없으면 반환
 		if(message == null) {
-			return;
+			return failMap;
 		}
 		
-		// 수신자가 설정되어 있는지 확인
-		if(this.subscriberList == null || this.subscriberList.size() == 0) {
-			throw new IllegalStateException("subscribeList is null or zero.");
+		// 수신자가 설정되어 있지 않은 경우 반환
+		if(subscriberList == null || subscriberList.size() == 0) {
+			return failMap;
 		}
 		
 		// 각 수신자에게 메시지 전송
-		for(AbstractRunner subscriber: this.subscriberList) {
+		for(AbstractRunner subscriber: subscriberList) {
 			if(isSubscribe(subscriber, message) == true) {
-				subscriber.fromQueue.put(message);
+				
+				// 큐의 크기가 maxLag 보다 적으면 put 하고
+				// 아닐 경우 발송 실패 목록에 추가함
+				if(subscriber.fromQueue.size() < this.maxLag) {
+					subscriber.fromQueue.put(message);
+				} else {
+					failMap.put(subscriber.component.name(), subscriber.fromQueue.size());
+				}
 			}
 		}
+		
+		return failMap;
 	}
 	
 	/**
@@ -193,6 +265,22 @@ public abstract class AbstractRunner {
 		}
 		
 		this.subscriberList.add(subscriber);
+	}
+	
+	/**
+	 * 알림 구독 컴포넌트 추가
+	 * 
+	 * @param subscriber 알림 구독 컴포넌트
+	 */
+	public synchronized void addNoticeSubscriber(AbstractRunner subscriber) throws Exception {
+		
+		if(this.noticeSubscriberList == null) {
+			// ArrayList는 동시성 문제가 있으나,
+			// 구독 컴포넌트 목록은 처음 한번 만든 이후 변경이 없음
+			this.noticeSubscriberList = new ArrayList<>();
+		}
+		
+		this.noticeSubscriberList.add(subscriber);
 	}
 	
 	/**
