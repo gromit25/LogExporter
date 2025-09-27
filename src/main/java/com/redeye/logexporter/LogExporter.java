@@ -44,7 +44,7 @@ public class LogExporter implements Runnable {
 	@Qualifier("handler")
 	private LogHandler logHandler;
 
-	/** 필터 스레드 객체 */
+	/** 핸들러 스레드 객체 */
 	private Thread handlerThread;
 
 	/** 로그 반출 객체 */
@@ -65,6 +65,7 @@ public class LogExporter implements Runnable {
 	@Getter
 	@Setter
 	private volatile boolean stop;
+	
 	
 	/**
 	 * 생성자

@@ -32,6 +32,7 @@ public class LogFilter {
 	/** 스크립트 실행 객체 */
 	private OLExp script;
 	
+	
 	/**
 	 * 초기화 수행
 	 */

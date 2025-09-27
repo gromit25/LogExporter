@@ -24,6 +24,7 @@ public class LogTransformer {
 	/** 변환 생성용 객체 */
 	private TextGen generator;
 
+	
 	/**
 	 * 초기화
 	 */
