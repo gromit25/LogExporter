@@ -301,7 +301,7 @@ public abstract class AbstractRunner {
 	 * @param clazz 컴포넌트 타입
 	 * @return 컴포넌트
 	 */
-	public T getComponent(Class<T> clazz) {
+	public <T> T getComponent(Class<T> clazz) {
 		return clazz.cast(this.component);
 	}
 }
