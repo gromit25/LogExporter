@@ -1,4 +1,4 @@
-package com.redeye.logexporter.exporter.kafka;
+package com.redeye.logexporter.common.exporter.kafka;
 
 import java.util.HashMap;
 import java.util.Map;

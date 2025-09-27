@@ -1,4 +1,4 @@
-package com.redeye.logexporter.exporter.restapi.domain;
+package com.redeye.logexporter.agentlog.domain;
 
 import java.util.List;
 import java.util.Map;

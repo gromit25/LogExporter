@@ -1,4 +1,4 @@
-package com.redeye.logexporter.exporter.restapi;
+package com.redeye.logexporter.common.exporter.restapi;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -17,8 +17,8 @@ import com.jutools.FileUtil;
 import com.jutools.publish.Publisher;
 import com.jutools.publish.PublisherFactory;
 import com.jutools.publish.PublisherType;
-import com.redeye.logexporter.exporter.Exporter;
-import com.redeye.logexporter.exporter.restapi.domain.TraceDTO;
+import com.redeye.logexporter.agentlog.domain.TraceDTO;
+import com.redeye.logexporter.common.exporter.Exporter;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;

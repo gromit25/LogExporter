@@ -1,4 +1,4 @@
-package com.redeye.logexporter.handler;
+package com.redeye.logexporter.common.handler;
 
 import java.util.Arrays;
 import java.util.HashMap;

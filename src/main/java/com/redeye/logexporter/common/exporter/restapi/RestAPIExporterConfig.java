@@ -1,4 +1,4 @@
-package com.redeye.logexporter.exporter.restapi;
+package com.redeye.logexporter.common.exporter.restapi;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

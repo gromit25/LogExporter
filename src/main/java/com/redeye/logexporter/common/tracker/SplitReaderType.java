@@ -1,7 +1,8 @@
-package com.redeye.logexporter.tracker;
+package com.redeye.logexporter.common.tracker;
 
 import com.jutools.filetracker.LineSplitReader;
 import com.jutools.filetracker.SplitReader;
+import com.redeye.logexporter.agentlog.tracker.AppAgentSplitReader;
 
 /**
  * 파일 트랙커의 Reader 타입

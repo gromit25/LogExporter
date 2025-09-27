@@ -1,4 +1,4 @@
-package com.redeye.logexporter.exporter.restapi.domain;
+package com.redeye.logexporter.agentlog.domain;
 
 import lombok.Data;
 
