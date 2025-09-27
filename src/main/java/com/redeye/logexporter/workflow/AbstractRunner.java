@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.jutools.StringUtil;
@@ -15,7 +14,6 @@ import com.jutools.thread.AbstractDaemon;
 import com.redeye.logexporter.workflow.comp.Component;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
