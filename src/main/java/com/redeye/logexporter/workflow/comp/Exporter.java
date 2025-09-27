@@ -1,11 +1,11 @@
-package com.redeye.logexporter.workflow;
+package com.redeye.logexporter.workflow.comp;
 
 /**
  * exporter 인터페이스 클래스
  * 
  * @author jmsohn
  */
-public interface Exporter {
+public interface Exporter extends Component {
   
 	/**
 	 * 리파지토리로 메시지 전송

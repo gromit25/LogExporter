@@ -16,7 +16,7 @@ import com.jutools.FileTracker;
 import com.jutools.StringUtil;
 import com.redeye.logexporter.common.handler.LogHandler;
 import com.redeye.logexporter.common.tracker.SplitReaderType;
-import com.redeye.logexporter.workflow.Exporter;
+import com.redeye.logexporter.workflow.comp.Exporter;
 
 import lombok.Getter;
 import lombok.Setter;

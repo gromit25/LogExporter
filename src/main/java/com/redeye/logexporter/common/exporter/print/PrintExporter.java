@@ -3,7 +3,7 @@ package com.redeye.logexporter.common.exporter.print;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import com.redeye.logexporter.workflow.Exporter;
+import com.redeye.logexporter.workflow.comp.Exporter;
 
 /**
  * 화면 출력 Exporter (테스트용)
