@@ -3,7 +3,7 @@ package com.redeye.logexporter.workflow.comp;
 import java.util.Map;
 
 /**
- * 컴포넌트 인터페이스 클래스
+ * 컴포넌트 인터페이스
  * 
  * @author jmsohn
  */

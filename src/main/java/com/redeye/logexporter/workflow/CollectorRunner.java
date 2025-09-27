@@ -5,7 +5,7 @@ import java.util.List;
 import com.redeye.logexporter.workflow.comp.Collector;
 
 /**
- * Collector 런너 클래스
+ * 컬렉터 실행 클래스
  * 
  * @author jmsohn
  */

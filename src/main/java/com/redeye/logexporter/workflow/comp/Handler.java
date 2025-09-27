@@ -5,7 +5,7 @@ import java.util.List;
 import com.redeye.logexporter.workflow.Message;
 
 /**
- * 핸들러 인터페이스 클래스
+ * 핸들러 인터페이스
  * 
  * @author jmsohn
  */

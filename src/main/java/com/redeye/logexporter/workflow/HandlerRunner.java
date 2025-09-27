@@ -5,7 +5,7 @@ import java.util.List;
 import com.redeye.logexporter.workflow.comp.Handler;
 
 /**
- * Handler 런너 클래스
+ * 핸들러 실행 클래스
  * 
  * @author jmsohn
  */

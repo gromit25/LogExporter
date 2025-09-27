@@ -5,7 +5,7 @@ import java.util.List;
 import com.redeye.logexporter.workflow.Message;
 
 /**
- * 처리할 데이터 수집 클래스
+ * 데이터 수집 인터페이스
  * 
  * @author jmsohn
  */

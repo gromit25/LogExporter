@@ -3,7 +3,7 @@ package com.redeye.logexporter.workflow;
 import com.redeye.logexporter.workflow.comp.Exporter;
 
 /**
- * Exporter 런너 클래스
+ * 익스포터 실행 클래스
  * 
  * @author jmsohn
  */
