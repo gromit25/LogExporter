@@ -1,5 +1,9 @@
 package com.redeye.logexporter.workflow.comp;
 
+import java.util.List;
+
+import com.redeye.logexporter.workflow.Message;
+
 /**
  * 핸들러 인터페이스 클래스
  * 
@@ -13,5 +17,5 @@ public interface Handler extends Component {
 	 * @param message 처리할 메시지
 	 * @return 처리된 메시지
 	 */
-	String[] handle(String message) throws Exception;
+	List<Message<?>> handle(Message<?> message) throws Exception;
 }

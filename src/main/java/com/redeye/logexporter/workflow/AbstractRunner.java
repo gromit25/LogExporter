@@ -65,7 +65,7 @@ public abstract class AbstractRunner {
 	/**
 	 * 각 Runner 프로세스
 	 */
-	protected abstract void processData() throws InterruptedException;
+	protected abstract void processData() throws Exception;
 	
 	/**
 	 * 컴포넌트 실행
@@ -80,11 +80,20 @@ public abstract class AbstractRunner {
 				
 				@Override
 				protected void process() throws InterruptedException {
-					processData();
+					
+					try {
+						processData();
+					} catch(InterruptedException iex) {
+						throw iex;
+					} catch(Exception ex) {
+						log.error(component.name(), ex);
+						putNotice(ex);
+					}
 				}
 				
 				@Override
 				protected void exit() {
+					
 					try {
 						component.exit();
 					} catch (Exception ex) {
@@ -133,6 +142,24 @@ public abstract class AbstractRunner {
 		}
 		
 		return this.fromQueue.poll(this.timeout, TimeUnit.SECONDS);
+	}
+	
+	/**
+	 * 메시지 목록의 메시지를 전송
+	 * 
+	 * @param messageList 메시지 목록
+	 */
+	protected void put(List<Message<?>> messageList) throws Exception {
+		
+		// 메시지가 null 이거나 없을 경우 반환
+		if(messageList == null || messageList.size() == 0) {
+			return;
+		}
+		
+		// 각 메시지를 순서대로 전송
+		for(Message<?> message: messageList) {
+			this.put(message);
+		}
 	}
 	
 	/**
