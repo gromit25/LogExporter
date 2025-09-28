@@ -49,7 +49,7 @@ public abstract class AbstractRunner {
 	private long timeout;
 	
 	/** 입력 큐 대기 최대치 */
-	@Value("${workflow.log.max}")
+	@Value("${workflow.lag.max}")
 	private int maxLag;
 	
 	/** 입력 큐(Collector의 경우 null) */
@@ -119,7 +119,10 @@ public abstract class AbstractRunner {
 	/**
 	 * 스레드 모두 중지
 	 */
-	public void stop() {
+	public synchronized void stop() {
+		
+		// 입력 큐 클리어
+		this.fromQueue.clear();
 		
 		// 스레드 중지
 		for(AbstractDaemon t: this.threadAry) {
@@ -330,5 +333,19 @@ public abstract class AbstractRunner {
 	 */
 	public <T> T getComponent(Class<T> clazz) {
 		return clazz.cast(this.component);
+	}
+	
+	/**
+	 * 설정된 컴포넌트 명 반환
+	 * 
+	 * @return 컴포넌트 명
+	 */
+	public String getComponentName() {
+		
+		if(this.component == null) {
+			return "N/A";
+		}
+		
+		return this.component.name();
 	}
 }

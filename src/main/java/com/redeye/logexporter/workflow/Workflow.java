@@ -1,12 +1,63 @@
 package com.redeye.logexporter.workflow;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * 
+ * 워크플로우 클래스
  * 
  * @author jmsohn
  */
+@Slf4j
 public class Workflow {
 	
+	/** 런너 맵 (key: 런너의 컴포넌트 명, value: 런너 */
+	private Map<String, AbstractRunner> runnerMap = new ConcurrentHashMap<>();
 	
-
+	
+	/**
+	 * 워크플로우 실행
+	 */
+	public void run() {
+		
+		for(String key: this.runnerMap.keySet()) {
+			
+			AbstractRunner runner = this.runnerMap.get(key);
+			
+			try {
+				runner.run();
+			} catch(Exception ex) {
+				log.error("start fail: " + runner.getComponentName(), ex);
+			}
+		}
+	}
+	
+	/**
+	 * 워크플로우 중단
+	 */
+	public void stop() throws Exception {
+		
+		for(String key: this.runnerMap.keySet()) {
+			
+			AbstractRunner runner = this.runnerMap.get(key);
+			
+			try {
+				runner.stop();
+			} catch(Exception ex) {
+				log.error("stop fail: " + runner.getComponentName(), ex);
+			}
+		}
+	}
+	
+	/**
+	 * 런너 설정
+	 * 
+	 * @param runnerMap 설정할 런너
+	 */
+	public void setRunnerMap(Map<String, AbstractRunner> runnerMap) {
+		this.runnerMap.clear();
+		this.runnerMap.putAll(runnerMap);
+	}
 }
