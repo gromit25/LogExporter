@@ -2,6 +2,7 @@ package com.redeye.logexporter.workflow;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,14 @@ import com.redeye.logexporter.workflow.runner.AbstractRunner;
 @ConfigurationProperties(prefix="workflow.comp")
 public class WorkflowConfiguration {
 	
+	/** 컴포넌트 명 패턴 문자열 */
+	private static final String COMPONENT_NAME_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9_\\-]*";
+	
 	/** 워크플로우 설정 맵 */
 	private final Map<String, String> config;
+	
+	/** */
+	private Pattern componentNameP = Pattern.compile(COMPONENT_NAME_PATTERN);
 
 	
 	/**
