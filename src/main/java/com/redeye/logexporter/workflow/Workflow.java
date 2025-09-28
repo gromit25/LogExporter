@@ -3,6 +3,8 @@ package com.redeye.logexporter.workflow;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.redeye.logexporter.workflow.runner.AbstractRunner;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**

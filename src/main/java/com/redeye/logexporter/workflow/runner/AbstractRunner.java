@@ -1,4 +1,4 @@
-package com.redeye.logexporter.workflow;
+package com.redeye.logexporter.workflow.runner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.jutools.StringUtil;
 import com.jutools.thread.AbstractDaemon;
+import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.comp.Component;
 
 import lombok.Getter;
