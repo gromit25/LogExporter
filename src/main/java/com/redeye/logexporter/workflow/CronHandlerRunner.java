@@ -1,5 +1,7 @@
 package com.redeye.logexporter.workflow;
 
+import java.util.List;
+
 import com.jutools.CronJob;
 import com.redeye.logexporter.workflow.comp.CronHandler;
 
@@ -28,8 +30,12 @@ public class CronHandlerRunner extends AbstractRunner {
 		this.job = new CronJob(period, () -> {
 			
 			try {
-				getComponent(CronHandler.class).flush();
+				
+				List<Message<?>> messageList = getComponent(CronHandler.class).flush();
+				put(messageList);
+				
 			} catch(Exception ex) {
+				
 				log.error("", ex);
 				putNotice(ex);
 			}
