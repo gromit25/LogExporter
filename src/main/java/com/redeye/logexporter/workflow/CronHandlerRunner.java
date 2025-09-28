@@ -36,7 +36,7 @@ public class CronHandlerRunner extends AbstractRunner {
 				
 			} catch(Exception ex) {
 				
-				log.error("", ex);
+				log.error(getComponent(CronHandler.class).name(), ex);
 				putNotice(ex);
 			}
 		});
