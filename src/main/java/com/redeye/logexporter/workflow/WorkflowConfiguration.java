@@ -14,17 +14,18 @@ import org.springframework.stereotype.Component;
  */
 @Configuration
 @ConfigurationProperties(prefix="comp")
-public class WorkflowBuilder {
+public class WorkflowConfiguration {
 	
 	/** 워크플로우 설정 맵 */
 	private final Map<String, String> config;
 
+	
 	/**
 	 * 생성자 
 	 * 
 	 * @param config
 	 */
-	public WorkflowBuilder(Map<String, String> config) {
+	public WorkflowConfiguration(Map<String, String> config) {
 		this.config = config;
 	}
 	
