@@ -58,5 +58,8 @@ public class RunnerFactory {
     runner.setMaxLag(this.maxLag);
     runner.setThreadCount(threadCount);
     runner.setSubscribeSubject(subscribeSubject);
+
+    // 생성된 런너 객체 반환
+    return runner;
   }
 }
