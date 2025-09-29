@@ -12,6 +12,11 @@ import com.redeye.logexporter.workflow.comp.Collector;
  */
 public class CollectorRunner extends AbstractRunner {
 
+	public CollectorRunner(Collector c) {
+		this.setComponent(c);
+		this.setFromQueue();
+	}
+
 	@Override
 	protected void processData() throws Exception {
 		
