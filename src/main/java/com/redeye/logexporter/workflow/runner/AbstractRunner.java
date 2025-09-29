@@ -62,6 +62,11 @@ public abstract class AbstractRunner {
 	
 
 	/**
+	 * 각 Runner 프로세스
+	 */
+	protected abstract void processData() throws Exception;
+	
+	/**
 	 * 생성자
 	 *
 	 * @param component 업무 컴포넌트
@@ -69,11 +74,6 @@ public abstract class AbstractRunner {
 	public AbstractRunner(Component component) {
 		this.component = component;
 	}
-	
-	/**
-	 * 각 Runner 프로세스
-	 */
-	protected abstract void processData() throws Exception;
 	
 	/**
 	 * 컴포넌트 실행
