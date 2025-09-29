@@ -10,6 +10,13 @@ import com.redeye.logexporter.workflow.Message;
  * @author jmsohn
  */
 public interface CronHandler extends Component {
+
+	/**
+	 * 수집 주기 반환
+	 *
+	 * @return 수집 주기
+	 */
+	String getPeriod();
 	
 	/**
 	 * 데이터 수신 부
