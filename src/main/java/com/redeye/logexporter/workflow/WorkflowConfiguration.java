@@ -21,12 +21,16 @@ public class WorkflowConfiguration {
 	
 	/** 컴포넌트 명 패턴 문자열 */
 	private static final String COMPONENT_NAME_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9_\\-]*";
-	
-	/** 워크플로우 설정 맵 */
-	private final Map<String, String> config;
-	
+
 	/** */
 	private Pattern componentNameP = Pattern.compile(COMPONENT_NAME_PATTERN);
+
+	/** 워크플로우 설정 맵 */
+	private final Map<String, String> config;
+
+	/** 런너 객체 생성 팩토리 객체 */
+	@Autowired
+	private RunnerFactory factory;
 
 	
 	/**
