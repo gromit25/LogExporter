@@ -25,10 +25,13 @@ public class CronHandlerRunner extends AbstractRunner {
 	 * 
 	 * @param period 크론잡 주기
 	 */
-	public CronHandlerRunner(String period) throws Exception {
+	public CronHandlerRunner(CronHandler cronHandler) throws Exception {
+
+		//
+		super(cronHandler);
 		
 		// 크론 잡 생성
-		this.job = new CronJob(period, () -> {
+		this.job = new CronJob(cronHandler.getPeriod(), () -> {
 			
 			try {
 				
