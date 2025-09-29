@@ -29,6 +29,9 @@ public class CronHandlerRunner extends AbstractRunner {
 
 		//
 		super(cronHandler);
+
+		// 입력 큐 설정
+		this.setFromQueue();
 		
 		// 크론 잡 생성
 		this.job = new CronJob(cronHandler.getPeriod(), () -> {
