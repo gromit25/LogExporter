@@ -14,7 +14,6 @@ public class CollectorRunner extends AbstractRunner {
 
 	public CollectorRunner(Collector collector) {
 		super(collector);
-		this.setFromQueue();
 	}
 
 	@Override
