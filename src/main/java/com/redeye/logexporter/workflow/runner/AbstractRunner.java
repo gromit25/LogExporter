@@ -42,8 +42,8 @@ public abstract class AbstractRunner {
 	/** 스레드 목록 */
 	private AbstractDaemon[] threadAry;
 	
-	/** 구독 패턴 */
-	private StringUtil.WildcardPattern subscribePattern;
+	/** 구독 제목 패턴 */
+	private StringUtil.WildcardPattern subscribeSubjectPattern;
 	
 	/** 입력 큐의 타입 아웃 */
 	private long timeout;
@@ -263,19 +263,19 @@ public abstract class AbstractRunner {
 		return
 			subscriber.fromQueue != null
 			&& (
-				subscriber.subscribePattern == null
-				|| subscriber.subscribePattern.match(message.getSubject()).isMatch()
+				StringUtil.isEmpty(subscriber.subscribeSubjectPattern) == true
+				|| subscriber.subscribeSubjectPattern.match(message.getSubject()).isMatch()
 				)
 			;
 	}
 	
 	/**
-	 * 구독 패턴 설정
+	 * 구독 제목 설정
 	 * 
-	 * @param subscribePatternStr 구독 패턴 문자열
+	 * @param subscribeSubject 구독 제목
 	 */
-	public void setSubscribePattern(String subscribePatternStr) throws Exception {
-		this.subscribePattern = StringUtil.WildcardPattern.create(subscribePatternStr);
+	public void setSubscribeSubject(String subscribeSubject) throws Exception {
+		this.subscribeSubjectPattern = StringUtil.WildcardPattern.create(subscribeSubject);
 	}
 	
 	/**
