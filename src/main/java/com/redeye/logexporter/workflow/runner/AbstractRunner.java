@@ -46,11 +46,9 @@ public abstract class AbstractRunner {
 	private StringUtil.WildcardPattern subscribePattern;
 	
 	/** 입력 큐의 타입 아웃 */
-	@Value("${workflow.timeout.sec}")
 	private long timeout;
 	
 	/** 입력 큐 대기 최대치 */
-	@Value("${workflow.lag.max}")
 	private int maxLag;
 	
 	/** 입력 큐(Collector의 경우 null) */
