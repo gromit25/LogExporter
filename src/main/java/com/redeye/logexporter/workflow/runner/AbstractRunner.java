@@ -60,6 +60,15 @@ public abstract class AbstractRunner {
 	/** 알림 메시지(예외, 상태 변경 등) 구독 컴포넌트 */
 	private List<AbstractRunner> noticeSubscriberList;
 	
+
+	/**
+	 * 생성자
+	 *
+	 * @param component 업무 컴포넌트
+	 */
+	public AbstractRunner(Component component) {
+		this.component = component;
+	}
 	
 	/**
 	 * 각 Runner 프로세스
