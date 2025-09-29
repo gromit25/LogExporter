@@ -55,7 +55,10 @@ public class WorkflowConfiguration {
 		
 		// 런너 생성 -------------
 		// 컴포넌트 생성
+		Component component = createComponent();
+		
 		// 컴포넌트의 런너 생성 및 설정
+		AbstractRunner runner = this.factory.create(component);
 		
 		// 런너 링킹 -------------
 		
@@ -64,5 +67,15 @@ public class WorkflowConfiguration {
 		wf.setRunnerMap(map);
 		
 		return wf;
+	}
+
+	/**
+	 *
+	 *
+	 * @param 생성할 컴포넌트 클래스명
+	 * @return 생성된 컴포넌트
+	 */
+	private Component createComponent(String clazzName) {
+		Class<?> clazz = Class.forName(clazzName);
 	}
 }
