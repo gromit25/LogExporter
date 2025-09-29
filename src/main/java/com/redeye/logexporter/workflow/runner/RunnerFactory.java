@@ -9,10 +9,10 @@ package com.redeye.logexporter.workflow.runner;
 public class RunnerFactory {
 
   @Value("${workflow.timeout.sec}")
-  private long timeout;
+  private final long timeout;
 
   @Value("${workflow.lag.max}")
-  private int maxLag;
+  private final int maxLag;
 
   /**
    * 컴포넌트의 런너 객체 생성 후 반환
