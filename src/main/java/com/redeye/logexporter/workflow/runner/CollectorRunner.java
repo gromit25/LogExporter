@@ -13,7 +13,7 @@ import com.redeye.logexporter.workflow.comp.Collector;
 public class CollectorRunner extends AbstractRunner {
 
 	public CollectorRunner(Collector c) {
-		this.setComponent(c);
+		super(c);
 		this.setFromQueue();
 	}
 
