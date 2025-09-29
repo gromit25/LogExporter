@@ -30,28 +30,14 @@ public class RunnerFactory {
     }
 
     // 컴포넌트 종류에 따라 런너 객체 생성
-    AbstractRunner runner = null;
-    
-    switch (component) {
-      case Collector c -> {
-        runner = new CollectorRunner(component);
-      }
-      case Handler h -> {
-        runner = new HandlerRunner(component);
-        runner.setFromQueue();
-      }
-      case Exporter e -> {
-        runner = new ExporterRunner(component);
-        runner.setFromQueue();
-      }
-      case CronHandler ch -> {
-        runner = new CronHandlerRunner(component);
-        runner.setFromQueue();
-      }
-      default -> {
-        throw new IllegalArgumentException("component type is not available: " + component.class);
-      }
-    }
+    AbstractRunner runner = 
+      switch (component) {
+        case Collector c -> new CollectorRunner(c);
+        case Handler h -> new HandlerRunner(h);
+        case Exporter e -> new ExporterRunner(e);
+        case CronHandler ch -> new CronHandlerRunner(ch);
+        default -> throw new IllegalArgumentException("component type is not available: " + component.class);
+      };
     
     // 런너 객체 공통 설정
     runner.setTimeout(this.timeout);
