@@ -18,8 +18,8 @@ public class CronHandlerRunner extends AbstractRunner {
 	
 	/** 크론 잡 */
 	private CronJob job;
-	
-	
+
+
 	/**
 	 * 생성자
 	 * 
