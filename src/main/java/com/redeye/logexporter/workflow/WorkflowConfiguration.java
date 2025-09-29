@@ -17,7 +17,7 @@ import com.redeye.logexporter.workflow.runner.AbstractRunner;
  */
 @Configuration
 @ConfigurationProperties(prefix="workflow.comp")
-public class WorkflowConfiguration {
+public class WorkflowConfiguration implements ApplicationContextAware {
 	
 	/** 컴포넌트 명 패턴 문자열 */
 	private static final String COMPONENT_NAME_PATTERN = "[a-zA-Z0-9][a-zA-Z0-9_\\-]*";
