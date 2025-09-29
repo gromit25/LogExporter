@@ -53,12 +53,12 @@ public class WorkflowConfiguration {
 		// 런너 맵
 		Map<String, AbstractRunner> map = new HashMap<>();
 		
-		// 런너 생성 -------------
+		// 컴포넌트 및 런너 생성 -------------
 		// 컴포넌트 생성
 		Component component = createComponent();
 		
 		// 컴포넌트의 런너 생성 및 설정
-		AbstractRunner runner = this.factory.create(component);
+		AbstractRunner runner = this.factory.create(component, threadCount);
 		
 		// 런너 링킹 -------------
 		
