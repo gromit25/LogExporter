@@ -11,7 +11,11 @@ import com.redeye.logexporter.workflow.comp.Exporter;
 public class ExporterRunner extends AbstractRunner {
 
 	public ExporterRunner(Exporter exporter) {
+
+		//
 		super(exporter);
+
+		// 입력 큐 설정
 		this.setFromQueue();
 	}
 
