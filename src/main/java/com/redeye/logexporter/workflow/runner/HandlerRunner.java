@@ -12,6 +12,15 @@ import com.redeye.logexporter.workflow.comp.Handler;
  */
 public class HandlerRunner extends AbstractRunner {
 
+	public HandlerRunner(Handler handler) {
+		
+		//
+		super(handler);
+
+		// 입력 큐 설정
+		this.setFromQueue();
+	}
+
 	@Override
 	protected void processData() throws Exception {
 		
