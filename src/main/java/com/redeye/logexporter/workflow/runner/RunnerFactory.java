@@ -5,6 +5,7 @@ package com.redeye.logexporter.workflow.runner;
  *
  * @author jmsohn
  */
+@Component
 public class RunnerFactory {
 
   @Value("${workflow.timeout.sec}")
