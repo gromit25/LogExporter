@@ -3,7 +3,7 @@ package com.redeye.logexporter.workflow;
 import lombok.Data;
 
 /**
- * 
+ * 워크플로우 메시지 클래스
  * 
  * @author jmsohn
  */
