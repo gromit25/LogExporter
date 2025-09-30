@@ -21,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootApplication
 public class LogExporterApplication implements CommandLineRunner {
 	
-	/** 로그 출력기 */
+	/** 로그 워크플로우 */
 	@Autowired
-	private LogExporter logExporter;
+	private Workflow workflow;
 
 	/** 중단 파일 */
 	@Value("${app.stop.file}")
@@ -45,8 +45,7 @@ public class LogExporterApplication implements CommandLineRunner {
 			
 			// log tracking 시작
 			log.info("start log exporter.");
-			Thread thread = new Thread(this.logExporter);
-			thread.start();
+			this.workflow.run();
 	
 			// stop 파일이 생성되거 업데이트 될때까지 대기
 			FileUtil.waitForFileTouched(this.stopFile);
