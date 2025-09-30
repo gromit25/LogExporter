@@ -17,11 +17,10 @@ public interface Component {
 	String name();
 	
 	/**
-	 * 컴포넌트 실행 전 초기화
-	 * 
-	 * @param config
+	 * 컴포넌트 실행 전 초기화<br>
+	 * 재 시작시 초기화가 필요한 경우
 	 */
-	default void init(Map<String, String> config) throws Exception {
+	default void init() throws Exception {
 		// Do nothing
 	}
 	
