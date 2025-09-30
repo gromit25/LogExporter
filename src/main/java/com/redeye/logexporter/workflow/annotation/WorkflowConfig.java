@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) 
 @Target(ElementType.TYPE)
 public @interface WorkflowConfig {
-  String from() default null;
-  String subscribe() default null;
+  String from() default "";
+  String subscribe() default "";
   int threadCount() default 1;
 }
