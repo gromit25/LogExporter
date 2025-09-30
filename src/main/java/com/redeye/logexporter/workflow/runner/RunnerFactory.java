@@ -18,11 +18,9 @@ public class RunnerFactory {
    * 컴포넌트의 런너 객체 생성 후 반환
    *
    * @param component 컴포넌트 
-   * @param subscribeSubject 구독 제목
-   * @param threadCount 스레드 개수
    * @return 컴포넌트의 런너 객체
    */
-  public AbstractRunner create(Component component, String subscribeSubject, int threadCount) throws Exception {
+  public AbstractRunner create(Component component) throws Exception {
 
     // 입력 값 검증
     if(component == null) {
