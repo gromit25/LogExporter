@@ -28,9 +28,6 @@ public abstract class AbstractRunner {
 	/** 컴포넌트 객체 */
 	private Component component;
 	
-	/** 설정 정보 - application.properties */
-	private Map<String, String> config;
-	
 	/** 스레드 중단 여부 */
 	@Getter
 	private volatile boolean stop = true;
@@ -111,9 +108,6 @@ public abstract class AbstractRunner {
 				}
 			};
 		}
-		
-		// 스레드 시작 전 컴포넌트 초기화
-		this.component.init(this.config);
 		
 		// 각 스레드 시작
 		for(AbstractDaemon t: this.threadAry) {
