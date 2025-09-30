@@ -51,7 +51,7 @@ public class WorkflowConfiguration {
 		Component component;
 		
 		// 컴포넌트의 런너 생성 및 설정
-		AbstractRunner runner = this.factory.create(component, threadCount);
+		AbstractRunner runner = this.factory.create(component);
 		
 		// 런너 링킹 -------------
 		
