@@ -76,6 +76,11 @@ public abstract class AbstractRunner {
 	 * 컴포넌트 실행
 	 */
 	public synchronized void run() throws Exception {
+
+		// 이미 수행 중 이면 반환
+		if(this.stop == false) {
+			return;
+		}
 		
 		// 스레드 생성 및 목록에 추가
 		this.threadAry = new AbstractDaemon[this.threadCount];
