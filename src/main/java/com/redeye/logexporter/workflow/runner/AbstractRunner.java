@@ -108,6 +108,9 @@ public abstract class AbstractRunner {
 				}
 			};
 		}
+
+		// 스레드 시작 전 초기화 메소드 호출
+		this.component.init();
 		
 		// 각 스레드 시작
 		for(AbstractDaemon t: this.threadAry) {
