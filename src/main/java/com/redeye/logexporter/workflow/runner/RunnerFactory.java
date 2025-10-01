@@ -6,6 +6,7 @@ package com.redeye.logexporter.workflow.runner;
  * @author jmsohn
  */
 @Component
+@ConfigurationProperties(prefix = "workflow.comp") 
 public class RunnerFactory {
 
   @Value("${workflow.timeout.sec}")
@@ -13,6 +14,11 @@ public class RunnerFactory {
 
   @Value("${workflow.lag.max}")
   private final int maxLag;
+
+  /** */
+  @Getter
+  @Setter
+  private Map<String, String> configMap;
 
   /**
    * 컴포넌트의 런너 객체 생성 후 반환
