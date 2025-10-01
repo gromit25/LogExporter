@@ -10,13 +10,6 @@ import java.util.Map;
 public interface Component {
 	
 	/**
-	 * 컴포넌트 명 반환
-	 * 
-	 * @return 컴포넌트 명
-	 */
-	String name();
-	
-	/**
 	 * 컴포넌트 실행 전 초기화<br>
 	 * 재 시작시 초기화가 필요한 경우
 	 */
