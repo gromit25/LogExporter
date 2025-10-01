@@ -44,14 +44,18 @@ public class WorkflowConfiguration {
 	Workflow workflow() throws Exception {
 		
 		// 런너 맵
-		Map<String, AbstractRunner> map = new HashMap<>();
+		Map<String, AbstractRunner> runnerMap = new HashMap<>();
 		
 		// 런너 생성 -------------
-		// 
-		Component component;
+		for(String name: this.componentMap.keySet()) {
+			
+			// 작업할 컴포넌트 획득
+			Component component = this.componentMap.get(name);
 		
-		// 컴포넌트의 런너 생성 및 설정
-		AbstractRunner runner = this.factory.create(component);
+			// 컴포넌트 런너 생성 및 설정
+			AbstractRunner runner = this.factory.create(component);
+			runnerMap.put(name, runner);
+		}
 		
 		// 런너 링킹 -------------
 		
