@@ -44,12 +44,27 @@ public class RunnerFactory {
       };
     
     // 런너 객체 공통 설정
+    this.setupRunner(runner);
+
+    // 생성된 런너 객체 반환
+    return runner;
+  }
+
+  /**
+   *
+   *
+   * @param runner
+   */
+  private void setupRunner(AbstractRunner runner) {
+
+    //
+    int threadCount = 1;
+    String subscribeSubject = "";
+    
+    //
     runner.setTimeout(this.timeout);
     runner.setMaxLag(this.maxLag);
     runner.setThreadCount(threadCount);
     runner.setSubscribeSubject(subscribeSubject);
-
-    // 생성된 런너 객체 반환
-    return runner;
   }
 }
