@@ -49,7 +49,7 @@ public class WorkflowConfiguration {
 		// 런너 생성 -------------
 		for(String name: this.componentMap.keySet()) {
 			
-			// 작업할 컴포넌트 획득
+			// 컴포넌트 획득
 			Component component = this.componentMap.get(name);
 		
 			// 컴포넌트 런너 생성 및 설정
@@ -58,10 +58,16 @@ public class WorkflowConfiguration {
 		}
 		
 		// 런너 링킹 -------------
+		for(String name: runnerMap.keySet()) {
+			
+			// 링킹 작업할 런너 획득
+			AbstractRunner subscribeRunner = runnerMap.get(name);
+		
+		}
 		
 		// 워크플로우 생성 및 반환
 		Workflow wf = new Workflow();
-		wf.setRunnerMap(map);
+		wf.setRunnerMap(runnerMap);
 		
 		return wf;
 	}
