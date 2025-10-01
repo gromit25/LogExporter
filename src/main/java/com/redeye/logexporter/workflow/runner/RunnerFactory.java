@@ -9,7 +9,7 @@ package com.redeye.logexporter.workflow.runner;
 @ConfigurationProperties(prefix = "workflow.comp") 
 public class RunnerFactory {
 
-  @Value("${workflow.timeout}")
+  @Value("${workflow.timeout.sec}")
   private final long timeout;
 
   @Value("${workflow.maxlag}")
