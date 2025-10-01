@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME) 
 @Target(ElementType.TYPE)
-public @interface WorkflowConfig {
+public @interface ComponentConfig {
   String from() default "";
   String subscribe() default "";
   int threadCount() default 1;
