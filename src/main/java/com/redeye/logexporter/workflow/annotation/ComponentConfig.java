@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) 
 @Target(ElementType.TYPE)
 public @interface ComponentConfig {
+  ComponentType type() default ComponentType.NORMAL;
   String from() default "";
   String subscribe() default "";
   int threadCount() default 1;
