@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import com.jutools.StringUtil;
 import com.jutools.thread.AbstractDaemon;
 import com.redeye.logexporter.workflow.Message;
@@ -25,8 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractRunner {
 	
+	/** 컴포넌트 객체 명 - 스프링부트에 등록된 이름 */
+	@Getter
+	private final String name;
+	
 	/** 컴포넌트 객체 */
-	private Component component;
+	@Getter
+	private final Component component;
 	
 	/** 스레드 중단 여부 */
 	@Getter
@@ -66,9 +69,11 @@ public abstract class AbstractRunner {
 	/**
 	 * 생성자
 	 *
-	 * @param component 업무 컴포넌트
+	 * @param name 컴포넌트 명
+	 * @param component 워크플로우 컴포넌트
 	 */
-	public AbstractRunner(Component component) {
+	public AbstractRunner(String name, Component component) {
+		this.name = name;
 		this.component = component;
 	}
 	
@@ -96,7 +101,7 @@ public abstract class AbstractRunner {
 					} catch(InterruptedException iex) {
 						throw iex;
 					} catch(Exception ex) {
-						log.error(component.name(), ex);
+						log.error(getName(), ex);
 						putNotice(ex);
 					}
 				}
@@ -107,7 +112,7 @@ public abstract class AbstractRunner {
 					try {
 						component.exit();
 					} catch (Exception ex) {
-						log.error(component.name(), ex);
+						log.error(getName(), ex);
 						putNotice(ex);
 					}
 				}
@@ -206,7 +211,7 @@ public abstract class AbstractRunner {
 		try {
 			this.put(this.noticeSubscriberList, notice);
 		} catch(Exception ex) {
-			log.error("notice failed in " + this.component.name(), ex);
+			log.error("notice failed in " + this.getName(), ex);
 		}
 	}
 	
@@ -218,7 +223,7 @@ public abstract class AbstractRunner {
 	protected void putNotice(Exception ex) {
 		
 		Message<Exception> notice = new Message<>();
-		notice.setSubject("an exception is raised at " + this.component.name());
+		notice.setSubject("an exception is raised at " + this.getName());
 		notice.setBody(ex);
 		
 		this.putNotice(notice);
@@ -255,7 +260,7 @@ public abstract class AbstractRunner {
 				if(subscriber.fromQueue.size() < this.maxLag) {
 					subscriber.fromQueue.put(message);
 				} else {
-					failMap.put(subscriber.component.name(), subscriber.fromQueue.size());
+					failMap.put(subscriber.getName(), subscriber.fromQueue.size());
 				}
 			}
 		}
@@ -274,7 +279,7 @@ public abstract class AbstractRunner {
 		return
 			subscriber.fromQueue != null
 			&& (
-				StringUtil.isEmpty(subscriber.subscribeSubjectPattern) == true
+				subscriber.subscribeSubjectPattern == null 
 				|| subscriber.subscribeSubjectPattern.match(message.getSubject()).isMatch()
 				)
 			;
@@ -343,19 +348,5 @@ public abstract class AbstractRunner {
 	 */
 	public <T> T getComponent(Class<T> clazz) {
 		return clazz.cast(this.component);
-	}
-	
-	/**
-	 * 설정된 컴포넌트 명 반환
-	 * 
-	 * @return 컴포넌트 명
-	 */
-	public String getComponentName() {
-		
-		if(this.component == null) {
-			return "N/A";
-		}
-		
-		return this.component.name();
 	}
 }
