@@ -10,17 +10,23 @@ import com.redeye.logexporter.workflow.comp.Collector;
  * 
  * @author jmsohn
  */
-public class CollectorRunner extends AbstractRunner {
+public class CollectorRunner extends AbstractRunner<Collector> {
 
-	public CollectorRunner(Collector collector) {
-		super(collector);
+	/**
+	 * 생성자
+	 * 
+	 * @param name 컴포넌트 명
+	 * @param collector 컬렉터 컴포넌트
+	 */
+	CollectorRunner(String name, Collector collector) {
+		super(name, collector);
 	}
 
 	@Override
 	protected void processData() throws Exception {
 		
 		// 메시지 수집 후 결과 반환
-		List<Message<?>> messageList = this.getComponent(Collector.class).collect();
+		List<Message<?>> messageList = this.getComponent().collect();
 		
 		// 결과를 구독 컴포넌트로 전달
 		this.put(messageList);

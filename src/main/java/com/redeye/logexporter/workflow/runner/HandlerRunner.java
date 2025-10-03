@@ -10,15 +10,16 @@ import com.redeye.logexporter.workflow.comp.Handler;
  * 
  * @author jmsohn
  */
-public class HandlerRunner extends AbstractRunner {
+public class HandlerRunner extends AbstractRunner<Handler> {
 
-	public HandlerRunner(Handler handler) {
-		
-		//
-		super(handler);
-
-		// 입력 큐 설정
-		this.setFromQueue();
+	/**
+	 * 생성자
+	 * 
+	 * @param name 컴포넌트 명
+	 * @param handler 핸들러 컴포넌트
+	 */
+	HandlerRunner(String name, Handler handler) {
+		super(name, handler);
 	}
 
 	@Override
@@ -32,7 +33,7 @@ public class HandlerRunner extends AbstractRunner {
 		}
 		
 		// 메시지 처리 후 결과 반환
-		List<Message<?>> messageList = this.getComponent(Handler.class).handle(message);
+		List<Message<?>> messageList = this.getComponent().handle(message);
 		
 		// 결과를 구독 컴포넌트로 전달
 		this.put(messageList);

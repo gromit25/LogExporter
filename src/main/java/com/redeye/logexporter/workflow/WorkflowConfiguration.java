@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.redeye.logexporter.workflow.comp.Component;
 import com.redeye.logexporter.workflow.runner.AbstractRunner;
+import com.redeye.logexporter.workflow.runner.RunnerFactory;
 
 /**
  * Workflow 생성 클래스
@@ -53,7 +57,7 @@ public class WorkflowConfiguration {
 			Component component = this.componentMap.get(name);
 		
 			// 컴포넌트 런너 생성 및 설정
-			AbstractRunner runner = this.factory.create(component);
+			AbstractRunner<?> runner = this.factory.create(name, component);
 			runnerMap.put(name, runner);
 		}
 		

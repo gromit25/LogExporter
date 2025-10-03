@@ -21,22 +21,20 @@ import lombok.extern.slf4j.Slf4j;
  * @author jmsohn
  */
 @Slf4j
-public abstract class AbstractRunner {
+public abstract class AbstractRunner<T extends Component> {
 	
 	/** 컴포넌트 객체 명 - 스프링부트에 등록된 이름 */
 	@Getter
 	private final String name;
 	
 	/** 컴포넌트 객체 */
-	@Getter
-	private final Component component;
+	private final T component;
 	
 	/** 스레드 중단 여부 */
 	@Getter
 	private volatile boolean stop = true;
 	
 	/** 스레드 개수 */
-	@Getter
 	private int threadCount = 1;
 	
 	/** 스레드 목록 */
@@ -45,7 +43,7 @@ public abstract class AbstractRunner {
 	/** 구독 제목 패턴 */
 	private StringUtil.WildcardPattern subscribeSubjectPattern;
 	
-	/** 입력 큐의 타입 아웃 */
+	/** 입력 큐 데이터 수신 타입 아웃 */
 	private long timeout;
 	
 	/** 입력 큐 대기 최대치 */
@@ -55,10 +53,10 @@ public abstract class AbstractRunner {
 	private BlockingQueue<Message<?>> fromQueue;
 	
 	/** 구독 컴포넌트(Handler의 경우 null) */
-	private List<AbstractRunner> subscriberList;
+	private List<AbstractRunner<?>> subscriberList;
 	
 	/** 알림 메시지(예외, 상태 변경 등) 구독 컴포넌트 */
-	private List<AbstractRunner> noticeSubscriberList;
+	private List<AbstractRunner<?>> noticeSubscriberList;
 	
 
 	/**
@@ -72,7 +70,7 @@ public abstract class AbstractRunner {
 	 * @param name 컴포넌트 명
 	 * @param component 워크플로우 컴포넌트
 	 */
-	public AbstractRunner(String name, Component component) {
+	protected AbstractRunner(String name, T component) {
 		this.name = name;
 		this.component = component;
 	}
@@ -236,7 +234,7 @@ public abstract class AbstractRunner {
 	 * @param message 전송할 메시지
 	 * @return lag 초과로 인한 발송 실패 맵 (key: 컴포넌트 명, value: 현재 큐 사이즈)
 	 */
-	private Map<String, Integer> put(List<AbstractRunner> subscriberList, Message<?> message) throws Exception {
+	private Map<String, Integer> put(List<AbstractRunner<?>> subscriberList, Message<?> message) throws Exception {
 		
 		// 메시지 발송 실패한 구독 컴포넌트 목록
 		Map<String, Integer> failMap = new HashMap<>();
@@ -252,7 +250,7 @@ public abstract class AbstractRunner {
 		}
 		
 		// 각 수신자에게 메시지 전송
-		for(AbstractRunner subscriber: subscriberList) {
+		for(AbstractRunner<?> subscriber: subscriberList) {
 			if(isSubscribe(subscriber, message) == true) {
 				
 				// 큐의 크기가 maxLag 보다 적으면 put 하고
@@ -275,7 +273,7 @@ public abstract class AbstractRunner {
 	 * @param message 전송할 메시지
 	 * @return 수신 컴포넌트의 구독 여부
 	 */
-	private static boolean isSubscribe(AbstractRunner subscriber, Message<?> message) throws Exception {
+	private static boolean isSubscribe(AbstractRunner<?> subscriber, Message<?> message) throws Exception {
 		return
 			subscriber.fromQueue != null
 			&& (
@@ -299,7 +297,7 @@ public abstract class AbstractRunner {
 	 * 
 	 * @param subscriber 구독 컴포넌트
 	 */
-	public synchronized void addSubscriber(AbstractRunner subscriber) throws Exception {
+	public synchronized void addSubscriber(AbstractRunner<?> subscriber) throws Exception {
 		
 		if(this.subscriberList == null) {
 			// ArrayList는 동시성 문제가 있으나,
@@ -315,7 +313,7 @@ public abstract class AbstractRunner {
 	 * 
 	 * @param subscriber 알림 구독 컴포넌트
 	 */
-	public synchronized void addNoticeSubscriber(AbstractRunner subscriber) throws Exception {
+	public synchronized void addNoticeSubscriber(AbstractRunner<?> subscriber) throws Exception {
 		
 		if(this.noticeSubscriberList == null) {
 			// ArrayList는 동시성 문제가 있으나,
@@ -334,10 +332,38 @@ public abstract class AbstractRunner {
 	public synchronized void setThreadCount(int threadCount) throws Exception {
 		
 		if(threadCount < 1) {
-			throw new IllegalArgumentException("threadCount must be greater than 0: " + threadCount);
+			throw new IllegalArgumentException("'threadCount' must be greater than 0: " + threadCount);
 		}
 		
 		this.threadCount = threadCount;
+	}
+	
+	/**
+	 * 입력 큐 데이터 수신 타입 아웃 설정
+	 * 
+	 * @param timeout 입력 큐 데이터 수신 타입 아웃
+	 */
+	public synchronized void setTimeout(long timeout) throws Exception {
+		
+		if(timeout < 1) {
+			throw new IllegalArgumentException("'timeout' must be greater than 0: " + timeout);
+		}
+		
+		this.timeout = timeout;
+	}
+	
+	/**
+	 * from 큐의 최대 lag 개수 설정
+	 * 
+	 * @param maxLag 설정할 최대 lag 수
+	 */
+	public synchronized void setMaxLag(int maxLag) throws Exception {
+		
+		if(maxLag < 1) {
+			throw new IllegalArgumentException("'maxLag' must be greater than 0: " + maxLag);
+		}
+		
+		this.maxLag = maxLag;
 	}
 	
 	/**
@@ -346,7 +372,7 @@ public abstract class AbstractRunner {
 	 * @param clazz 컴포넌트 타입
 	 * @return 컴포넌트
 	 */
-	public <T> T getComponent(Class<T> clazz) {
-		return clazz.cast(this.component);
+	public T getComponent() {
+		return this.component;
 	}
 }

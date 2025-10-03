@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * @authro jmsohn
  */
 @Slf4j
-public class CronHandlerRunner extends AbstractRunner {
+public class CronHandlerRunner extends AbstractRunner<CronHandler> {
 	
 	/** 크론 잡 */
 	private CronJob job;
@@ -23,27 +23,24 @@ public class CronHandlerRunner extends AbstractRunner {
 	/**
 	 * 생성자
 	 * 
-	 * @param period 크론잡 주기
+	 * @param name 컴포넌트 명
+	 * @param cronHandler 크론  컴포넌트
 	 */
-	public CronHandlerRunner(CronHandler cronHandler) throws Exception {
+	CronHandlerRunner(String name, CronHandler cronHandler) throws Exception {
 
-		//
-		super(cronHandler);
+		super(name, cronHandler);
 
-		// 입력 큐 설정
-		this.setFromQueue();
-		
 		// 크론 잡 생성
 		this.job = new CronJob(cronHandler.getPeriod(), () -> {
 			
 			try {
 				
-				List<Message<?>> messageList = getComponent(CronHandler.class).flush();
+				List<Message<?>> messageList = getComponent().flush();
 				put(messageList);
 				
 			} catch(Exception ex) {
 				
-				log.error(getComponent(CronHandler.class).name(), ex);
+				log.error(getName(), ex);
 				putNotice(ex);
 			}
 		});
@@ -63,6 +60,6 @@ public class CronHandlerRunner extends AbstractRunner {
 		}
 		
 		// 메시지 처리
-		this.getComponent(CronHandler.class).accept(message);
+		this.getComponent().accept(message);
 	}
 }

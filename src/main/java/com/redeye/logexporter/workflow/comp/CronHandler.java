@@ -5,6 +5,7 @@ import java.util.List;
 import com.redeye.logexporter.workflow.Message;
 
 /**
+ * 크론 핸틀러 인터페이스<br>
  * 데이터 수신 후 특정 주기로 데이터를 전송하는 인터페이스
  * 
  * @author jmsohn

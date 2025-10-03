@@ -8,15 +8,16 @@ import com.redeye.logexporter.workflow.comp.Exporter;
  * 
  * @author jmsohn
  */
-public class ExporterRunner extends AbstractRunner {
+public class ExporterRunner extends AbstractRunner<Exporter> {
 
-	public ExporterRunner(Exporter exporter) {
-
-		//
-		super(exporter);
-
-		// 입력 큐 설정
-		this.setFromQueue();
+	/**
+	 * 생성자
+	 * 
+	 * @param name 컴포넌트 명
+	 * @param exporter 익스포터 컴포넌트
+	 */
+	ExporterRunner(String name, Exporter exporter) {
+		super(name, exporter);
 	}
 
 	@Override
@@ -30,6 +31,6 @@ public class ExporterRunner extends AbstractRunner {
 		}
 		
 		// 메시지 처리
-		this.getComponent(Exporter.class).export(message);
+		this.getComponent().export(message);
 	}
 }
