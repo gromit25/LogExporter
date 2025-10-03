@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.jutools.FileUtil;
+import com.redeye.logexporter.workflow.Workflow;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,9 +55,7 @@ public class LogExporterApplication implements CommandLineRunner {
 
 			// stop 파일 생성시 logExporter 중지
 			log.info("stop log exporter.");
-			if(this.logExporter.isStop() == false) {
-				this.logExporter.stop();
-			}
+			this.workflow.stop();
 		}
 	}
 }

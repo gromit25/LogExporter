@@ -5,7 +5,7 @@ package com.redeye.logexporter.workflow.annotation;
  * 
  * @author jmsohn
  */
-enum ComponentType {
+public enum ComponentType {
 	
 	/** 일반 컴포넌트 */
 	NORMAL,

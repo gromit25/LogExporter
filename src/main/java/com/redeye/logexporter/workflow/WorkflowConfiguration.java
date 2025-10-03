@@ -2,11 +2,8 @@ package com.redeye.logexporter.workflow;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,14 +19,6 @@ import com.redeye.logexporter.workflow.runner.RunnerFactory;
 @Configuration
 public class WorkflowConfiguration {
 
-	/** */
-	@Value("workflow.timeout")
-	private long timeout;
-
-	/** */
-	@Value("workflow.maxlag")
-	private int maxLag; 
-	
 	/** 런너 객체 생성 팩토리 객체 */
 	@Autowired
 	private RunnerFactory factory;
@@ -48,7 +37,7 @@ public class WorkflowConfiguration {
 	Workflow workflow() throws Exception {
 		
 		// 런너 맵
-		Map<String, AbstractRunner> runnerMap = new HashMap<>();
+		Map<String, AbstractRunner<?>> runnerMap = new HashMap<>();
 		
 		// 런너 생성 -------------
 		for(String name: this.componentMap.keySet()) {
@@ -65,7 +54,7 @@ public class WorkflowConfiguration {
 		for(String name: runnerMap.keySet()) {
 			
 			// 링킹 작업할 런너 획득
-			AbstractRunner subscribeRunner = runnerMap.get(name);
+			AbstractRunner<?> subscribeRunner = runnerMap.get(name);
 		
 		}
 		

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import com.redeye.logexporter.workflow.annotation.ComponentConfig;
+import com.redeye.logexporter.workflow.annotation.ComponentType;
 import com.redeye.logexporter.workflow.comp.Collector;
 import com.redeye.logexporter.workflow.comp.CronHandler;
 import com.redeye.logexporter.workflow.comp.Exporter;
@@ -23,13 +25,15 @@ import lombok.Setter;
 @ConfigurationProperties(prefix = "workflow.comp") 
 public class RunnerFactory {
 
+	/** */
 	@Value("${workflow.timeout.sec}")
 	private long timeout;
 
+	/** */
 	@Value("${workflow.maxlag}")
 	private int maxLag;
 
-	/** */
+	/** workflow.comp 이하의 컴포넌트 설정 값 */
 	@Getter
 	@Setter
 	private Map<String, String> configMap;
@@ -88,14 +92,52 @@ public class RunnerFactory {
 	 */
 	private void setupRunner(AbstractRunner<?> runner) throws Exception {
 
-		//
-		int threadCount = 1;
+		ComponentType type = ComponentType.NORMAL;
+		String from = "";
 		String subscribeSubject = "";
-    
+		int threadCount = 1;
+		
+		//
+		ComponentConfig config = runner.getComponent().getClass()
+				.getAnnotation(ComponentConfig.class);
+
+		//
+		String configPrefix = "workflow.comp." + runner.getName() + ".";
+		
+		String configThreadCount = this.configMap.get(configPrefix + "threadcount");
+		if(configThreadCount != null) {
+			threadCount = Integer.parseInt(configThreadCount);
+		} else if(config != null) {
+			threadCount = config.threadCount();
+		}
+		
+		String configSubscribe = this.configMap.get(configPrefix + "subscribe");
+		if(configSubscribe != null) {
+			subscribeSubject = configSubscribe;
+		} else if(config != null) {
+			subscribeSubject = config.subscribe(); 
+		}
+		
+		String configType = this.configMap.get(configPrefix + "type");
+		if(configType != null) {
+			type = ComponentType.valueOf(configType);
+		} else if(config != null) {
+			type = config.type();
+		}
+		
+		String configFrom = this.configMap.get(configPrefix + "from");
+		if(configFrom != null) {
+			
+		} else if(config != null) {
+			config.from();
+		}
+		
 		// 런너 공통 정보 설정
 		runner.setTimeout(this.timeout);
 		runner.setMaxLag(this.maxLag);
-		runner.setThreadCount(threadCount);
+		
+		//
 		runner.setSubscribeSubject(subscribeSubject);
+		runner.setThreadCount(threadCount);
 	}
 }

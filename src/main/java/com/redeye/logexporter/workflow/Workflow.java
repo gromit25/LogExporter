@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Workflow {
 	
 	/** 런너 맵 (key: 런너의 컴포넌트 명, value: 런너 */
-	private Map<String, AbstractRunner> runnerMap = new ConcurrentHashMap<>();
+	private Map<String, AbstractRunner<?>> runnerMap = new ConcurrentHashMap<>();
 	
 	
 	/**
@@ -26,12 +26,12 @@ public class Workflow {
 		
 		for(String key: this.runnerMap.keySet()) {
 			
-			AbstractRunner runner = this.runnerMap.get(key);
+			AbstractRunner<?> runner = this.runnerMap.get(key);
 			
 			try {
 				runner.run();
 			} catch(Exception ex) {
-				log.error("start fail: " + runner.getComponentName(), ex);
+				log.error("start fail: " + runner.getName(), ex);
 			}
 		}
 	}
@@ -43,12 +43,12 @@ public class Workflow {
 		
 		for(String key: this.runnerMap.keySet()) {
 			
-			AbstractRunner runner = this.runnerMap.get(key);
+			AbstractRunner<?> runner = this.runnerMap.get(key);
 			
 			try {
 				runner.stop();
 			} catch(Exception ex) {
-				log.error("stop fail: " + runner.getComponentName(), ex);
+				log.error("stop fail: " + runner.getName(), ex);
 			}
 		}
 	}
@@ -58,7 +58,7 @@ public class Workflow {
 	 * 
 	 * @param runnerMap 설정할 런너
 	 */
-	public void setRunnerMap(Map<String, AbstractRunner> runnerMap) {
+	public void setRunnerMap(Map<String, AbstractRunner<?>> runnerMap) {
 		this.runnerMap.clear();
 		this.runnerMap.putAll(runnerMap);
 	}
