@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 public @interface ComponentConfig {
 	
 	/** 컴포넌트 타입 */
-	ComponentType type() default ComponentType.NORMAL;
+	LinkType type() default LinkType.NORMAL;
 	
 	/** from 컴포넌트 설정 */
 	String from() default "";

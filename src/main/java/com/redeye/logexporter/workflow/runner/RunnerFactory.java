@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import com.redeye.logexporter.workflow.annotation.ComponentConfig;
-import com.redeye.logexporter.workflow.annotation.ComponentType;
+import com.redeye.logexporter.workflow.annotation.LinkType;
 import com.redeye.logexporter.workflow.comp.Collector;
 import com.redeye.logexporter.workflow.comp.CronHandler;
 import com.redeye.logexporter.workflow.comp.Exporter;
@@ -92,7 +92,7 @@ public class RunnerFactory {
 	 */
 	private void setupRunner(AbstractRunner<?> runner) throws Exception {
 
-		ComponentType type = ComponentType.NORMAL;
+		LinkType type = LinkType.NORMAL;
 		String from = "";
 		String subscribeSubject = "";
 		int threadCount = 1;
@@ -120,7 +120,7 @@ public class RunnerFactory {
 		
 		String configType = this.configMap.get(configPrefix + "type");
 		if(configType != null) {
-			type = ComponentType.valueOf(configType);
+			type = LinkType.valueOf(configType);
 		} else if(config != null) {
 			type = config.type();
 		}
