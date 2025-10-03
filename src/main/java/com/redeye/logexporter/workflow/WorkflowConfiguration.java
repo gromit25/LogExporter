@@ -37,9 +37,30 @@ public class WorkflowConfiguration {
 	Workflow workflow() throws Exception {
 		
 		// 런너 맵
-		Map<String, AbstractRunner<?>> runnerMap = new HashMap<>();
+		
 		
 		// 런너 생성 -------------
+		Map<String, AbstractRunner<?>> runnerMap = this.createRunner();
+		
+		// 런너 링킹 -------------
+		this.linkRunner(runnerMap);
+		
+		// 워크플로우 생성 및 반환
+		Workflow wf = new Workflow();
+		wf.setRunnerMap(runnerMap);
+		
+		return wf;
+	}
+
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
+	private Map<String, AbstractRunner<?>> createRunner() throws Exception {
+		
+		Map<String, AbstractRunner<?>> runnerMap = new HashMap<>(); 
+		
 		for(String name: this.componentMap.keySet()) {
 			
 			// 컴포넌트 획득
@@ -50,18 +71,21 @@ public class WorkflowConfiguration {
 			runnerMap.put(name, runner);
 		}
 		
-		// 런너 링킹 -------------
+		return runnerMap;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param runnerMap
+	 */
+	private void linkRunner(Map<String, AbstractRunner<?>> runnerMap) throws Exception {
+		
 		for(String name: runnerMap.keySet()) {
 			
 			// 링킹 작업할 런너 획득
 			AbstractRunner<?> subscribeRunner = runnerMap.get(name);
 		
 		}
-		
-		// 워크플로우 생성 및 반환
-		Workflow wf = new Workflow();
-		wf.setRunnerMap(runnerMap);
-		
-		return wf;
 	}
 }
