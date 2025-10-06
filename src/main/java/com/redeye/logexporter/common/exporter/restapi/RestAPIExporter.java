@@ -18,6 +18,7 @@ import com.jutools.publish.Publisher;
 import com.jutools.publish.PublisherFactory;
 import com.jutools.publish.PublisherType;
 import com.redeye.logexporter.agentlog.domain.TraceDTO;
+import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.comp.Exporter;
 
 import jakarta.annotation.PostConstruct;
@@ -130,8 +131,8 @@ public class RestAPIExporter implements Exporter {
 	}
 
 	@Override
-	public void send(String message) throws Exception {
-		// 입력 데이터 확인
+	public void export(Message<?> message) throws Exception {
+		//
 	}
 }
 

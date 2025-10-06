@@ -10,6 +10,6 @@ public enum LinkType {
 	/** 일반 컴포넌트 */
 	NORMAL,
 	
-	/** 에러 핸들러 컴포넌트 */
-	ERROR_HANDLER;
+	/** 앙림 핸들러 컴포넌트 */
+	NOTICE_HANDLER;
 }

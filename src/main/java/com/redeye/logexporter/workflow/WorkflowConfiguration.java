@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.redeye.logexporter.workflow.annotation.LinkType;
 import com.redeye.logexporter.workflow.comp.Component;
 import com.redeye.logexporter.workflow.runner.AbstractRunner;
 import com.redeye.logexporter.workflow.runner.RunnerFactory;
@@ -18,12 +19,16 @@ import com.redeye.logexporter.workflow.runner.RunnerFactory;
  */
 @Configuration
 public class WorkflowConfiguration {
+	
+	/** */
+	@Autowired
+	private WorkflowContext context;
 
 	/** 런너 객체 생성 팩토리 객체 */
 	@Autowired
 	private RunnerFactory factory;
 
-	/** 컴포넌트 맵 */
+	/** 컴포넌트 맵 - 스프링부트에서 설정됨 */
 	@Autowired
 	private Map<String, Component> componentMap;
 
@@ -83,9 +88,20 @@ public class WorkflowConfiguration {
 		
 		for(String name: runnerMap.keySet()) {
 			
-			// 링킹 작업할 런너 획득
-			AbstractRunner<?> subscribeRunner = runnerMap.get(name);
-		
+			AbstractRunner<?> runner = runnerMap.get(name);
+			
+			//
+			String from = this.context.getContext(runner, "from");
+			AbstractRunner<?> fromRunner = runnerMap.get(from);
+			
+			//
+			LinkType type = LinkType.valueOf(this.context.getContext(runner, "type"));
+			
+			if(type == LinkType.NOTICE_HANDLER) {
+				fromRunner.addNoticeSubscriber(fromRunner);
+			} else {
+				fromRunner.addSubscriber(fromRunner);
+			}
 		}
 	}
 }

@@ -33,10 +33,4 @@ public class PrintExporter implements Exporter {
 		
 		System.out.println("RECEIVED: " + message);
 	}
-
-	@Override
-	public String name() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

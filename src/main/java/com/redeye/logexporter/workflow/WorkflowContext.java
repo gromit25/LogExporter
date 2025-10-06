@@ -80,19 +80,12 @@ public class WorkflowContext {
 	
 	/**
 	 * 
-	 */
-	public void linkRunner(Map<String, AbstractRunner<?>> runnerMap) throws Exception {
-		
-	}
-	
-	/**
-	 * 
 	 * 
 	 * @param runner
 	 * @param propertyName
 	 * @return
 	 */
-	private String getContext(AbstractRunner<?> runner, String propertyName) {
+	public String getContext(AbstractRunner<?> runner, String propertyName) {
 		return this.contextMap.get(COMPONENT_PREFIX + runner.getName() + "." + propertyName);
 	}
 }

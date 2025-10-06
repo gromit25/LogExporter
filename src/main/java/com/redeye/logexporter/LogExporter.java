@@ -211,7 +211,7 @@ public class LogExporter implements Runnable {
 
 						// exporter를 통해 출력
 						String message = toExporterQueue.poll(POLLING_PERIOD, TimeUnit.MILLISECONDS);
-						exporter.export(message);
+						//exporter.export(message);
 						
 					} catch(Exception ex) {
 						log.error("exporter error.", ex);

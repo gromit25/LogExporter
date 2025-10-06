@@ -60,6 +60,6 @@ public class KafkaExporter implements Exporter {
 		}
 		
 		log.info("SEND:" + message);
-		this.kafkaTemplate.send(this.topicName, message);
+		this.kafkaTemplate.send(this.topicName, message.getBody().toString());
 	}
 }
