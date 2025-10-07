@@ -133,7 +133,7 @@ public class ActivityRunner {
 	private void setInitMethod(Method method) throws Exception {
 		
 		Init initAnnotation = method.getAnnotation(Init.class);
-		if(initAnnotation != null) {
+		if(initAnnotation == null) {
 			return;
 		}
 			
