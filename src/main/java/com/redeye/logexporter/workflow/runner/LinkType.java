@@ -1,4 +1,4 @@
-package com.redeye.logexporter.workflow.annotation;
+package com.redeye.logexporter.workflow.runner;
 
 /**
  * 워크플로우 컴포넌트 종류

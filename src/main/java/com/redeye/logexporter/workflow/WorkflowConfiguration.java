@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.redeye.logexporter.workflow.annotation.Activity;
-import com.redeye.logexporter.workflow.annotation.LinkType;
 import com.redeye.logexporter.workflow.runner.ActivityRunner;
+import com.redeye.logexporter.workflow.runner.LinkType;
 import com.redeye.logexporter.workflow.runner.RunnerFactory;
 
 /**

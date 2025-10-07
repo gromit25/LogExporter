@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 
 import org.springframework.stereotype.Component;
 
+import com.redeye.logexporter.workflow.runner.LinkType;
+
 /**
  * 워크플로우 액티비티 어노테이션<br>
  * 액티비티는 하나의 Process 어노테이션이 있어야 함
