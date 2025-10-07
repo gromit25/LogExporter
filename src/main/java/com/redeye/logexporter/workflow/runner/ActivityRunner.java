@@ -8,13 +8,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import com.jutools.CronJob;
 import com.jutools.StringUtil;
 import com.jutools.thread.AbstractDaemon;
 import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.annotation.Activity;
+import com.redeye.logexporter.workflow.annotation.Cron;
 import com.redeye.logexporter.workflow.annotation.Exit;
 import com.redeye.logexporter.workflow.annotation.Init;
 import com.redeye.logexporter.workflow.annotation.Process;
@@ -74,6 +77,8 @@ public class ActivityRunner {
 	/** 현재 액티비티의 알림 메시지(예외, 상태 변경 등) 구독 컴포넌트 */
 	private List<ActivityRunner> noticeSubscriberList;
 	
+	/** 크론 잡 맵 */
+	private Map<String, CronJob> cronJobMap = new ConcurrentHashMap<>();
 
 	
 	/**
@@ -109,6 +114,9 @@ public class ActivityRunner {
 			// exit 메소드 설정
 			this.setExitMethod(method);
 			
+			// cron 메소드 추가
+			this.addCronMethod(method);
+			
 		}
 		
 		// process 메소드 설정되어 있는지 확인
@@ -126,21 +134,22 @@ public class ActivityRunner {
 		
 		Init initAnnotation = method.getAnnotation(Init.class);
 		if(initAnnotation != null) {
-			
-			if(this.initMethod != null) {
-				throw new IllegalArgumentException("duplicated init method at " + this.activity.getClass());
-			}
-			
-			if(method.getReturnType() != void.class) {
-				throw new IllegalArgumentException("init method return type must be void: " + method);
-			}
-			
-			if(method.getParameterCount() != 0) {
-				throw new IllegalArgumentException("init method must have 0 parameter: " + method);
-			}
-			
-			this.initMethod = method;
+			return;
 		}
+			
+		if(this.initMethod != null) {
+			throw new IllegalArgumentException("duplicated init method at " + this.activity.getClass());
+		}
+		
+		if(method.getReturnType() != void.class) {
+			throw new IllegalArgumentException("init method return type must be void: " + method);
+		}
+		
+		if(method.getParameterCount() != 0) {
+			throw new IllegalArgumentException("init method must have 0 parameter: " + method);
+		}
+		
+		this.initMethod = method;
 	}
 	
 	/**
@@ -151,31 +160,32 @@ public class ActivityRunner {
 	private void setProcessMethod(Method method) throws Exception {
 		
 		Process processAnnotation = method.getAnnotation(Process.class);
-		if(processAnnotation != null) {
-			
-			if(this.processMethod != null) {
-				throw new IllegalArgumentException("duplicated process method at " + this.activity.getClass());
-			}
-			
-			Type returnType = method.getGenericReturnType();
-			if(returnType != void.class && isMessageListType(returnType) == false) {
-				throw new IllegalArgumentException("process method return type must be 'void' or 'List<Message<?>>': " + method);
-			}
-			
-			if(method.getParameterCount() != 0) {
-				if(
-					method.getParameterCount() == 1
-					&& isMessageType(method.getGenericParameterTypes()[0]) == true
-				) {
-					// process 메소드에 입력 파라미터(Message<?>)가 있는 경우 fromQueue 를 생성함
-					this.fromQueue = new LinkedBlockingQueue<>();
-				} else {
-					throw new IllegalArgumentException("init method must have 0 parameter: " + method);
-				}
-			}
-			
-			this.processMethod = method;
+		if(processAnnotation == null) {
+			return;
 		}
+			
+		if(this.processMethod != null) {
+			throw new IllegalArgumentException("duplicated process method at " + this.activity.getClass());
+		}
+		
+		Type returnType = method.getGenericReturnType();
+		if(returnType != void.class && isMessageListType(returnType) == false) {
+			throw new IllegalArgumentException("process method return type must be 'void' or 'List<Message<?>>': " + method);
+		}
+		
+		if(method.getParameterCount() != 0) {
+			if(
+				method.getParameterCount() == 1
+				&& isMessageType(method.getGenericParameterTypes()[0]) == true
+			) {
+				// process 메소드에 입력 파라미터(Message<?>)가 있는 경우 fromQueue 를 생성함
+				this.fromQueue = new LinkedBlockingQueue<>();
+			} else {
+				throw new IllegalArgumentException("init method must have 0 parameter: " + method);
+			}
+		}
+		
+		this.processMethod = method;
 	}
 	
 	/**
@@ -186,22 +196,60 @@ public class ActivityRunner {
 	private void setExitMethod(Method method) throws Exception {
 		
 		Exit exitAnnotation = method.getAnnotation(Exit.class);
-		if(exitAnnotation != null) {
-			
-			if(this.exitMethod != null) {
-				throw new IllegalArgumentException("duplicated exit method at " + this.activity.getClass());
-			}
-			
-			if(method.getReturnType() != void.class) {
-				throw new IllegalArgumentException("exit method return type must be void: " + method);
-			}
-			
-			if(method.getParameterCount() != 0) {
-				throw new IllegalArgumentException("exit method must have 0 parameter: " + method);
-			}
-			
-			this.exitMethod = method;
+		if(exitAnnotation == null) {
+			return;
 		}
+			
+		if(this.exitMethod != null) {
+			throw new IllegalArgumentException("duplicated exit method at " + this.activity.getClass());
+		}
+		
+		if(method.getReturnType() != void.class) {
+			throw new IllegalArgumentException("exit method return type must be void: " + method);
+		}
+		
+		if(method.getParameterCount() != 0) {
+			throw new IllegalArgumentException("exit method must have 0 parameter: " + method);
+		}
+		
+		this.exitMethod = method;
+	}
+	
+	/**
+	 * 크론 메소드 추가
+	 * 
+	 * @param method 설정할 메소드
+	 */
+	private void addCronMethod(Method method) throws Exception {
+		
+		Cron cronAnnotation = method.getAnnotation(Cron.class);
+		if(cronAnnotation == null) {
+			return;
+		}
+		
+		Type returnType = method.getGenericReturnType();
+		if(returnType != void.class && isMessageListType(returnType) == false) {
+			throw new IllegalArgumentException("cron method return type must be 'void' or 'List<Message<?>>': " + method);
+		}
+		
+		if(method.getParameterCount() != 0) {
+			throw new IllegalArgumentException("cron method must have 0 parameter: " + method);
+		}
+		
+		this.cronJobMap.put(
+			method.getName(),
+			new CronJob(cronAnnotation.period(), () -> {
+				
+				final Method cronMethod = method;
+				
+				try {
+					Object result = cronMethod.invoke(this.activity);
+					put(result);
+				}catch(Exception ex) {
+					log.error(cronMethod.toString(), ex);
+				}
+			})
+		);
 	}
 	
 	/**
@@ -256,7 +304,7 @@ public class ActivityRunner {
 			return;
 		}
 		
-		// 스레드 생성 및 목록에 추가
+		// ------ 스레드 생성 및 목록에 추가
 		this.threadAry = new AbstractDaemon[this.threadCount];
 		for(int index = 0; index < this.threadCount; index++) {
 			
@@ -320,6 +368,12 @@ public class ActivityRunner {
 			t.run();
 		}
 		
+		// -------- 크론 작업 시작 
+		for(String key: this.cronJobMap.keySet()) {
+			CronJob job = this.cronJobMap.get(key);
+			job.run();
+		}
+		
 		// 상태 수정
 		this.stop = false;
 	}
@@ -329,9 +383,15 @@ public class ActivityRunner {
 	 */
 	public synchronized void stop() {
 		
-		// 스레드 중지
+		// 큐 처리 스레드 중지
 		for(AbstractDaemon t: this.threadAry) {
 			t.stop();
+		}
+		
+		// 크론잡 중지
+		for(String key: this.cronJobMap.keySet()) {
+			CronJob job = this.cronJobMap.get(key);
+			job.stop();
 		}
 		
 		// 상태 변경
@@ -446,8 +506,7 @@ public class ActivityRunner {
 			&& (
 				subscriber.subscriptionSubject == null 
 				|| subscriber.subscriptionSubject.match(message.getSubject()).isMatch()
-				)
-			;
+			);
 	}
 	
 	/**
