@@ -13,8 +13,6 @@ public class DummyHandler {
 	@Process
 	public List<Message<?>> handle(Message<?> message) throws Exception {
 		
-		System.out.println("$$$$$ DEBUG 100: " + (message == null));
-		
 		System.out.println("Handler : " + message.getBody());
 		
 		List<Message<?>> data = new ArrayList<>();

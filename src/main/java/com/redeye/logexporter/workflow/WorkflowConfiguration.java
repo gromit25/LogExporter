@@ -51,8 +51,6 @@ public class WorkflowConfiguration {
 	@Bean("workflow")
 	Workflow workflow() throws Exception {
 		
-		System.out.println("### DEBUG 100: " + this.activityMap);
-		
 		// 런너 생성 -------------
 		Map<String, ActivityRunner> runnerMap = this.createRunner();
 		
