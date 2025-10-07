@@ -3,18 +3,15 @@ package com.redeye.logexporter.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.jutools.DateUtil;
 import com.redeye.logexporter.workflow.Message;
-import com.redeye.logexporter.workflow.annotation.ComponentConfig;
-import com.redeye.logexporter.workflow.comp.Collector;
+import com.redeye.logexporter.workflow.annotation.Activity;
+import com.redeye.logexporter.workflow.annotation.Process;
 
-@Component("dummyCollector")
-@ComponentConfig
-public class DummyCollector implements Collector {
+@Activity(value="dummyCollector")
+public class DummyCollector {
 
-	@Override
+	@Process
 	public List<Message<?>> collect() throws Exception {
 		
 		Thread.sleep(1 * 1000);

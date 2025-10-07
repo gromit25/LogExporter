@@ -1,16 +1,13 @@
 package com.redeye.logexporter.test;
 
-import org.springframework.stereotype.Component;
-
 import com.redeye.logexporter.workflow.Message;
-import com.redeye.logexporter.workflow.annotation.ComponentConfig;
-import com.redeye.logexporter.workflow.comp.Exporter;
+import com.redeye.logexporter.workflow.annotation.Activity;
+import com.redeye.logexporter.workflow.annotation.Process;
 
-@Component
-@ComponentConfig(from="dummyHandler")
-public class DummyExporter implements Exporter {
+@Activity(from="dummyHandler")
+public class DummyExporter {
 
-	@Override
+	@Process
 	public void export(Message<?> message) throws Exception {
 		System.out.println("Exporter : " + message.getBody());
 	}

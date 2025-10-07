@@ -3,7 +3,7 @@ package com.redeye.logexporter.workflow;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.redeye.logexporter.workflow.runner.AbstractRunner;
+import com.redeye.logexporter.workflow.runner.ActivityRunner;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Workflow {
 	
 	/** 런너 맵 (key: 런너의 컴포넌트 명, value: 런너 */
-	private Map<String, AbstractRunner<?>> runnerMap = new ConcurrentHashMap<>();
+	private Map<String, ActivityRunner> runnerMap = new ConcurrentHashMap<>();
 	
 	
 	/**
@@ -26,7 +26,7 @@ public class Workflow {
 		
 		for(String key: this.runnerMap.keySet()) {
 			
-			AbstractRunner<?> runner = this.runnerMap.get(key);
+			ActivityRunner runner = this.runnerMap.get(key);
 			
 			try {
 				runner.run();
@@ -43,7 +43,7 @@ public class Workflow {
 		
 		for(String key: this.runnerMap.keySet()) {
 			
-			AbstractRunner<?> runner = this.runnerMap.get(key);
+			ActivityRunner runner = this.runnerMap.get(key);
 			
 			try {
 				runner.stop();
@@ -58,7 +58,7 @@ public class Workflow {
 	 * 
 	 * @param runnerMap 설정할 런너
 	 */
-	public void setRunnerMap(Map<String, AbstractRunner<?>> runnerMap) {
+	public void setRunnerMap(Map<String, ActivityRunner> runnerMap) {
 		this.runnerMap.clear();
 		this.runnerMap.putAll(runnerMap);
 	}

@@ -19,7 +19,6 @@ import com.jutools.publish.PublisherFactory;
 import com.jutools.publish.PublisherType;
 import com.redeye.logexporter.agentlog.domain.TraceDTO;
 import com.redeye.logexporter.workflow.Message;
-import com.redeye.logexporter.workflow.comp.Exporter;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 	value = "app.exporter.type",
 	havingValue = "RESTAPI"
 )
-public class RestAPIExporter implements Exporter {
+public class RestAPIExporter {
 
 	/** 포맷 파일 명 */
 	private static final String FORMAT_FILE = "format/restapi/json_format.xml";
@@ -130,7 +129,6 @@ public class RestAPIExporter implements Exporter {
 		}
 	}
 
-	@Override
 	public void export(Message<?> message) throws Exception {
 		//
 	}

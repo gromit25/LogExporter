@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.redeye.logexporter.workflow.annotation.Activity;
 import com.redeye.logexporter.workflow.annotation.LinkType;
-import com.redeye.logexporter.workflow.comp.Component;
-import com.redeye.logexporter.workflow.runner.AbstractRunner;
+import com.redeye.logexporter.workflow.runner.ActivityRunner;
 import com.redeye.logexporter.workflow.runner.RunnerFactory;
 
 /**
@@ -20,7 +21,7 @@ import com.redeye.logexporter.workflow.runner.RunnerFactory;
 @Configuration
 public class WorkflowConfiguration {
 	
-	/** */
+	/** 워크플로우 컨텍스트 객체 */
 	@Autowired
 	private WorkflowContext context;
 
@@ -28,9 +29,18 @@ public class WorkflowConfiguration {
 	@Autowired
 	private RunnerFactory factory;
 
-	/** 컴포넌트 맵 - 스프링부트에서 설정됨 */
-	@Autowired
-	private Map<String, Component> componentMap;
+	/** 액티비티 맵 */
+	private Map<String, Object> activityMap;
+	
+	
+	/**
+	 * 생성자
+	 * 
+	 * @param context 스프링부트 어플리케이션 컨택스트 객체
+	 */
+	public WorkflowConfiguration(ApplicationContext context) throws Exception {
+		this.activityMap = context.getBeansWithAnnotation(Activity.class);
+	}
 
 	
 	/**
@@ -41,8 +51,10 @@ public class WorkflowConfiguration {
 	@Bean("workflow")
 	Workflow workflow() throws Exception {
 		
+		System.out.println("### DEBUG 100: " + this.activityMap);
+		
 		// 런너 생성 -------------
-		Map<String, AbstractRunner<?>> runnerMap = this.createRunner();
+		Map<String, ActivityRunner> runnerMap = this.createRunner();
 		
 		// 런너 링킹 -------------
 		this.linkRunner(runnerMap);
@@ -59,17 +71,17 @@ public class WorkflowConfiguration {
 	 * 
 	 * @return
 	 */
-	private Map<String, AbstractRunner<?>> createRunner() throws Exception {
+	private Map<String, ActivityRunner> createRunner() throws Exception {
 		
-		Map<String, AbstractRunner<?>> runnerMap = new HashMap<>(); 
+		Map<String, ActivityRunner> runnerMap = new HashMap<>(); 
 		
-		for(String name: this.componentMap.keySet()) {
+		for(String name: this.activityMap.keySet()) {
 			
-			// 컴포넌트 획득
-			Component component = this.componentMap.get(name);
+			// 액티비티 객체 획득
+			Object activity = this.activityMap.get(name);
 		
-			// 컴포넌트 런너 생성 및 설정
-			AbstractRunner<?> runner = this.factory.create(name, component);
+			// 액티비티 런너 생성 및 설정
+			ActivityRunner runner = this.factory.create(name, activity);
 			runnerMap.put(name, runner);
 		}
 		
@@ -81,15 +93,15 @@ public class WorkflowConfiguration {
 	 * 
 	 * @param runnerMap
 	 */
-	private void linkRunner(Map<String, AbstractRunner<?>> runnerMap) throws Exception {
+	private void linkRunner(Map<String, ActivityRunner> runnerMap) throws Exception {
 		
 		for(String name: runnerMap.keySet()) {
 			
-			AbstractRunner<?> runner = runnerMap.get(name);
+			ActivityRunner runner = runnerMap.get(name);
 			
 			//
 			String from = this.context.getFrom(runner);
-			AbstractRunner<?> fromRunner = runnerMap.get(from);
+			ActivityRunner fromRunner = runnerMap.get(from);
 			if(fromRunner == null) {
 				continue;
 			}

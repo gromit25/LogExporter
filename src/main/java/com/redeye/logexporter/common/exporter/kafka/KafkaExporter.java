@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.jutools.StringUtil;
 import com.redeye.logexporter.workflow.Message;
-import com.redeye.logexporter.workflow.comp.Exporter;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 	value = "app.exporter.type",
 	havingValue = "KAFKA"
 )
-public class KafkaExporter implements Exporter {
+public class KafkaExporter {
 
 	/** Kafka topic name */
 	@Value("${app.exporter.kafka.topicname}")
@@ -51,7 +50,6 @@ public class KafkaExporter implements Exporter {
 	 * 
 	 * @param message 전송할 메시지
 	 */
-	@Override
 	public void export(Message<?> message) throws Exception {
 		
 		// 메시지가 null 인 경우 반환

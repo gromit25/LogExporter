@@ -4,7 +4,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import com.redeye.logexporter.workflow.Message;
-import com.redeye.logexporter.workflow.comp.Exporter;
 
 /**
  * 화면 출력 Exporter (테스트용)
@@ -17,14 +16,13 @@ import com.redeye.logexporter.workflow.comp.Exporter;
 	value = "app.exporter.type",
 	havingValue = "PRINT"
 )
-public class PrintExporter implements Exporter {
+public class PrintExporter {
 
 	/**
 	 * 화면 출력
 	 *
 	 * @param message 출력할 메시지
 	 */
-	@Override
 	public void export(Message<?> message) throws Exception {
 		
 		if(message == null) {
