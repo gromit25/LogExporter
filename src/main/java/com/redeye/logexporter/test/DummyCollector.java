@@ -1,7 +1,6 @@
 package com.redeye.logexporter.test;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.DateUtil;
 import com.redeye.logexporter.workflow.Message;
@@ -11,6 +10,10 @@ import com.redeye.logexporter.workflow.annotation.Init;
 import com.redeye.logexporter.workflow.annotation.Process;
 
 @Activity(value="dummyCollector")
+@ConditionalOnProperty(
+	name="log.type",
+	havingValue="test"
+)
 public class DummyCollector {
 	
 	@Init
@@ -19,21 +22,17 @@ public class DummyCollector {
 	}
 
 	@Process
-	public List<Message<?>> collect() throws Exception {
+	public Message<?> collect() throws Exception {
 		
 		Thread.sleep(1 * 1000);
-		
-		List<Message<?>> data = new ArrayList<>();
 		
 		Message<String> dummy = new Message<String>();
 		dummy.setSubject("dummy subject");
 		dummy.setBody("dummy body : " + DateUtil.getDateTimeStr(System.currentTimeMillis()));
 		
-		data.add(dummy);
-		
 		System.out.println("COLLECT: " + dummy);
 		
-		return data;
+		return dummy;
 	}
 	
 	@Cron(period = "*/5 * * * * *")

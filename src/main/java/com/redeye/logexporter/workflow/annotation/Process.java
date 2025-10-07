@@ -9,10 +9,12 @@ import java.lang.annotation.Target;
 /**
  * 액티비티 데이터 처리 메소드 어노테이션<br>
  * 아래의 형식 중 하나여야 함<br>
- * List<Message<?>> method()<br>
- * List<Message<?>> method(Message<?> message)<br>
- * void method(Message<?> message)<br>
- * void method()
+ * <li>List<Message<?>> method()</li>
+ * <li>Message<?> method()</li>
+ * <li>List<Message<?>> method(Message<?> message)</li>
+ * <li>Message<?> method(Message<?> message)</li>
+ * <li>void method(Message<?> message)</li>
+ * <li>void method()</li>
  */
 @Retention(RUNTIME)
 @Target(METHOD)

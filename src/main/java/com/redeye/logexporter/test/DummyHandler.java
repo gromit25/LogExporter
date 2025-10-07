@@ -3,11 +3,17 @@ package com.redeye.logexporter.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+
 import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.annotation.Activity;
 import com.redeye.logexporter.workflow.annotation.Process;
 
 @Activity(value="dummyHandler", from="dummyCollector")
+@ConditionalOnProperty(
+	name="log.type",
+	havingValue="test"
+)
 public class DummyHandler {
 
 	@Process

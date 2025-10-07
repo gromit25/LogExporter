@@ -186,7 +186,11 @@ public class ActivityRunner {
 		
 		// 리턴 타입 검사
 		Type returnType = method.getGenericReturnType();
-		if(returnType != void.class && isMessageListType(returnType) == false) {
+		if(
+			returnType != void.class
+			&& isMessageListType(returnType) == false
+			&& isMessageType(returnType) == false
+		) {
 			throw new IllegalArgumentException("process method return type must be 'void' or 'List<Message<?>>': " + method);
 		}
 		
@@ -449,15 +453,22 @@ public class ActivityRunner {
 	 * 
 	 * @param messageList 메시지 목록
 	 */
+	@SuppressWarnings("unchecked")
 	protected void put(Object result) throws Exception {
 		
 		// 입력값 검증
-		if(result == null || result instanceof List == false) {
+		if(result == null) {
 			return;
 		}
 		
-		@SuppressWarnings("unchecked")
-		List<Message<?>> messageList = (List<Message<?>>)result;
+		// 리스트 형태가 아니면 리스트에 만들어 넣음
+		List<Message<?>> messageList = null;
+		if(result instanceof List == false) {
+			messageList = new ArrayList<Message<?>>();
+			messageList.add((Message<?>)result);
+		} else {
+			messageList = (List<Message<?>>)result;
+		}
 		
 		// 메시지가 없을 경우 반환
 		if(messageList.size() == 0) {
