@@ -1,5 +1,7 @@
 package com.redeye.logexporter.workflow.runner;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.comp.Exporter;
 
@@ -18,6 +20,7 @@ public class ExporterRunner extends AbstractRunner<Exporter> {
 	 */
 	ExporterRunner(String name, Exporter exporter) {
 		super(name, exporter);
+		this.setFromQueue(new LinkedBlockingQueue<>());
 	}
 
 	@Override

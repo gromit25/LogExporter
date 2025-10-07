@@ -30,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author jmsohn
  */
 @Slf4j
-@Component
 public class LogExporter implements Runnable {
 
 	/** 큐에서 데이터 취득시 대기 시간(1초) */

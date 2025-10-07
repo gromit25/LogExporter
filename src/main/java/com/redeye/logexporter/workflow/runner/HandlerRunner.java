@@ -1,6 +1,7 @@
 package com.redeye.logexporter.workflow.runner;
 
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.comp.Handler;
@@ -20,6 +21,7 @@ public class HandlerRunner extends AbstractRunner<Handler> {
 	 */
 	HandlerRunner(String name, Handler handler) {
 		super(name, handler);
+		this.setFromQueue(new LinkedBlockingQueue<>());
 	}
 
 	@Override

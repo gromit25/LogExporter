@@ -1,12 +1,14 @@
 package com.redeye.logexporter.workflow;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import com.redeye.logexporter.workflow.annotation.ComponentConfig;
+import com.redeye.logexporter.workflow.annotation.LinkType;
 import com.redeye.logexporter.workflow.runner.AbstractRunner;
 
 import lombok.Getter;
@@ -37,7 +39,7 @@ public class WorkflowContext {
 	/** workflow.comp 이하의 컴포넌트 설정 값 */
 	@Getter
 	@Setter
-	private Map<String, String> contextMap;
+	private Map<String, String> contextMap = new ConcurrentHashMap<>();
 	
 	
 	/**
@@ -46,36 +48,78 @@ public class WorkflowContext {
 	 * @param runner
 	 */
 	public void setupRunner(AbstractRunner<?> runner) throws Exception {
-
-		String subscribeSubject = "";
-		int threadCount = 1;
-		
-		//
-		ComponentConfig config = runner.getComponent().getClass()
-				.getAnnotation(ComponentConfig.class);
-
-		
-		String configThreadCount = this.getContext(runner, "threadcount");
-		if(configThreadCount != null) {
-			threadCount = Integer.parseInt(configThreadCount);
-		} else if(config != null) {
-			threadCount = config.threadCount();
-		}
-		
-		String configSubscribe = this.getContext(runner, "subscribe");
-		if(configSubscribe != null) {
-			subscribeSubject = configSubscribe;
-		} else if(config != null) {
-			subscribeSubject = config.subscribe(); 
-		}
 		
 		// 런너 공통 정보 설정
 		runner.setTimeout(this.timeout);
 		runner.setMaxLag(this.maxLag);
 		
 		//
-		runner.setSubscribeSubject(subscribeSubject);
-		runner.setThreadCount(threadCount);
+		runner.setSubscriptionSubject(this.getSubscriptionSubject(runner));
+		runner.setThreadCount(this.getThreadCount(runner));
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param runner
+	 * @return
+	 */
+	public LinkType getType(AbstractRunner<?> runner) throws Exception {
+		
+		String value = this.getContext(runner, "type");
+		if(value != null) {
+			return LinkType.valueOf(value);
+		} else {
+			return getComponentConfig(runner).linkType();
+		}
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param runner
+	 * @return
+	 */
+	public String getFrom(AbstractRunner<?> runner) throws Exception {
+		
+		String value = this.getContext(runner, "from");
+		if(value != null) {
+			return value;
+		} else {
+			return getComponentConfig(runner).from();
+		}
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param runner
+	 * @return
+	 */
+	public String getSubscriptionSubject(AbstractRunner<?> runner) throws Exception {
+		
+		String value = this.getContext(runner, "subscribe");
+		if(value != null) {
+			return value;
+		} else {
+			return getComponentConfig(runner).subscribe();
+		}
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param runner
+	 * @return
+	 */
+	public int getThreadCount(AbstractRunner<?> runner) throws Exception {
+		
+		String value = this.getContext(runner, "threadcount");
+		if(value != null) {
+			return Integer.parseInt(value);
+		} else {
+			return getComponentConfig(runner).threadCount();
+		}
 	}
 	
 	/**
@@ -85,7 +129,17 @@ public class WorkflowContext {
 	 * @param propertyName
 	 * @return
 	 */
-	public String getContext(AbstractRunner<?> runner, String propertyName) {
+	private String getContext(AbstractRunner<?> runner, String propertyName) {
 		return this.contextMap.get(COMPONENT_PREFIX + runner.getName() + "." + propertyName);
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param runner
+	 * @return
+	 */
+	private static ComponentConfig getComponentConfig(AbstractRunner<?> runner) {
+		return runner.getComponent().getClass().getAnnotation(ComponentConfig.class);
 	}
 }

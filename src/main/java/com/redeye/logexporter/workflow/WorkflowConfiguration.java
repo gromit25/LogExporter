@@ -41,9 +41,6 @@ public class WorkflowConfiguration {
 	@Bean("workflow")
 	Workflow workflow() throws Exception {
 		
-		// 런너 맵
-		
-		
 		// 런너 생성 -------------
 		Map<String, AbstractRunner<?>> runnerMap = this.createRunner();
 		
@@ -91,16 +88,19 @@ public class WorkflowConfiguration {
 			AbstractRunner<?> runner = runnerMap.get(name);
 			
 			//
-			String from = this.context.getContext(runner, "from");
+			String from = this.context.getFrom(runner);
 			AbstractRunner<?> fromRunner = runnerMap.get(from);
+			if(fromRunner == null) {
+				continue;
+			}
 			
 			//
-			LinkType type = LinkType.valueOf(this.context.getContext(runner, "type"));
+			LinkType type = this.context.getType(runner);
 			
 			if(type == LinkType.NOTICE_HANDLER) {
-				fromRunner.addNoticeSubscriber(fromRunner);
+				fromRunner.addNoticeSubscriber(runner);
 			} else {
-				fromRunner.addSubscriber(fromRunner);
+				fromRunner.addSubscriber(runner);
 			}
 		}
 	}

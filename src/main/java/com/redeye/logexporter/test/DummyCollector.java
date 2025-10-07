@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 
 import com.jutools.DateUtil;
 import com.redeye.logexporter.workflow.Message;
+import com.redeye.logexporter.workflow.annotation.ComponentConfig;
 import com.redeye.logexporter.workflow.comp.Collector;
 
 @Component("dummyCollector")
+@ComponentConfig
 public class DummyCollector implements Collector {
 
 	@Override
@@ -24,6 +26,8 @@ public class DummyCollector implements Collector {
 		dummy.setBody("dummy body : " + DateUtil.getDateTimeStr(System.currentTimeMillis()));
 		
 		data.add(dummy);
+		
+		System.out.println("COLLECT: " + dummy);
 		
 		return data;
 	}

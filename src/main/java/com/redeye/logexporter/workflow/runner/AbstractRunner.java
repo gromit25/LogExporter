@@ -12,7 +12,9 @@ import com.jutools.thread.AbstractDaemon;
 import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.comp.Component;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -41,7 +43,7 @@ public abstract class AbstractRunner<T extends Component> {
 	private AbstractDaemon[] threadAry;
 	
 	/** 구독 제목 패턴 */
-	private StringUtil.WildcardPattern subscribeSubjectPattern;
+	private StringUtil.WildcardPattern subscriptionSubject;
 	
 	/** 입력 큐 데이터 수신 타입 아웃 */
 	private long timeout;
@@ -50,6 +52,7 @@ public abstract class AbstractRunner<T extends Component> {
 	private int maxLag;
 	
 	/** 입력 큐(Collector의 경우 null) */
+	@Setter(AccessLevel.PROTECTED)
 	private BlockingQueue<Message<?>> fromQueue;
 	
 	/** 구독 컴포넌트(Handler의 경우 null) */
@@ -174,28 +177,7 @@ public abstract class AbstractRunner<T extends Component> {
 		
 		// 각 메시지를 순서대로 전송
 		for(Message<?> message: messageList) {
-			this.put(message);
-		}
-	}
-	
-	/**
-	 * 수신 컴포넌트에 메시지 전송
-	 * 
-	 * @param message 전송할 메시지
-	 */
-	protected void put(Message<?> message) throws Exception {
-		
-		// 메시지 전송
-		Map<String, Integer> failMap = this.put(this.subscriberList, message);
-		
-		// lag 초과로 인한 메시지 전송 실패가 있는 경우 알림 메시지 발송
-		if(failMap.size() != 0) {
-			
-			Message<String> notice = new Message<>();
-			notice.setSubject("lag is exceeded.");
-			notice.setBody(failMap.toString());
-			
-			this.putNotice(notice);
+			this.put(this.subscriberList, message);
 		}
 	}
 	
@@ -251,6 +233,7 @@ public abstract class AbstractRunner<T extends Component> {
 		
 		// 각 수신자에게 메시지 전송
 		for(AbstractRunner<?> subscriber: subscriberList) {
+			
 			if(isSubscribe(subscriber, message) == true) {
 				
 				// 큐의 크기가 maxLag 보다 적으면 put 하고
@@ -274,11 +257,12 @@ public abstract class AbstractRunner<T extends Component> {
 	 * @return 수신 컴포넌트의 구독 여부
 	 */
 	private static boolean isSubscribe(AbstractRunner<?> subscriber, Message<?> message) throws Exception {
+		
 		return
 			subscriber.fromQueue != null
 			&& (
-				subscriber.subscribeSubjectPattern == null 
-				|| subscriber.subscribeSubjectPattern.match(message.getSubject()).isMatch()
+				subscriber.subscriptionSubject == null 
+				|| subscriber.subscriptionSubject.match(message.getSubject()).isMatch()
 				)
 			;
 	}
@@ -286,10 +270,17 @@ public abstract class AbstractRunner<T extends Component> {
 	/**
 	 * 구독 제목 설정
 	 * 
-	 * @param subscribeSubject 구독 제목
+	 * @param subscriptionSubject 구독 제목
 	 */
-	public void setSubscribeSubject(String subscribeSubject) throws Exception {
-		this.subscribeSubjectPattern = StringUtil.WildcardPattern.create(subscribeSubject);
+	public void setSubscriptionSubject(String subscriptionSubject) throws Exception {
+		
+		// 구독 제목(subscriptionSubject) 이 없는 경우,
+		// 모든 제목에 대해 구독하도록 this.subscriptionSubject을 null 로 설정
+		if(StringUtil.isBlank(subscriptionSubject) == false) {
+			this.subscriptionSubject = StringUtil.WildcardPattern.create(subscriptionSubject);
+		} else {
+			this.subscriptionSubject = null;
+		}
 	}
 	
 	/**
