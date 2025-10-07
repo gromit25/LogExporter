@@ -1,6 +1,7 @@
 package com.redeye.logexporter.workflow.runner;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -136,19 +137,28 @@ public class ActivityRunner {
 		if(initAnnotation == null) {
 			return;
 		}
-			
+		
+		// 이미 설정되어 있는 경우 예외 발생
 		if(this.initMethod != null) {
 			throw new IllegalArgumentException("duplicated init method at " + this.activity.getClass());
 		}
 		
+		// 메소드 public 여부 검사
+		if(isPublic(method) == false) {
+			throw new IllegalArgumentException("ini method must be public: " + method);
+		}
+		
+		// 리턴 타입 검사
 		if(method.getReturnType() != void.class) {
 			throw new IllegalArgumentException("init method return type must be void: " + method);
 		}
 		
+		// 파라미터 검사
 		if(method.getParameterCount() != 0) {
 			throw new IllegalArgumentException("init method must have 0 parameter: " + method);
 		}
 		
+		// init method 설정
 		this.initMethod = method;
 	}
 	
@@ -163,16 +173,24 @@ public class ActivityRunner {
 		if(processAnnotation == null) {
 			return;
 		}
-			
+		
+		// 이미 설정되어 있는 경우 예외 발생
 		if(this.processMethod != null) {
 			throw new IllegalArgumentException("duplicated process method at " + this.activity.getClass());
 		}
+
+		// 메소드 public 여부 검사
+		if(isPublic(method) == false) {
+			throw new IllegalArgumentException("ini method must be public: " + method);
+		}
 		
+		// 리턴 타입 검사
 		Type returnType = method.getGenericReturnType();
 		if(returnType != void.class && isMessageListType(returnType) == false) {
 			throw new IllegalArgumentException("process method return type must be 'void' or 'List<Message<?>>': " + method);
 		}
 		
+		// 파라미터 검사
 		if(method.getParameterCount() != 0) {
 			if(
 				method.getParameterCount() == 1
@@ -185,6 +203,7 @@ public class ActivityRunner {
 			}
 		}
 		
+		// process method 설정
 		this.processMethod = method;
 	}
 	
@@ -199,19 +218,28 @@ public class ActivityRunner {
 		if(exitAnnotation == null) {
 			return;
 		}
-			
+		
+		// 이미 설정되어 있는 경우 예외 발생
 		if(this.exitMethod != null) {
 			throw new IllegalArgumentException("duplicated exit method at " + this.activity.getClass());
 		}
 		
+		// 메소드 public 여부 검사
+		if(isPublic(method) == false) {
+			throw new IllegalArgumentException("ini method must be public: " + method);
+		}
+		
+		// 리턴 타입 검사
 		if(method.getReturnType() != void.class) {
 			throw new IllegalArgumentException("exit method return type must be void: " + method);
 		}
 		
+		// 파라미터 검사
 		if(method.getParameterCount() != 0) {
 			throw new IllegalArgumentException("exit method must have 0 parameter: " + method);
 		}
 		
+		// exit method 설정
 		this.exitMethod = method;
 	}
 	
@@ -227,15 +255,23 @@ public class ActivityRunner {
 			return;
 		}
 		
+		// 메소드 public 여부 검사
+		if(isPublic(method) == false) {
+			throw new IllegalArgumentException("ini method must be public: " + method);
+		}
+		
+		// 리턴 타입 검사
 		Type returnType = method.getGenericReturnType();
 		if(returnType != void.class && isMessageListType(returnType) == false) {
 			throw new IllegalArgumentException("cron method return type must be 'void' or 'List<Message<?>>': " + method);
 		}
 		
+		// 파라미터 검사
 		if(method.getParameterCount() != 0) {
 			throw new IllegalArgumentException("cron method must have 0 parameter: " + method);
 		}
 		
+		// cron method 추가
 		this.cronJobMap.put(
 			method.getName(),
 			new CronJob(cronAnnotation.period(), () -> {
@@ -292,6 +328,16 @@ public class ActivityRunner {
         }
         
 		return false;
+	}
+	
+	/**
+	 * 메소드의 public 여부 반환
+	 * 
+	 * @param method 검사 대상 메소드
+	 * @return public 여부
+	 */
+	private static boolean isPublic(Method method) {
+		return Modifier.isPublic(method.getModifiers());
 	}
 	
 	/**
