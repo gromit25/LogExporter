@@ -15,6 +15,8 @@ import com.redeye.logexporter.workflow.annotation.Activity;
 import com.redeye.logexporter.workflow.annotation.Init;
 import com.redeye.logexporter.workflow.annotation.Process;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 앱 메이전트 로그 트랙커 클래스
  * 
@@ -25,6 +27,7 @@ import com.redeye.logexporter.workflow.annotation.Process;
 	name="log.type",
 	havingValue="appagent"
 )
+@Slf4j
 public class AppAgentLogTracker {
 	
 	/** 트래킹 앱 에이전트 로그 파일 */
