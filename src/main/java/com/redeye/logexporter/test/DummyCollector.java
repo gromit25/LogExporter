@@ -27,7 +27,7 @@ public class DummyCollector {
 		Thread.sleep(1 * 1000);
 		
 		Message<String> dummy = new Message<String>();
-		dummy.setSubject("dummy subject");
+		dummy.setTopic("dummy subject");
 		dummy.setBody("dummy body : " + DateUtil.getDateTimeStr(System.currentTimeMillis()));
 		
 		System.out.println("COLLECT: " + dummy);
