@@ -13,7 +13,7 @@ import com.redeye.logexporter.workflow.annotation.Process;
  */
 @Activity(
 	value="exporter",
-	from="logTracker"
+	from="${exporter.from}"
 )
 @ConditionalOnProperty(
 	name="log.type",

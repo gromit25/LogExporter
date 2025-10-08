@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.jutools.StringUtil;
 import com.redeye.logexporter.workflow.annotation.Activity;
 import com.redeye.logexporter.workflow.runner.ActivityRunner;
 import com.redeye.logexporter.workflow.runner.LinkType;
@@ -90,15 +91,20 @@ public class WorkflowConfiguration {
 	 */
 	private void linkRunner(Map<String, ActivityRunner> runnerMap) throws Exception {
 		
+		// 각 액티비티별 연결 수행
 		for(String name: runnerMap.keySet()) {
 			
 			ActivityRunner runner = runnerMap.get(name);
 			
 			// 이전 액티비티 런너 명 획득
 			String from = runner.getFrom();
+			if(StringUtil.isEmpty(from) == true) {
+				continue;
+			}
+			
 			ActivityRunner fromRunner = runnerMap.get(from);
 			if(fromRunner == null) {
-				continue;
+				throw new Exception("from(" + from + ") activity is not found at " + runner.getName());
 			}
 			
 			// 링크 타입 획득
