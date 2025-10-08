@@ -39,6 +39,7 @@ public class RunnerFactory {
 	/** 스프링부트 환경 객체 */
 	private final Environment env;
 
+	
 	/**
 	 * 생성자
 	 * 
@@ -112,6 +113,7 @@ public class RunnerFactory {
 	 * 액티비티 어노테이션 관련 설정<br>
 	 * 이전 액티비티 연결 타입, 이전 액티비티명, 구독 제목, 실행 스레드 수
 	 * 
+	 * @param runner 액티비티 런너
 	 * @param activity 설정할 액티비티
 	 */
 	private void setActivity(ActivityRunner runner, Object activity) throws Exception {
@@ -139,6 +141,7 @@ public class RunnerFactory {
 	/**
 	 * 초기화 메소드 설정
 	 * 
+	 * @param runner 액티비티 런너
 	 * @param method 설정할 메소드
 	 */
 	private void setInitMethod(ActivityRunner runner, Method method) throws Exception {
@@ -175,6 +178,7 @@ public class RunnerFactory {
 	/**
 	 * 종료시 호출 메소드 설정
 	 * 
+	 * @param runner 액티비티 런너
 	 * @param method 설정할 메소드
 	 */
 	private void setExitMethod(ActivityRunner runner, Method method) throws Exception {
@@ -211,6 +215,7 @@ public class RunnerFactory {
 	/**
 	 * 크론 메소드 추가
 	 * 
+	 * @param runner 액티비티 런너
 	 * @param method 설정할 메소드
 	 */
 	private void addCronMethod(ActivityRunner runner, Method method) throws Exception {
@@ -260,6 +265,7 @@ public class RunnerFactory {
 	/**
 	 * 데이터 처리 메소드 설정
 	 * 
+	 * @param runner 액티비티 런너
 	 * @param method 설정할 메소드
 	 */
 	private void setProcessMethod(ActivityRunner runner, Method method) throws Exception {
@@ -319,6 +325,7 @@ public class RunnerFactory {
 	/**
 	 * 액티비티에 설정된 액티비티 어노테이션 반환
 	 * 
+	 * @param runner 액티비티 런너
 	 * @return 액티비티 어노테이션
 	 */
 	private Activity getActivityAnnotation(ActivityRunner runner) throws Exception {

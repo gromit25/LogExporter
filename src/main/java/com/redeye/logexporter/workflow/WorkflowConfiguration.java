@@ -61,9 +61,10 @@ public class WorkflowConfiguration {
 	}
 
 	/**
+	 * 액티비티 런너 생성 후 반환<br>
+	 * Activity 어노테이션이 설정된 모든 스프링부트 컴포넌트 대상
 	 * 
-	 * 
-	 * @return
+	 * @return 생성된 액티비티 런너 - K: 스프링부트 컴포넌트 명, V: 생성된 액티비티 런너
 	 */
 	private Map<String, ActivityRunner> createRunner() throws Exception {
 		
@@ -83,9 +84,9 @@ public class WorkflowConfiguration {
 	}
 	
 	/**
+	 * 생성된 각 액티비티 런너를 링크
 	 * 
-	 * 
-	 * @param runnerMap
+	 * @param runnerMap 액티비티 맵
 	 */
 	private void linkRunner(Map<String, ActivityRunner> runnerMap) throws Exception {
 		
@@ -93,16 +94,17 @@ public class WorkflowConfiguration {
 			
 			ActivityRunner runner = runnerMap.get(name);
 			
-			//
+			// 이전 액티비티 런너 명 획득
 			String from = runner.getFrom();
 			ActivityRunner fromRunner = runnerMap.get(from);
 			if(fromRunner == null) {
 				continue;
 			}
 			
-			//
+			// 링크 타입 획득
 			LinkType type = runner.getLinkType();
 			
+			// 링크 타입에 따라 이전 액티비티와 연결 설정
 			if(type == LinkType.NOTICE_HANDLER) {
 				fromRunner.addNoticeSubscriber(runner);
 			} else {
