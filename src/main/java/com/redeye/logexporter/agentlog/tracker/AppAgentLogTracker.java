@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.FileTracker;
-import com.jutools.filetracker.LineSplitReader;
 import com.redeye.logexporter.workflow.Message;
 import com.redeye.logexporter.workflow.annotation.Activity;
 import com.redeye.logexporter.workflow.annotation.Init;
