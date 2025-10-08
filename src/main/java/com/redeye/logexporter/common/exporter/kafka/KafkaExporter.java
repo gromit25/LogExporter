@@ -7,7 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import com.jutools.StringUtil;
-import com.redeye.logexporter.workflow.Message;
+import com.jutools.workflow.Message;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;

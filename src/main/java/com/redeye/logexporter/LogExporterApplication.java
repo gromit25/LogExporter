@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 import com.jutools.FileUtil;
-import com.redeye.logexporter.workflow.Workflow;
+import com.jutools.workflow.Workflow;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @SpringBootApplication
+@ComponentScan(basePackages = {
+    "com.redeye.logexporter",
+    "com.jutools.workflow"
+})
 public class LogExporterApplication implements CommandLineRunner {
 	
 	/** 로그 워크플로우 */

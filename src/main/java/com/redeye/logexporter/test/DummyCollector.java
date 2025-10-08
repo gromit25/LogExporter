@@ -3,11 +3,11 @@ package com.redeye.logexporter.test;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.DateUtil;
-import com.redeye.logexporter.workflow.Message;
-import com.redeye.logexporter.workflow.annotation.Activity;
-import com.redeye.logexporter.workflow.annotation.Cron;
-import com.redeye.logexporter.workflow.annotation.Init;
-import com.redeye.logexporter.workflow.annotation.Process;
+import com.jutools.workflow.Message;
+import com.jutools.workflow.annotation.Activity;
+import com.jutools.workflow.annotation.Cron;
+import com.jutools.workflow.annotation.Init;
+import com.jutools.workflow.annotation.Process;
 
 @Activity(value="dummyCollector")
 @ConditionalOnProperty(
