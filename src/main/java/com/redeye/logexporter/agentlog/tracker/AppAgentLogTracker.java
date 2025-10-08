@@ -12,7 +12,7 @@ import com.jutools.FileTracker;
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
 import com.jutools.workflow.annotation.Init;
-import com.jutools.workflow.annotation.Process;
+import com.jutools.workflow.annotation.Proc;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,7 +76,7 @@ public class AppAgentLogTracker {
 	 * 
 	 * @return
 	 */
-	@Process
+	@Proc
 	public Message<?> traking() throws Exception {
 		
 		// 수집된 로그 데이터 획득

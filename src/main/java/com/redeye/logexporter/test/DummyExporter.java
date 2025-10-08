@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
-import com.jutools.workflow.annotation.Process;
+import com.jutools.workflow.annotation.Proc;
 
 @Activity(from="dummyHandler")
 @ConditionalOnProperty(
@@ -13,7 +13,7 @@ import com.jutools.workflow.annotation.Process;
 )
 public class DummyExporter {
 
-	@Process
+	@Proc
 	public void export(Message<?> message) throws Exception {
 		System.out.println("Exporter : " + message.getBody());
 	}

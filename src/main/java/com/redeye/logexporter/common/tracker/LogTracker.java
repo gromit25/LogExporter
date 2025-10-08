@@ -13,7 +13,7 @@ import com.jutools.filetracker.LineSplitReader;
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
 import com.jutools.workflow.annotation.Init;
-import com.jutools.workflow.annotation.Process;
+import com.jutools.workflow.annotation.Proc;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,7 +77,7 @@ public class LogTracker {
 	 * 
 	 * @return
 	 */
-	@Process
+	@Proc
 	public Message<?> traking() throws Exception {
 		
 		// 수집된 로그 데이터 획득

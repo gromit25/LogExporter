@@ -7,7 +7,7 @@ import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
 import com.jutools.workflow.annotation.Cron;
 import com.jutools.workflow.annotation.Init;
-import com.jutools.workflow.annotation.Process;
+import com.jutools.workflow.annotation.Proc;
 
 @Activity(value="dummyCollector")
 @ConditionalOnProperty(
@@ -21,7 +21,7 @@ public class DummyCollector {
 		System.out.println("### Initialize DummyCollector. ###");
 	}
 
-	@Process
+	@Proc
 	public Message<?> collect() throws Exception {
 		
 		Thread.sleep(1 * 1000);

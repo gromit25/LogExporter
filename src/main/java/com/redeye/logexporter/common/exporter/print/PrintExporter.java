@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
-import com.jutools.workflow.annotation.Process;
+import com.jutools.workflow.annotation.Proc;
 
 /**
  * 화면 출력 Exporter (테스트용)
@@ -26,7 +26,7 @@ public class PrintExporter {
 	 *
 	 * @param message 출력할 메시지
 	 */
-	@Process
+	@Proc
 	public void export(Message<?> message) throws Exception {
 		
 		if(message == null) {

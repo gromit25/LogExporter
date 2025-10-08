@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
-import com.jutools.workflow.annotation.Process;
+import com.jutools.workflow.annotation.Proc;
 
 @Activity(value="dummyHandler", from="dummyCollector")
 @ConditionalOnProperty(
@@ -16,7 +16,7 @@ import com.jutools.workflow.annotation.Process;
 )
 public class DummyHandler {
 
-	@Process
+	@Proc
 	public List<Message<?>> handle(Message<?> message) throws Exception {
 		
 		System.out.println("Handler : " + message.getBody());
