@@ -1,6 +1,10 @@
 package com.redeye.logexporter.common.tracker;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.FileTracker;
+import com.jutools.StringUtil;
 import com.jutools.filetracker.LineSplitReader;
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
@@ -29,6 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 )
 @Slf4j
 public class LogTracker {
+	
+	/** */
+	private static final String DELIMITER = "[ \t]*";
 	
 	/** 트래킹 로그 파일 */
 	@Value("${log.file}")
@@ -75,19 +83,54 @@ public class LogTracker {
 	/**
 	 * 로그 파일 트래킹 수행
 	 * 
-	 * @return
+	 * @return 수집된 로그 메시지
 	 */
 	@Proc
 	public Message<?> traking() throws Exception {
 		
 		// 수집된 로그 데이터 획득
-		String log = this.logQueue.poll(1000, TimeUnit.SECONDS);
+		String logText = this.logQueue.poll(1000, TimeUnit.SECONDS);
+		
+		// 로그 맵 형태로 변경
+		Map<String, Object> logMap = makeLogMap(logText);
 		
 		// 메시지 생성 및 반환
-		Message<String> logMessage = new Message<>();
-		logMessage.setTopic("common log");
-		logMessage.setBody(log);
+		Message<Map<String, Object>> logMessage = new Message<>();
+		logMessage.setTopic("log:" + this.logFile.getAbsolutePath());
+		logMessage.setBody(logMap);
 		
 		return logMessage;
+	}
+	
+	/**
+	 * 로그 메시지(logText)에서 로그 맵 객체를 생성 및 반환<br>
+	 * <li>"log" -> 로그 메시지 전체</li>
+	 * <li>"fields" -> 분할된 필드 목록 객체</li>
+	 * 
+	 * @param logText 로그 메시지
+	 * @return 로그 맵
+	 */
+	private static Map<String, Object> makeLogMap(String logText) {
+		
+		Map<String, Object> logMap = new HashMap<>();
+		
+		// 로그 메시지 원본 추가
+		logMap.put("log", logText);
+		
+		// 구분자(delimiter)에 따라 분리 후 logMap에 추가
+		if(StringUtil.isBlank(logText) == false) {
+			
+			String[] fieldArray = null;
+			if(StringUtil.isEmpty(logText) == true) {
+				fieldArray = new String[] {logText};
+			} else {
+				fieldArray = logText.split(DELIMITER);
+			}
+			
+			List<String> fieldList = Arrays.asList(fieldArray);
+			logMap.put("fields", fieldList);
+		}
+		
+		return logMap;
 	}
 }
