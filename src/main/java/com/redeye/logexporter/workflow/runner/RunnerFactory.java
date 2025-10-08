@@ -13,7 +13,7 @@ import com.redeye.logexporter.workflow.WorkflowContext;
 @Component
 public class RunnerFactory {
 	
-	/** */
+	/** 워크플로우 컨텍스트(설정) */
 	@Autowired
 	private WorkflowContext context;
 
@@ -35,7 +35,7 @@ public class RunnerFactory {
 		// 컴포넌트 종류에 따라 런너 객체 생성
 		ActivityRunner runner = new ActivityRunner(name, activity); 
     
-		// 런너 객체 공통 설정
+		// 런너 객체 설정 - 컨텍스트 반영
 		this.context.setupRunner(runner);
 
 		// 생성된 런너 객체 반환

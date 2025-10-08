@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
  * <li>Message<?> method(Message<?> message)</li>
  * <li>void method(Message<?> message)</li>
  * <li>void method()</li>
+ * 
+ * @author jmsohn
  */
 @Retention(RUNTIME)
 @Target(METHOD)

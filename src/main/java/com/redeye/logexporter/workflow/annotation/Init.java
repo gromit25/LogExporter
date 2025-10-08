@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 
 /**
  * 초기화 메소드 어노테이션
+ * 
+ * @author jmsohn
  */
 @Retention(RUNTIME)
 @Target(METHOD)
