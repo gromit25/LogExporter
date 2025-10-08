@@ -503,7 +503,7 @@ public class ActivityRunner {
 	protected void putNotice(Exception ex) {
 		
 		Message<Exception> notice = new Message<>();
-		notice.setSubject("an exception is raised at " + this.getName());
+		notice.setTopic("an exception is raised at " + this.getName());
 		notice.setBody(ex);
 		
 		this.putNotice(notice);
@@ -562,7 +562,7 @@ public class ActivityRunner {
 			subscriber.fromQueue != null
 			&& (
 				subscriber.subscriptionSubject == null 
-				|| subscriber.subscriptionSubject.match(message.getSubject()).isMatch()
+				|| subscriber.subscriptionSubject.match(message.getTopic()).isMatch()
 			);
 	}
 	
