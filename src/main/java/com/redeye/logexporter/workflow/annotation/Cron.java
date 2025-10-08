@@ -15,6 +15,6 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface Cron {
 	
-	/** 수행 주기 */
+	/** 수행 주기 - SpEL 사룡가능, ex) "${cron.period}" */
 	String period();
 }

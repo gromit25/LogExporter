@@ -1,29 +1,22 @@
 package com.redeye.logexporter.workflow.runner;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import com.jutools.CronJob;
 import com.jutools.StringUtil;
 import com.jutools.thread.AbstractDaemon;
 import com.redeye.logexporter.workflow.Message;
-import com.redeye.logexporter.workflow.annotation.Activity;
-import com.redeye.logexporter.workflow.annotation.Cron;
-import com.redeye.logexporter.workflow.annotation.Exit;
-import com.redeye.logexporter.workflow.annotation.Init;
-import com.redeye.logexporter.workflow.annotation.Process;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -36,18 +29,37 @@ public class ActivityRunner {
 	
 	/** 액티비티 객체 명 - 스프링부트에 등록된 컴포넌트 이름 */
 	@Getter
-	private final String name;
+	@Setter(AccessLevel.PACKAGE)
+	private String name;
+	
+	/** 이전 액티비티 연결 타입 */
+	@Getter
+	@Setter(AccessLevel.PACKAGE)
+	private LinkType linkType;
+	
+	/** 연결할 이전 액티비티 명 */
+	@Getter
+	@Setter(AccessLevel.PACKAGE)
+	private String from;
 	
 	/** 액티비티 객체 */
-	private final Object activity;
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
+	private Object activity;
 	
 	/** 액티비티 객체의 초기화 메소드 */
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private Method initMethod;
 	
 	/** 액티비티 객체의 데이터 처리 메소드 */
+	@Getter(AccessLevel.PACKAGE)
+	@Setter(AccessLevel.PACKAGE)
 	private Method processMethod;
 	
 	/** 액티비티 객체의 동료시 호출 메소드 */
+	@Setter(AccessLevel.PACKAGE)
+	@Getter(AccessLevel.PACKAGE)
 	private Method exitMethod;
 	
 	/** 스레드 중단 여부 */
@@ -61,9 +73,10 @@ public class ActivityRunner {
 	private int threadCount = 1;
 	
 	/** 구독 제목 패턴 */
-	private StringUtil.WildcardPattern subscriptionSubject;
+	private StringUtil.WildcardPattern subscriptionTopic;
 	
 	/** 입력 큐 */
+	@Setter(AccessLevel.PACKAGE)
 	private BlockingQueue<Message<?>> fromQueue;
 	
 	/** 입력 큐 데이터 수신 타입 아웃 */
@@ -79,271 +92,16 @@ public class ActivityRunner {
 	private List<ActivityRunner> noticeSubscriberList;
 	
 	/** 크론 잡 맵 */
+	@Getter(AccessLevel.PACKAGE)
 	private Map<String, CronJob> cronJobMap = new ConcurrentHashMap<>();
 
 	
 	/**
-	 * 생성자
-	 *
-	 * @param name 스프링부트 컴포넌트 명
-	 * @param activity 워크플로우 액티비티 객체
+	 * 생성자 - RunnerFactory 에서만 생성
 	 */
-	protected ActivityRunner(String name, Object activity) throws Exception {
-		
-		// 입력값 검증
-		if(name == null) {
-			throw new IllegalArgumentException("'name' is null.");
-		}
-		
-		if(activity == null) {
-			throw new IllegalArgumentException("'activity' is null.");
-		}
-		
-		// 액티비티 명과 객체 설정
-		this.name = name;
-		this.activity = activity;
-		
-		// 실행할 메소드 추출 및 설정
-		for(Method method: this.activity.getClass().getMethods()) {
-			
-			// init 메소드 설정
-			this.setInitMethod(method);
-			
-			// process 메소드 설정
-			this.setProcessMethod(method);
-
-			// exit 메소드 설정
-			this.setExitMethod(method);
-			
-			// cron 메소드 추가
-			this.addCronMethod(method);
-			
-		}
-		
-		// process 메소드 설정되어 있는지 확인
-		if(this.processMethod == null) {
-			throw new IllegalArgumentException("process method is not found at " + this.activity.getClass());
-		}
+	ActivityRunner() {
 	}
-	
-	/**
-	 * 초기화 메소드 설정
-	 * 
-	 * @param method 설정할 메소드
-	 */
-	private void setInitMethod(Method method) throws Exception {
 		
-		Init initAnnotation = method.getAnnotation(Init.class);
-		if(initAnnotation == null) {
-			return;
-		}
-		
-		// 이미 설정되어 있는 경우 예외 발생
-		if(this.initMethod != null) {
-			throw new IllegalArgumentException("duplicated init method at " + this.activity.getClass());
-		}
-		
-		// 메소드 public 여부 검사
-		if(isPublic(method) == false) {
-			throw new IllegalArgumentException("ini method must be public: " + method);
-		}
-		
-		// 리턴 타입 검사
-		if(method.getReturnType() != void.class) {
-			throw new IllegalArgumentException("init method return type must be void: " + method);
-		}
-		
-		// 파라미터 검사
-		if(method.getParameterCount() != 0) {
-			throw new IllegalArgumentException("init method must have 0 parameter: " + method);
-		}
-		
-		// init method 설정
-		this.initMethod = method;
-	}
-	
-	/**
-	 * 데이터 처리 메소드 설정
-	 * 
-	 * @param method 설정할 메소드
-	 */
-	private void setProcessMethod(Method method) throws Exception {
-		
-		Process processAnnotation = method.getAnnotation(Process.class);
-		if(processAnnotation == null) {
-			return;
-		}
-		
-		// 이미 설정되어 있는 경우 예외 발생
-		if(this.processMethod != null) {
-			throw new IllegalArgumentException("duplicated process method at " + this.activity.getClass());
-		}
-
-		// 메소드 public 여부 검사
-		if(isPublic(method) == false) {
-			throw new IllegalArgumentException("ini method must be public: " + method);
-		}
-		
-		// 리턴 타입 검사
-		Type returnType = method.getGenericReturnType();
-		if(
-			returnType != void.class
-			&& isMessageListType(returnType) == false
-			&& isMessageType(returnType) == false
-		) {
-			throw new IllegalArgumentException("process method return type must be 'void' or 'List<Message<?>>': " + method);
-		}
-		
-		// 파라미터 검사
-		if(method.getParameterCount() != 0) {
-			if(
-				method.getParameterCount() == 1
-				&& isMessageType(method.getGenericParameterTypes()[0]) == true
-			) {
-				// process 메소드에 입력 파라미터(Message<?>)가 있는 경우 fromQueue 를 생성함
-				this.fromQueue = new LinkedBlockingQueue<>();
-			} else {
-				throw new IllegalArgumentException("init method must have 0 parameter: " + method);
-			}
-		}
-		
-		// process method 설정
-		this.processMethod = method;
-	}
-	
-	/**
-	 * 종료시 호출 메소드 설정
-	 * 
-	 * @param method 설정할 메소드
-	 */
-	private void setExitMethod(Method method) throws Exception {
-		
-		Exit exitAnnotation = method.getAnnotation(Exit.class);
-		if(exitAnnotation == null) {
-			return;
-		}
-		
-		// 이미 설정되어 있는 경우 예외 발생
-		if(this.exitMethod != null) {
-			throw new IllegalArgumentException("duplicated exit method at " + this.activity.getClass());
-		}
-		
-		// 메소드 public 여부 검사
-		if(isPublic(method) == false) {
-			throw new IllegalArgumentException("ini method must be public: " + method);
-		}
-		
-		// 리턴 타입 검사
-		if(method.getReturnType() != void.class) {
-			throw new IllegalArgumentException("exit method return type must be void: " + method);
-		}
-		
-		// 파라미터 검사
-		if(method.getParameterCount() != 0) {
-			throw new IllegalArgumentException("exit method must have 0 parameter: " + method);
-		}
-		
-		// exit method 설정
-		this.exitMethod = method;
-	}
-	
-	/**
-	 * 크론 메소드 추가
-	 * 
-	 * @param method 설정할 메소드
-	 */
-	private void addCronMethod(Method method) throws Exception {
-		
-		Cron cronAnnotation = method.getAnnotation(Cron.class);
-		if(cronAnnotation == null) {
-			return;
-		}
-		
-		// 메소드 public 여부 검사
-		if(isPublic(method) == false) {
-			throw new IllegalArgumentException("ini method must be public: " + method);
-		}
-		
-		// 리턴 타입 검사
-		Type returnType = method.getGenericReturnType();
-		if(returnType != void.class && isMessageListType(returnType) == false) {
-			throw new IllegalArgumentException("cron method return type must be 'void' or 'List<Message<?>>': " + method);
-		}
-		
-		// 파라미터 검사
-		if(method.getParameterCount() != 0) {
-			throw new IllegalArgumentException("cron method must have 0 parameter: " + method);
-		}
-		
-		// cron method 추가
-		this.cronJobMap.put(
-			method.getName(),
-			new CronJob(cronAnnotation.period(), () -> {
-				
-				final Method cronMethod = method;
-				
-				try {
-					Object result = cronMethod.invoke(this.activity);
-					put(result);
-				}catch(Exception ex) {
-					log.error(cronMethod.toString(), ex);
-				}
-			})
-		);
-	}
-	
-	/**
-	 * 주어진 타입이 List<Message<?>> 여부 반환
-	 * 
-	 * @param type 검사할 타입
-	 * @return List<Message<?>> 여부
-	 */
-	private boolean isMessageListType(Type type) {
-		
-		if(type instanceof ParameterizedType == true) {
-			
-			ParameterizedType paramType = (ParameterizedType)type;
-			
-			// List 여부 확인
-			if(paramType.getRawType() == List.class) {
-
-				// 제네릭 타입 파라미터 확인
-				Type[] typeArgs = paramType.getActualTypeArguments();
-
-				if(typeArgs.length == 1) {
-					return isMessageType(typeArgs[0]);
-				}
-			}
-		}
-		
-		return false;
-	}
-
-	/**
-	 * 주어진 타입이 Message<?> 여부 반환
-	 * 
-	 * @param type 검사할 타입
-	 * @return Message<?> 여부
-	 */
-	private boolean isMessageType(Type type) {
-		
-		if(type instanceof ParameterizedType == true) {
-			return ((ParameterizedType)type).getRawType() == Message.class;
-        }
-        
-		return false;
-	}
-	
-	/**
-	 * 메소드의 public 여부 반환
-	 * 
-	 * @param method 검사 대상 메소드
-	 * @return public 여부
-	 */
-	private static boolean isPublic(Method method) {
-		return Modifier.isPublic(method.getModifiers());
-	}
-	
 	/**
 	 * 액티비티 실행
 	 */
@@ -561,24 +319,24 @@ public class ActivityRunner {
 		return
 			subscriber.fromQueue != null
 			&& (
-				subscriber.subscriptionSubject == null 
-				|| subscriber.subscriptionSubject.match(message.getTopic()).isMatch()
+				subscriber.subscriptionTopic == null 
+				|| subscriber.subscriptionTopic.match(message.getTopic()).isMatch()
 			);
 	}
 	
 	/**
 	 * 구독 제목 설정
 	 * 
-	 * @param subscriptionSubject 구독 제목
+	 * @param subscriptionTopic 구독 제목
 	 */
-	public void setSubscriptionSubject(String subscriptionSubject) throws Exception {
+	public void setSubscriptionTopic(String subscriptionTopic) throws Exception {
 		
-		// 구독 제목(subscriptionSubject) 이 없는 경우,
-		// 모든 제목에 대해 구독하도록 this.subscriptionSubject을 null 로 설정
-		if(StringUtil.isBlank(subscriptionSubject) == false) {
-			this.subscriptionSubject = StringUtil.WildcardPattern.create(subscriptionSubject);
+		// 구독 제목(subscriptionTopic) 이 없는 경우,
+		// 모든 제목에 대해 구독하도록 this.subscriptionTopic을 null 로 설정
+		if(StringUtil.isBlank(subscriptionTopic) == false) {
+			this.subscriptionTopic = StringUtil.WildcardPattern.create(subscriptionTopic);
 		} else {
-			this.subscriptionSubject = null;
+			this.subscriptionTopic = null;
 		}
 	}
 	
@@ -654,14 +412,5 @@ public class ActivityRunner {
 		}
 		
 		this.maxLag = maxLag;
-	}
-	
-	/**
-	 * 액티비티에 설정된 액티비티 어노테이션 반환
-	 * 
-	 * @return 액티비티 어노테이션
-	 */
-	public Activity getActivityAnnotation() {
-		return this.activity.getClass().getAnnotation(Activity.class);
 	}
 }

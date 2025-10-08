@@ -35,7 +35,7 @@ public class DummyCollector {
 		return dummy;
 	}
 	
-	@Cron(period = "*/5 * * * * *")
+	@Cron(period = "${test.cron}")
 	public void cron() throws Exception {
 		System.out.println(" #### CRON JOB #### ");
 	}

@@ -21,10 +21,6 @@ import com.redeye.logexporter.workflow.runner.RunnerFactory;
 @Configuration
 public class WorkflowConfiguration {
 	
-	/** 워크플로우 컨텍스트 객체 */
-	@Autowired
-	private WorkflowContext context;
-
 	/** 런너 객체 생성 팩토리 객체 */
 	@Autowired
 	private RunnerFactory factory;
@@ -98,14 +94,14 @@ public class WorkflowConfiguration {
 			ActivityRunner runner = runnerMap.get(name);
 			
 			//
-			String from = this.context.getFrom(runner);
+			String from = runner.getFrom();
 			ActivityRunner fromRunner = runnerMap.get(from);
 			if(fromRunner == null) {
 				continue;
 			}
 			
 			//
-			LinkType type = this.context.getType(runner);
+			LinkType type = runner.getLinkType();
 			
 			if(type == LinkType.NOTICE_HANDLER) {
 				fromRunner.addNoticeSubscriber(runner);

@@ -34,5 +34,5 @@ public @interface Activity {
 	String subscribe() default "";
 	
 	/** 스레드 개수 */
-	int threadCount() default 1;
+	String threadCount() default "1";
 }
