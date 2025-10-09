@@ -8,8 +8,8 @@ import com.jutools.workflow.annotation.Proc;
 
 @Activity(from="dummyHandler")
 @ConditionalOnProperty(
-	name="log.type",
-	havingValue="test"
+	name="dummy.test",
+	havingValue="y"
 )
 public class DummyExporter {
 

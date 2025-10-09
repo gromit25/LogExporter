@@ -11,8 +11,8 @@ import com.jutools.workflow.annotation.Proc;
 
 @Activity(value="dummyHandler", from="dummyCollector")
 @ConditionalOnProperty(
-	name="log.type",
-	havingValue="test"
+	name="dummy.test",
+	havingValue="y"
 )
 public class DummyHandler {
 
