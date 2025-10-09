@@ -8,7 +8,7 @@ import com.jutools.BytesUtil;
 import com.jutools.filetracker.SplitReader;
 
 /**
- * AppAgent에서 출력되는 로그 파일의 메시지를 분할해서 읽는 Reader
+ * 앱 에이전트에서 출력되는 로그 파일의 메시지를 분할해서 읽는 Reader
  * 
  * @author jmsohn
  */

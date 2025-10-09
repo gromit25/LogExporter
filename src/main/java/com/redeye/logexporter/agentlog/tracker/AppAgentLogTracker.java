@@ -17,20 +17,23 @@ import com.jutools.workflow.annotation.Proc;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 앱 메이전트 로그 트랙커 클래스
+ * 앱 메이전트 로그 트랙커 클래스<br>
+ * 설정 값<br>
+ * <li>app.appagent.tracker.use: 'y' 일 경우 활성화</li>
+ * <li>app.appagent.tracker.file: 로그 파일 명</li>
  * 
  * @author jmsohn
  */
 @Activity(value="logTracker")
 @ConditionalOnProperty(
-	name="log.type",
-	havingValue="appagent"
+	name="app.appagent.tracker.use",
+	havingValue="y"
 )
 @Slf4j
 public class AppAgentLogTracker {
 	
 	/** 트래킹 앱 에이전트 로그 파일 */
-	@Value("${log.file}")
+	@Value("${app.appagent.tracker.file}")
 	private File logFile;
 	
 	/** 로그 트랙커 객체 */
@@ -74,7 +77,7 @@ public class AppAgentLogTracker {
 	/**
 	 * 로그 파일 트래킹 수행
 	 * 
-	 * @return
+	 * @return 수집된 로그 메시지
 	 */
 	@Proc
 	public Message<?> traking() throws Exception {
