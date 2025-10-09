@@ -7,17 +7,20 @@ import com.jutools.workflow.annotation.Activity;
 import com.jutools.workflow.annotation.Proc;
 
 /**
- * 화면 출력 Exporter (테스트용)
+ * 화면 출력 Exporter (테스트용)<br>
+ * 설정값
+ * <li>app.common.print.use: 'y' 일 경우 활성화</li>
+ * <li>app.common.print.from: 이전 액티비티 명</li>
  *
  * @author jmsohn
  */
 @Activity(
-	value="exporter",
-	from="${exporter.from}"
+	value="print",
+	from="${app.common.print.from}"
 )
 @ConditionalOnProperty(
-	name="log.type",
-	havingValue="common"
+	name="app.common.print.use",
+	havingValue="y"
 )
 public class PrintExporter {
 

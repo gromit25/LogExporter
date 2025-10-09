@@ -16,28 +16,34 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 스크립트를 이용해서 메시지 검사<br>
- * 검사 결과에 따라 export 여부 설정
+ * 검사 결과에 따라 export 여부 설정<br>
+ * 설정값
+ * <li>app.common.filter.use: 'y' 일 경우 활성화</li>
+ * <li>app.common.filter.from: 이전 액티비티 명</li>
+ * <li>app.common.filter.thread.count: 스레드 수(default: 1)</li>
+ * <li>app.common.filter.script: 필터링 스크립트</li>
+ * <li>app.common.filter.debug: 필터링 스크립트 디버깅 여부(default: false)</li>
  * 
  * @author jmsohn
  */
 @Slf4j
 @Activity(
 	value="filter",
-	from="${app.filter.from}",
-	threadCount="${app.filter.thread.count}"
+	from="${app.common.filter.from}",
+	threadCount="${app.common.filter.thread.count}"
 )
 @ConditionalOnProperty(
-	name="log.type",
-	havingValue="common"
+	name="app.common.filter.use",
+	havingValue="y"
 )
 public class LogFilter {
 	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
-	@Value("${app.handler.filter.debug}")
-	private boolean debug;
+	@Value("${app.common.filter.debug}")
+	private boolean debug = false;
 	
 	/** 스크립트 문자열 */
-	@Value("${app.handler.filter.script}")
+	@Value("${app.common.filter.script}")
 	private String scriptStr;
 	
 	/** 스크립트 실행 객체 */
@@ -51,7 +57,7 @@ public class LogFilter {
 	public void init() throws Exception {
 		
 		// 스크립트 컴파일
-		log.info("script : " + this.scriptStr);
+		log.info("script: " + this.scriptStr);
 		
 		this.script = (StringUtil.isBlank(scriptStr) == false)
 				? OLExp.compile(this.scriptStr) : null;
@@ -68,8 +74,13 @@ public class LogFilter {
 		
 		@SuppressWarnings("unchecked")
 		Map<String, Object> body = (Map<String, Object>)message.getBody();
-		
-		return null;
+
+		// 필터링 여부 검사
+		if(this.shouldBeExported(body) == true) {
+			return message;
+		} else {
+			return null;
+		}
 	}
 
 	/**

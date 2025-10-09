@@ -1,57 +1,17 @@
 {"properties": [
   {
-    "name": "app.exporter.type",
+    "name": "workflow.timeout.sec",
     "type": "java.lang.String",
-    "description": "A description for 'app.exporter.type'"
+    "description": "A description for 'workflow.timeout.sec'"
   },
   {
-    "name": "app.exporter.kafka.clientid",
+    "name": "workflow.maxlag",
     "type": "java.lang.String",
-    "description": "A description for 'app.exporter.kafka.clientid'"
-  },
-  {
-    "name": "app.exporter.kafka.topicname",
-    "type": "java.lang.String",
-    "description": "A description for 'app.exporter.kafka.topicname'"
-  },
-  {
-    "name": "app.exporter.kafka.url",
-    "type": "java.lang.String",
-    "description": "A description for 'app.exporter.kafka.url'"
+    "description": "A description for 'workflow.maxlag'"
   },
   {
     "name": "app.stop.file",
     "type": "java.lang.String",
     "description": "A description for 'app.stop.file'"
-  },
-  {
-    "name": "app.handler.delimiter",
-    "type": "java.lang.String",
-    "description": "A description for 'app.handler.delimiter'"
-  },
-  {
-    "name": "app.handler.filter.script",
-    "type": "java.lang.String",
-    "description": "A description for 'app.handler.filter.script'"
-  },
-  {
-    "name": "app.handler.filter.debug",
-    "type": "java.lang.String",
-    "description": "A description for 'app.handler.filter.debug'"
-  },
-  {
-    "name": "app.handler.transformer.format",
-    "type": "java.lang.String",
-    "description": "A description for 'app.handler.transformer.format'"
-  },
-  {
-    "name": "app.tracker.files",
-    "type": "java.lang.String",
-    "description": "A description for 'app.tracker.files'"
-  },
-  {
-    "name": "app.tracker.reader.type",
-    "type": "java.lang.String",
-    "description": "A description for 'app.tracker.reader.type'"
   }
 ]}

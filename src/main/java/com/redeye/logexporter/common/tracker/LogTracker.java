@@ -23,23 +23,26 @@ import com.jutools.workflow.annotation.Proc;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 로그 파일 트랙커 클래스
+ * 로그 파일 트랙커 클래스<br>
+ * 설정 값<br>
+ * <li>app.common.tracker.use: 'y' 일 경우 활성화</li>
+ * <li>app.common.tracker.file: 로그 파일 명</li>
  * 
  * @author jmsohn
  */
-@Activity("logTracker")
+@Activity("tracker")
 @ConditionalOnProperty(
-	name="log.type",
-	havingValue="common"
+	name="app.common.tracker.use",
+	havingValue="y"
 )
 @Slf4j
 public class LogTracker {
 	
-	/** */
+	/** 필드 분리 문자 */
 	private static final String DELIMITER = "[ \t]*";
 	
 	/** 트래킹 로그 파일 */
-	@Value("${log.file}")
+	@Value("${app.common.tracker.file}")
 	private File logFile;
 	
 	/** 로그 트랙커 객체 */

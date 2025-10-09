@@ -22,12 +22,11 @@ import com.jutools.StringUtil;
  * @author jmsohn
  */
 @Configuration
-@ConditionalOnProperty
-(
-	value = "app.exporter.type",
-	havingValue = "KAFKA"
+@ConditionalOnProperty(
+	name="app.common.kafka.use",
+	havingValue="y"
 )
-public class KafkaExporterConfig {
+public class KafkaConfig {
 
 	/**
 	 * kafka template 생성 후 반환
@@ -51,8 +50,8 @@ public class KafkaExporterConfig {
 	 */
 	@Bean
 	ProducerFactory<String, String> producerFactory(
-		@Value("${app.exporter.kafka.servers}") String servers,
-		@Value("${app.exporter.kafka.acks}") String acks
+		@Value("${app.common.kafka.servers}") String servers,
+		@Value("${app.common.kafka.acks}") String acks
 	) {
 		
 		// 입력값 검증
