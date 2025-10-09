@@ -19,7 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 	value = "app.exporter.type",
 	havingValue = "RESTAPI"
 )
-public class RestAPIExporterConfig {
+public class RestAPIConfig {
 	
 	/**
 	 * WebClient 객체 생성 및 반환
