@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 스크립트를 이용해서 메시지 검사<br>
  * 검사 결과에 따라 export 여부 설정<br>
- * 설정값
+ * 설정값<br>
  * <li>app.common.filter.use: 'y' 일 경우 활성화</li>
  * <li>app.common.filter.from: 이전 액티비티 명</li>
  * <li>app.common.filter.thread.count: 스레드 수(default: 1)</li>
@@ -66,8 +66,8 @@ public class LogFilter {
 	/**
 	 * 필터링 수행
 	 * 
-	 * @param message
-	 * @return
+	 * @param message 수신 메시지
+	 * @return 필터링된 메시지
 	 */
 	@Proc
 	public Message<?> filter(Message<?> message) throws Exception {

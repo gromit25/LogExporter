@@ -17,7 +17,12 @@ import org.springframework.kafka.core.ProducerFactory;
 import com.jutools.StringUtil;
 
 /**
- * kafka exporter 및 kafkaTemplate 객체 생성 컴포넌트
+ * kafka exporter 및 kafkaTemplate 객체 생성 컴포넌트<br>
+ * 설정값<br>
+ * <li>app.common.kafka.use: 'y' 일 경우 활성화</li>
+ * <li>app.common.kafka.servers: kafka server 목록</li>
+ * <li>app.common.kafka.acks: kafka acks 설정</li>
+ * <li>app.common.kafka.clientid: producer client id</li>
  *
  * @author jmsohn
  */
@@ -44,14 +49,16 @@ public class KafkaConfig {
 	/**
 	 * kafka producer factory 생성
 	 * 
-	 * @param servers 접속할 kafka server 목록
+	 * @param servers kafka server 목록
 	 * @param acks kafka acks 설정
+	 * @param clientId producer client id
 	 * @return kafka producer factory 객체
 	 */
 	@Bean
 	ProducerFactory<String, String> producerFactory(
 		@Value("${app.common.kafka.servers}") String servers,
-		@Value("${app.common.kafka.acks}") String acks
+		@Value("${app.common.kafka.acks}") String acks,
+		@Value("${app.common.kafka.clientid}") String clientId
 	) {
 		
 		// 입력값 검증
@@ -70,6 +77,10 @@ public class KafkaConfig {
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		configProps.put(ProducerConfig.ACKS_CONFIG, acks);
+		
+		if(StringUtil.isBlank(clientId) == false) {
+			configProps.put(ProducerConfig.CLIENT_ID_CONFIG, clientId);
+		}
 
 		return new DefaultKafkaProducerFactory<>(configProps);
 	}
