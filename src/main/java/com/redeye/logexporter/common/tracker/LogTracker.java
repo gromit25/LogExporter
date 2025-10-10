@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
+import com.jutools.SysUtil;
 import com.jutools.filetracker.LineSplitReader;
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
@@ -41,9 +42,24 @@ public class LogTracker {
 	/** 필드 분리 문자 */
 	private static final String DELIMITER = "[ \t]+";
 	
+	/** 기관 명 */
+	@Value("${app.config.organ}")
+	private String organCode;
+	
+	/** 도메인 명 */
+	@Value("${app.config.domain}")
+	private String domainCode;
+	
+	/** 호스트 명 */
+	@Value("${app.config.hostname}")
+	private String hostname;
+	
 	/** 트래킹 로그 파일 */
 	@Value("${app.common.tracker.file}")
 	private File logFile;
+	
+	/** 메시지 제목 */
+	private String topic;
 	
 	/** 로그 트랙커 객체 */
 	private FileTracker tracker;
@@ -57,6 +73,21 @@ public class LogTracker {
 	 */
 	@Init
 	public void init() throws Exception {
+		
+		// 호스트 명 설정
+		// 설정된 호스트명이 없는 경우 시스템의 호스트명을 설정함
+		if(StringUtil.isBlank(this.hostname) == true) {
+			this.hostname = SysUtil.getHostname();
+		}
+		
+		// 메시지 제목 설정
+		this.topic = String.format(
+			"%s:%s:%s:%s",
+			this.organCode,
+			this.domainCode,
+			this.hostname,
+			this.logFile.getAbsolutePath()
+		);
 		
 		// 트랙커 객체 생성
 		this.tracker = FileTracker.create(logFile, new LineSplitReader());
@@ -94,13 +125,10 @@ public class LogTracker {
 		// 수집된 로그 데이터 획득
 		String logText = this.logQueue.poll(1000, TimeUnit.SECONDS);
 		
-		// 로그 맵 형태로 변경
-		Map<String, Object> logMap = makeLogMap(logText);
-		
 		// 메시지 생성 및 반환
 		Message<Map<String, Object>> logMessage = new Message<>();
-		logMessage.setTopic("log:" + this.logFile.getAbsolutePath());
-		logMessage.setBody(logMap);
+		logMessage.setTopic(this.topic);
+		logMessage.setBody(makeLogMap(logText));
 		
 		return logMessage;
 	}
