@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @author jmsohn
  */
-@Activity(value="appagent.tracker")
+@Activity(value="tracker")
 @ConditionalOnProperty(
 	name="app.appagent.tracker.use",
 	havingValue="y"
