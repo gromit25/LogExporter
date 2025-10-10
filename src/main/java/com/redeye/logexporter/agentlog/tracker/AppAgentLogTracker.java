@@ -79,7 +79,7 @@ public class AppAgentLogTracker {
 			this.hostname = SysUtil.getHostname();
 		}
 		
-		// 메시지 제목 생성 및 설정
+		// 메시지 제목 설정
 		this.topic = String.format(
 			"%s:%s:%s:%s",
 			this.organCode,
