@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LogTracker {
 	
 	/** 필드 분리 문자 */
-	private static final String DELIMITER = "[ \t]*";
+	private static final String DELIMITER = "[ \t]+";
 	
 	/** 트래킹 로그 파일 */
 	@Value("${app.common.tracker.file}")
