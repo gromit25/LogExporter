@@ -38,7 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AppAgentLogTracker {
 	
-	/** 스택 정보 파싱용 정규표현식 */
+	/** 스택 정보 파싱용 정규표현식 객체 */
 	private static Pattern locationP = Pattern.compile("(?<class>[^.]+(\\.[^.]+)*)\\.(?<method>[^.]+)\\:(?<loc>\\-?[0-9]+)");
 
 	/** 기관 명 */
