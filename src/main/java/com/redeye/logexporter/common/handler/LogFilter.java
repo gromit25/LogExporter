@@ -59,7 +59,7 @@ public class LogFilter {
 		// 스크립트 컴파일
 		log.info("script: " + this.scriptStr);
 		
-		this.script = (StringUtil.isBlank(scriptStr) == false)
+		this.script = (StringUtil.isBlank(this.scriptStr) == false)
 				? OLExp.compile(this.scriptStr) : null;
 	}
 	
