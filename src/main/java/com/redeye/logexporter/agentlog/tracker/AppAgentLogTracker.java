@@ -168,10 +168,13 @@ public class AppAgentLogTracker {
 		logMap.put("message", objIdSplit[1]);
 		
 		// key를 만들어 넣음
-		logMap.put("key", makeKey(
-			logMap.get("apiType").toString(),
-			logMap.get("stackTrace").toString()
-		));
+		logMap.put(
+			"key",
+			makeKey(
+				logMap.get("apiType").toString(),
+				logMap.get("stackTrace").toString()
+			)
+		);
 		
 		return logMap;
 	}
