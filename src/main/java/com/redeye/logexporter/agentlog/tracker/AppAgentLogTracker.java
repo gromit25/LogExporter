@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
+import com.jutools.SysUtil;
 import com.jutools.workflow.Message;
 import com.jutools.workflow.annotation.Activity;
 import com.jutools.workflow.annotation.Init;
@@ -29,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @author jmsohn
  */
-@Activity(value="logTracker")
+@Activity(value="agentTracker")
 @ConditionalOnProperty(
 	name="app.appagent.tracker.use",
 	havingValue="y"
@@ -39,10 +40,25 @@ public class AppAgentLogTracker {
 	
 	/** 스택 정보 파싱용 정규표현식 */
 	private static Pattern locationP = Pattern.compile("(?<class>[^.]+(\\.[^.]+)*)\\.(?<method>[^.]+)\\:(?<loc>\\-?[0-9]+)");
+
+	/** 기관 명 */
+	@Value("${app.config.organ}")
+	private String organCode;
+	
+	/** 도메인 명 */
+	@Value("${app.config.domain}")
+	private String domainCode;
+	
+	/** 호스트 명 */
+	@Value("${app.config.hostname}")
+	private String hostname;
 	
 	/** 트래킹 앱 에이전트 로그 파일 */
 	@Value("${app.appagent.tracker.file}")
 	private File logFile;
+	
+	/** 메시지 제목 */
+	private String topic;
 	
 	/** 로그 트랙커 객체 */
 	private FileTracker tracker;
@@ -56,6 +72,21 @@ public class AppAgentLogTracker {
 	 */
 	@Init
 	public void init() throws Exception {
+		
+		// 호스트 명 설정
+		// 설정된 호스트명이 없는 경우 시스템의 호스트명을 설정함
+		if(StringUtil.isBlank(this.hostname) == true) {
+			this.hostname = SysUtil.getHostname();
+		}
+		
+		// 메시지 제목 생성 및 설정
+		this.topic = String.format(
+			"%s:%s:%s:%s",
+			this.organCode,
+			this.domainCode,
+			this.hostname,
+			this.logFile.getAbsolutePath()
+		);
 		
 		// 트랙커 객체 생성
 		this.tracker = FileTracker.create(logFile, new AppAgentSplitReader());
@@ -95,7 +126,7 @@ public class AppAgentLogTracker {
 		
 		// 메시지 생성 및 반환
 		Message<Map<String, Object>> logMessage = new Message<>();
-		logMessage.setTopic("app agent log:");
+		logMessage.setTopic(this.topic);
 		logMessage.setBody(parse(logText));
 		
 		return logMessage;
