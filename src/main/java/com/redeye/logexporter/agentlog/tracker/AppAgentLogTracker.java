@@ -122,7 +122,7 @@ public class AppAgentLogTracker {
 	public Message<?> traking() throws Exception {
 		
 		// 수집된 로그 데이터 획득
-		String logText = this.logQueue.poll(1000, TimeUnit.SECONDS);
+		String logText = this.logQueue.poll(10, TimeUnit.SECONDS);
 		
 		// 메시지 생성 및 반환
 		Message<Map<String, Object>> logMessage = new Message<>();
