@@ -30,10 +30,19 @@ public class TraceDTO {
 	/**
 	 * 메시지 파싱 및 조인 포인트 정보 업데이트
 	 * 
-	 * @param log 로그 메시지
+	 * @param messageMap 로그 메시지 맵
 	 * @return 현재 객체
 	 */
-	public TraceDTO add(String log) throws Exception {
-		return this;
+	public void add(Map<String, Object> messageMap) throws Exception {
+		
+		// 키를 통해 조인 포인트 정보 획득
+		String key = messageMap.get("key").toString();
+		JoinPointDTO joinPoint = this.joinPointMap.getOrDefault(
+			key,
+			new JoinPointDTO(key, messageMap.get("message").toString())
+		);
+		
+		// 조인 포인트의 
+		joinPoint.add((long)messageMap.get("elased"));
 	}
 }
