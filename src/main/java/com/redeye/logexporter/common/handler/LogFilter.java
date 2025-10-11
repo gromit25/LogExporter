@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
  * 설정값<br>
  * <li>app.common.filter.use: 'y' 일 경우 활성화</li>
  * <li>app.common.filter.from: 이전 액티비티 명</li>
- * <li>app.common.filter.thread.count: 스레드 수(default: 1)</li>
- * <li>app.common.filter.debug: 필터링 스크립트 디버깅 여부(default: false)</li>
+ * <li>app.common.filter.thread.count: 스레드 수</li>
+ * <li>app.common.filter.debug: 필터링 스크립트 디버깅 여부</li>
  * 
  * @author jmsohn
  */
