@@ -1,5 +1,7 @@
 package com.redeye.logexporter.common.exporter.kafka;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -48,7 +50,15 @@ public class KafkaExporter {
 	@Proc
 	public void export(Message<?> message) throws Exception {
 		
+		@SuppressWarnings("unchecked")
+		Map<String, Object> messageMap = (Map<String, Object>)message.getBody();
+		
 		log.info("SEND:" + message);
-		this.kafkaTemplate.send(this.topic, message.getBody().toString());
+		
+		this.kafkaTemplate.send(
+			this.topic,
+			messageMap.get("key").toString(),
+			messageMap.get("log").toString()
+		);
 	}
 }
