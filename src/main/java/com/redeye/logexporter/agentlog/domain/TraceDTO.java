@@ -43,6 +43,29 @@ public class TraceDTO {
 		);
 		
 		// 조인 포인트의 
-		joinPoint.add((long)messageMap.get("elased"));
+		joinPoint.add((long)messageMap.get("elapsed"));
+	}
+	
+	@Override
+	public String toString() {
+		
+		StringBuilder builder = new StringBuilder("");
+		
+		builder
+			.append("{")
+			.append("\"start\": " + this.startTime + ",")
+			.append("\"end\": " + this.endTime + ",");
+		
+		//
+		builder.append("\"joinPointMap\": {");
+		for(String key: this.joinPointMap.keySet()) {
+			builder.append(this.joinPointMap.get(key).toString());
+		}
+		builder.append("}");
+		
+		//
+		builder.append("}");
+		
+		return builder.toString();
 	}
 }
