@@ -62,7 +62,7 @@ public class JoinPointDTO {
 				.append("\"min\": ").append(this.elasedParameter.getMin()).append(",")
 				.append("\"max\": ").append(this.elasedParameter.getMax()).append(",")
 				.append("\"err\": ").append(this.errorCount)
-			.append("}");	// end of stat
+			.append("}")	// end of stat
 			.append("}");
 		
 		return builder.toString();
