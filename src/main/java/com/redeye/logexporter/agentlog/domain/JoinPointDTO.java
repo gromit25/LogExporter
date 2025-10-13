@@ -51,8 +51,7 @@ public class JoinPointDTO {
 		StringBuilder builder = new StringBuilder("");
 		
 		builder
-			.append("{")
-			.append("\"key\": \"").append(this.key).append("\",")
+			.append("\"").append(this.key).append("\": {")
 			.append("\"message\": \"").append(this.message).append("\",")
 			.append("\"count\": ").append(this.elasedParameter.getCount()).append(",")
 			.append("\"sum\": ").append(this.elasedParameter.getSum()).append(",")
