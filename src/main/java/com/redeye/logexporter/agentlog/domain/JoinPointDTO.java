@@ -52,14 +52,17 @@ public class JoinPointDTO {
 		
 		builder
 			.append("\"").append(this.key).append("\": {")
-			.append("\"message\": \"").append(this.message).append("\",")
-			.append("\"count\": ").append(this.elasedParameter.getCount()).append(",")
-			.append("\"sum\": ").append(this.elasedParameter.getSum()).append(",")
-			.append("\"squaredSum\": ").append(this.elasedParameter.getSquaredSum()).append(",")
-			.append("\"cubedSum\": ").append(this.elasedParameter.getCubedSum()).append(",")
-			.append("\"fourthPoweredSum\": ").append(this.elasedParameter.getFourthPoweredSum()).append(",")
-			.append("\"min\": ").append(this.elasedParameter.getMin()).append(",")
-			.append("\"max\": ").append(this.elasedParameter.getMax())
+			.append("\"msg\": \"").append(this.message).append("\",")
+			.append("\"stat\": {").append(this.message).append("\",")
+				.append("\"cnt\": ").append(this.elasedParameter.getCount()).append(",")
+				.append("\"sum\": ").append(this.elasedParameter.getSum()).append(",")
+				.append("\"sqd\": ").append(this.elasedParameter.getSquaredSum()).append(",")
+				.append("\"cbd\": ").append(this.elasedParameter.getCubedSum()).append(",")
+				.append("\"4th\": ").append(this.elasedParameter.getFourthPoweredSum()).append(",")
+				.append("\"min\": ").append(this.elasedParameter.getMin()).append(",")
+				.append("\"max\": ").append(this.elasedParameter.getMax()).append(",")
+				.append("\"err\": ").append(this.errorCount)
+			.append("}");	// end of stat
 			.append("}");
 		
 		return builder.toString();
