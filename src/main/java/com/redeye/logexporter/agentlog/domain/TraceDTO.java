@@ -88,14 +88,13 @@ public class TraceDTO {
 			.append("\"start\": " + this.startTime + ",")
 			.append("\"end\": " + this.endTime + ",");
 		
-		//
+		// 조인포인트 정보 출력
 		builder.append("\"joinPointMap\": {");
 		for(String key: this.joinPointMap.keySet()) {
 			builder.append(this.joinPointMap.get(key).toString());
 		}
 		builder.append("}");
 		
-		//
 		builder.append("}");
 		
 		return builder.toString();
