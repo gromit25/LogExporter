@@ -18,7 +18,7 @@ import com.redeye.logexporter.agentlog.domain.TraceDTO;
  * @author jmsohn
  */
 @Activity(
-	value="stat",
+	value="appstat",
 	from="${app.appagent.stat.from}"
 )
 @ConditionalOnProperty(
@@ -27,12 +27,12 @@ import com.redeye.logexporter.agentlog.domain.TraceDTO;
 )
 public class InvokeStatHandler {
 	
-	/** */
-	private TraceDTO traceInfo = new TraceDTO();
+	/** 앱 트레이스 정보 */
+	private TraceDTO appTrace = new TraceDTO();
 	
 	
 	/**
-	 * 
+	 * 수신된 데이터로 통계 데이터 업데이트
 	 * 
 	 * @param message
 	 */
@@ -42,7 +42,7 @@ public class InvokeStatHandler {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> messageMap = (Map<String, Object>)message.getBody();
 		
-		this.traceInfo.add(messageMap);
+		this.appTrace.add(messageMap);
 	}
 	
 	/**
