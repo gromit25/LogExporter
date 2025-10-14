@@ -28,8 +28,15 @@ import com.redeye.logexporter.agentlog.domain.TraceDTO;
 public class InvokeStatHandler {
 	
 	/** 앱 트레이스 정보 */
-	private TraceDTO appTrace = new TraceDTO();
-	
+	private TraceDTO appTrace;
+
+	/**
+	 * 초기화
+	 */
+	@Init
+	public void init() throws Exception {
+		this.appTrace = new TraceDTO(System.currentTimeMillis(), );
+	}
 	
 	/**
 	 * 수신된 데이터로 통계 데이터 업데이트
@@ -54,12 +61,14 @@ public class InvokeStatHandler {
 	public Message<?> send(long startTime, long endTime) throws Exception {
 
 		TraceDTO appTraceToSend = null;
-		
+
+		// 앱 트레이스 정보 객체 신규 생성 및 교체
 		synchronized(this) {
 			appTraceToSend = this.appTrace;
 			this.appTrace = new TraceDTO(startTime, endTime);
 		}
 
+		// 앱 트레이스 정보 메시지 생성 및 전송
 		Message<TraceDTO> message = new Message<>();
 		message.setBody(appTraceToSend);
 		
