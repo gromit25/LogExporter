@@ -31,16 +31,6 @@ public class InvokeStatHandler {
 
 	
 	/**
-	 * 크론 초기화
-	 *
-	 * @param nextTime 다음 수행 시간
-	 */
-	@CronInit
-	public void init(long nextTime) throws Exception {
-		this.appTrace = new TraceDTO(System.currentTimeMillis(), nextTime);
-	}
-	
-	/**
 	 * 수신된 데이터로 통계 데이터 업데이트
 	 * 
 	 * @param message
@@ -52,6 +42,16 @@ public class InvokeStatHandler {
 		Map<String, Object> messageMap = (Map<String, Object>)message.getBody();
 		
 		this.appTrace.add(messageMap);
+	}
+
+	/**
+	 * 크론 초기화
+	 *
+	 * @param nextTime 다음 수행 시간
+	 */
+	@CronInit(method="send")
+	public void init(long nextTime) throws Exception {
+		this.appTrace = new TraceDTO(System.currentTimeMillis(), nextTime);
 	}
 	
 	/**
