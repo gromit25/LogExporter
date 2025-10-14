@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.jutools.TypeUtil;
+
 import lombok.Data;
 
 /**
@@ -61,7 +63,7 @@ public class TraceDTO {
 	 */
 	public boolean isValid(Map<String, Object> messageMap) throws Exception {
 		long timestamp = TypeUtil.toLong(messageMap.get("timestamp"));
-		retrun timestamp >= this.startTime && timestamp <= this.endTime;
+		return timestamp >= this.startTime && timestamp <= this.endTime;
 	}
 	
 	/**
@@ -73,7 +75,7 @@ public class TraceDTO {
 
 		// 메시지 타임스템프 검사
 		if(this.isValid(messageMap) == false) {
-			throws new IllegalArgumentException("invalid timestamp value(" + this.startTime + ", " + this.endTime + "): " + messageMap.get("timestamp"));
+			throw new IllegalArgumentException("invalid timestamp value(" + this.startTime + ", " + this.endTime + "): " + messageMap.get("timestamp"));
 		}
 		
 		// 키를 통해 조인 포인트 정보 획득

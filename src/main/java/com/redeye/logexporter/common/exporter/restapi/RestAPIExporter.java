@@ -106,7 +106,8 @@ public class RestAPIExporter {
 			Map<String, Object> values = new HashMap<>();
 			values.put("joinPointTrace", this.joinPointTrace);
 			
-			this.joinPointTrace = new TraceDTO();
+			//TODO
+			this.joinPointTrace = new TraceDTO(0, 0);
 			
 			// JSON 출력 실행
 			String joinPointJSON = this.publisher.publish(Charset.forName("UTF-8"), values); 
