@@ -1,7 +1,6 @@
 package com.redeye.logexporter.agentlog.handler;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
