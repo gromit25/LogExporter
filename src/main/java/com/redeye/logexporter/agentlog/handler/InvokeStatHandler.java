@@ -51,7 +51,18 @@ public class InvokeStatHandler {
 	 * @return
 	 */
 	@Cron(period="${app.appagent.stat.period}")
-	public Message<?> send() throws Exception {
-		return null;
+	public Message<?> send(long startTime, long endTime) throws Exception {
+
+		TraceDTO appTraceToSend = null;
+		
+		synchronized(this) {
+			appTraceToSend = this.appTrace;
+			this.appTrace = new TraceDTO(startTime, endTime);
+		}
+
+		Message<TraceDTO> message = new Message<>();
+		message.setBody(appTraceToSend);
+		
+		return message;
 	}
 }
