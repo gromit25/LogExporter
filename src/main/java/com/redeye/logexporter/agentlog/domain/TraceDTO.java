@@ -34,6 +34,8 @@ public class TraceDTO {
 	 * @return 현재 객체
 	 */
 	public void add(Map<String, Object> messageMap) throws Exception {
+
+		long timestamp = messageMap.get("timestamp");
 		
 		// 키를 통해 조인 포인트 정보 획득
 		String key = messageMap.get("key").toString();
