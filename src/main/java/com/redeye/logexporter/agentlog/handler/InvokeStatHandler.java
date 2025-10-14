@@ -29,14 +29,15 @@ public class InvokeStatHandler {
 	/** 앱 호출 트레이스 객체 - 통계 정보도 포함됨 */
 	private TraceDTO appTrace;
 
+	
 	/**
-	 * 초기화
+	 * 크론 초기화
 	 *
-	 * @param endTime 종료 시간
+	 * @param nextTime 다음 수행 시간
 	 */
 	@CronInit
-	public void init(long endTime) throws Exception {
-		this.appTrace = new TraceDTO(System.currentTimeMillis(), endTime);
+	public void init(long nextTime) throws Exception {
+		this.appTrace = new TraceDTO(System.currentTimeMillis(), nextTime);
 	}
 	
 	/**
@@ -54,21 +55,21 @@ public class InvokeStatHandler {
 	}
 	
 	/**
+	 * 크론 수행
 	 * 
-	 * 
-	 * @param startTime 시작 시간
-	 * @param endTime 종료 시간
+	 * @param startTime 실행 기준 시간
+	 * @param endTime 다음 수행 시간
 	 * @return 전송할 메시지
 	 */
 	@Cron(period="${app.appagent.stat.period}")
-	public Message<?> send(long startTime, long endTime) throws Exception {
+	public Message<?> send(long baseTime, long nextTime) throws Exception {
 
 		TraceDTO appTraceToSend = null;
 
 		// 앱 트레이스 정보 객체 신규 생성 및 교체
 		synchronized(this) {
 			appTraceToSend = this.appTrace;
-			this.appTrace = new TraceDTO(startTime, endTime);
+			this.appTrace = new TraceDTO(baseTime, nextTime);
 		}
 
 		// 앱 트레이스 정보 메시지 생성 및 전송
