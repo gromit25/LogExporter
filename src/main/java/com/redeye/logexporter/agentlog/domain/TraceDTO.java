@@ -35,7 +35,11 @@ public class TraceDTO {
 	 */
 	public void add(Map<String, Object> messageMap) throws Exception {
 
-		long timestamp = messageMap.get("timestamp");
+		// 메시지 타임스템프 검사
+		long timestamp = TypeUtil.toLong(messageMap.get("timestamp"));
+		if(timestamp < this.startTime || timestamp > this.endTime) {
+			throws new IllegalArgumentException("invalid timestamp value(" + this.startTime + ", " + this.endTime + "): " + timestamp);
+		}
 		
 		// 키를 통해 조인 포인트 정보 획득
 		String key = messageMap.get("key").toString();
