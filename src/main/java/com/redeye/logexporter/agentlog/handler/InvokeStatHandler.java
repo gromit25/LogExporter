@@ -12,8 +12,7 @@ import com.jutools.workflow.annotation.Proc;
 import com.redeye.logexporter.agentlog.domain.TraceDTO;
 
 /**
- * 
- * 
+ * 호출 통계 핸들러 클래스
  * 
  * @author jmsohn
  */
@@ -27,15 +26,17 @@ import com.redeye.logexporter.agentlog.domain.TraceDTO;
 )
 public class InvokeStatHandler {
 	
-	/** 앱 트레이스 정보 */
+	/** 앱 호출 트레이스 객체 - 통계 정보도 포함됨 */
 	private TraceDTO appTrace;
 
 	/**
 	 * 초기화
+	 *
+	 * @param endTime 종료 시간
 	 */
-	@Init
-	public void init() throws Exception {
-		this.appTrace = new TraceDTO(System.currentTimeMillis(), );
+	@CronInit
+	public void init(long endTime) throws Exception {
+		this.appTrace = new TraceDTO(System.currentTimeMillis(), endTime);
 	}
 	
 	/**
@@ -55,7 +56,9 @@ public class InvokeStatHandler {
 	/**
 	 * 
 	 * 
-	 * @return
+	 * @param startTime 시작 시간
+	 * @param endTime 종료 시간
+	 * @return 전송할 메시지
 	 */
 	@Cron(period="${app.appagent.stat.period}")
 	public Message<?> send(long startTime, long endTime) throws Exception {
