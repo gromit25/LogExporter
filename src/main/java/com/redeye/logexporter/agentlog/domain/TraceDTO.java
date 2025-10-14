@@ -52,19 +52,28 @@ public class TraceDTO {
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
+
+	/**
+	 * 메세지 타임스탬프 유효성 검증
+	 *
+	 * @param messageMap 로그 메시지 맵
+	 * @return 유효성 여부(유효할 경우 true)
+	 */
+	public boolean isValid(Map<String, Object> messageMap) throws Exception {
+		long timestamp = TypeUtil.toLong(messageMap.get("timestamp"));
+		retrun timestamp >= this.startTime && timestamp <= this.endTime;
+	}
 	
 	/**
 	 * 메시지 파싱 및 조인 포인트 정보 업데이트
 	 * 
 	 * @param messageMap 로그 메시지 맵
-	 * @return 현재 객체
 	 */
 	public void add(Map<String, Object> messageMap) throws Exception {
 
 		// 메시지 타임스템프 검사
-		long timestamp = TypeUtil.toLong(messageMap.get("timestamp"));
-		if(timestamp < this.startTime || timestamp > this.endTime) {
-			throws new IllegalArgumentException("invalid timestamp value(" + this.startTime + ", " + this.endTime + "): " + timestamp);
+		if(this.isValid(messageMap) == false) {
+			throws new IllegalArgumentException("invalid timestamp value(" + this.startTime + ", " + this.endTime + "): " + messageMap.get("timestamp"));
 		}
 		
 		// 키를 통해 조인 포인트 정보 획득
