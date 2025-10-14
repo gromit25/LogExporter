@@ -28,6 +28,32 @@ public class TraceDTO {
 
 
 	/**
+	 * 생성자
+	 *
+	 * @param startTime
+	 * @param endTime
+	 */
+	public TraceDTO(long startTime, long endTime) throws Exception {
+
+		// 입력 값 검증
+		if(startTime < 0) {
+			throw new IllegalArgumentException("'startTime' must be greater than 0: " + startTime);
+		}
+
+		if(endTime < 0) {
+			throw new IllegalArgumentException("'endTime' must be greater than 0: " + startTime);
+		}
+
+		if(endTime <= startTime) {
+			throw new IllegalArgumentException("'endTime: " + endTime + "' must be greater than 'startTime: " + startTime + "'.");
+		}
+
+		// 설정
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
+	/**
 	 * 메시지 파싱 및 조인 포인트 정보 업데이트
 	 * 
 	 * @param messageMap 로그 메시지 맵
