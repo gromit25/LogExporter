@@ -4,11 +4,11 @@ import java.util.Map;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import com.jutools.workflow.Message;
-import com.jutools.workflow.annotation.Activity;
-import com.jutools.workflow.annotation.Cron;
-import com.jutools.workflow.annotation.CronInit;
-import com.jutools.workflow.annotation.Proc;
+import com.jutools.spring.workflow.Message;
+import com.jutools.spring.workflow.annotation.Activity;
+import com.jutools.spring.workflow.annotation.Cron;
+import com.jutools.spring.workflow.annotation.CronInit;
+import com.jutools.spring.workflow.annotation.Proc;
 import com.redeye.logexporter.agentlog.domain.TraceDTO;
 
 /**

@@ -2,9 +2,9 @@ package com.redeye.logexporter.common.exporter.print;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import com.jutools.workflow.Message;
-import com.jutools.workflow.annotation.Activity;
-import com.jutools.workflow.annotation.Proc;
+import com.jutools.spring.workflow.Message;
+import com.jutools.spring.workflow.annotation.Activity;
+import com.jutools.spring.workflow.annotation.Proc;
 
 /**
  * 화면 출력 Exporter (테스트용)<br>

@@ -17,7 +17,7 @@ import com.jutools.FileUtil;
 import com.jutools.publish.Publisher;
 import com.jutools.publish.PublisherFactory;
 import com.jutools.publish.PublisherType;
-import com.jutools.workflow.Message;
+import com.jutools.spring.workflow.Message;
 import com.redeye.logexporter.agentlog.domain.TraceDTO;
 
 import jakarta.annotation.PostConstruct;

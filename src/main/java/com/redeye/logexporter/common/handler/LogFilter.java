@@ -8,10 +8,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import com.jutools.FileUtil;
 import com.jutools.StringUtil;
 import com.jutools.script.olexp.OLExp;
-import com.jutools.workflow.Message;
-import com.jutools.workflow.annotation.Activity;
-import com.jutools.workflow.annotation.Init;
-import com.jutools.workflow.annotation.Proc;
+import com.jutools.spring.workflow.Message;
+import com.jutools.spring.workflow.annotation.Activity;
+import com.jutools.spring.workflow.annotation.Init;
+import com.jutools.spring.workflow.annotation.Proc;
 
 import lombok.extern.slf4j.Slf4j;
 

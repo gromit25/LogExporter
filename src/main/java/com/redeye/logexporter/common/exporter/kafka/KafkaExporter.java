@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import com.jutools.workflow.Message;
-import com.jutools.workflow.annotation.Activity;
-import com.jutools.workflow.annotation.Proc;
+import com.jutools.spring.workflow.Message;
+import com.jutools.spring.workflow.annotation.Activity;
+import com.jutools.spring.workflow.annotation.Proc;
 
 import lombok.extern.slf4j.Slf4j;
 

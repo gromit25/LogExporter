@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import com.jutools.FileUtil;
-import com.jutools.workflow.Workflow;
+import com.jutools.spring.workflow.Workflow;
 
 import lombok.extern.slf4j.Slf4j;
 
