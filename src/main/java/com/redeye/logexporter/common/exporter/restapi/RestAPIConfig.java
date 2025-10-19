@@ -9,15 +9,14 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * 
+ * REST API 접속 클라이언트 객체 생성 클래스
  * 
  * @author jmsohn
  */
 @Configuration
-@ConditionalOnProperty
-(
-	value = "app.exporter.type",
-	havingValue = "RESTAPI"
+@ConditionalOnProperty(
+	name="app.restapi.use",
+	havingValue="y"
 )
 public class RestAPIConfig {
 	
@@ -29,7 +28,7 @@ public class RestAPIConfig {
 	 */
 	@Bean("apiClient")
 	WebClient apiClient(
-		@Value("app.exporter.restapi.url") String url
+		@Value("app.restapi.url") String url
 	) {
 		return WebClient.builder()
 			.baseUrl(url)

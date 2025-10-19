@@ -16,19 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Kafka 출력 Exporter<br>
  * 설정값<br>
- * <li>app.common.kafka.use: 'y' 일 경우 활성화</li>
- * <li>app.common.kafka.from: 이전 액티비티 명</li>
- * <li>app.common.kafka.topic: kafka topic</li>
+ * <li>app.kafka.use: 'y' 일 경우 활성화</li>
+ * <li>app.kafka.from: 이전 액티비티 명</li>
+ * <li>app.kafka.topic: kafka topic</li>
  * 
  * @author jmsohn
  */
 @Slf4j
 @Activity(
 	value="kafka",
-	from="${app.common.kafka.from}"
+	from="${app.kafka.from}"
 )
 @ConditionalOnProperty(
-	name="app.common.kafka.use",
+	name="app.kafka.use",
 	havingValue="y"
 )
 public class KafkaExporter {
@@ -38,7 +38,7 @@ public class KafkaExporter {
 	private KafkaTemplate<String, String> kafkaTemplate;
 	
 	/** Kafka 전송 토픽명 */
-	@Value("${app.common.kafka.topic}")
+	@Value("${app.kafka.topic}")
 	private String topic;
 	
 	

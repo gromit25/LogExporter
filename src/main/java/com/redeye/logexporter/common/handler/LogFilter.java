@@ -19,18 +19,18 @@ import lombok.extern.slf4j.Slf4j;
  * 스크립트를 이용해서 메시지 검사<br>
  * 검사 결과에 따라 export 여부 설정<br>
  * 설정값<br>
- * <li>app.common.filter.use: 'y' 일 경우 활성화</li>
- * <li>app.common.filter.from: 이전 액티비티 명</li>
- * <li>app.common.filter.thread.count: 스레드 수</li>
- * <li>app.common.filter.debug: 필터링 스크립트 디버깅 여부</li>
+ * <li>app.filter.use: 'y' 일 경우 활성화</li>
+ * <li>app.filter.from: 이전 액티비티 명</li>
+ * <li>app.filter.thread.count: 스레드 수</li>
+ * <li>app.filter.debug: 필터링 스크립트 디버깅 여부</li>
  * 
  * @author jmsohn
  */
 @Slf4j
 @Activity(
 	value="filter",
-	from="${app.common.filter.from}",
-	threadCount="${app.common.filter.thread.count}"
+	from="${app.filter.from}",
+	threadCount="${app.filter.thread.count}"
 )
 @ConditionalOnProperty(
 	name="app.common.filter.use",
@@ -42,7 +42,7 @@ public class LogFilter {
 	private static String SCRIPT_FILE = "script/filter.script";
 	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
-	@Value("${app.common.filter.debug}")
+	@Value("${app.filter.debug}")
 	private boolean debug = false;
 	
 	/** 스크립트 실행 객체 */

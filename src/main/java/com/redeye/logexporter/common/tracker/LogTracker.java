@@ -9,31 +9,32 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.FileTracker;
 import com.jutools.StringUtil;
-import com.jutools.SysUtil;
 import com.jutools.filetracker.LineSplitReader;
 import com.jutools.spring.workflow.Message;
 import com.jutools.spring.workflow.annotation.Activity;
 import com.jutools.spring.workflow.annotation.Init;
 import com.jutools.spring.workflow.annotation.Proc;
+import com.redeye.logexporter.ExporterContext;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * 로그 파일 트랙커 클래스<br>
  * 설정 값<br>
- * <li>app.common.tracker.use: 'y' 일 경우 활성화</li>
- * <li>app.common.tracker.file: 로그 파일 명</li>
+ * <li>app.tracker.use: 'y' 일 경우 활성화</li>
+ * <li>app.tracker.file: 로그 파일 명</li>
  * 
  * @author jmsohn
  */
 @Activity("tracker")
 @ConditionalOnProperty(
-	name="app.common.tracker.use",
+	name="app.tracker.use",
 	havingValue="y"
 )
 @Slf4j
@@ -42,20 +43,12 @@ public class LogTracker {
 	/** 필드 분리 문자 */
 	private static final String DELIMITER = "[ \t]+";
 	
-	/** 기관 명 */
-	@Value("${app.config.organ}")
-	private String organCode;
-	
-	/** 도메인 명 */
-	@Value("${app.config.domain}")
-	private String domainCode;
-	
-	/** 호스트 명 */
-	@Value("${app.config.hostname}")
-	private String hostname;
+	/**로그 익스포터의 컨텍스트 */
+	@Autowired
+	private ExporterContext context;
 	
 	/** 트래킹 로그 파일 */
-	@Value("${app.common.tracker.file}")
+	@Value("${app.tracker.file}")
 	private File logFile;
 	
 	/** 메시지 제목 */
@@ -74,18 +67,12 @@ public class LogTracker {
 	@Init
 	public void init() throws Exception {
 		
-		// 호스트 명 설정
-		// 설정된 호스트명이 없는 경우 시스템의 호스트명을 설정함
-		if(StringUtil.isBlank(this.hostname) == true) {
-			this.hostname = SysUtil.getHostname();
-		}
-		
 		// 메시지 제목 설정
 		this.topic = String.format(
 			"%s:%s:%s:%s",
-			this.organCode,
-			this.domainCode,
-			this.hostname,
+			this.context.getOrganCode(),
+			this.context.getDomainCode(),
+			this.context.getHostname(),
 			this.logFile.getAbsolutePath()
 		);
 		

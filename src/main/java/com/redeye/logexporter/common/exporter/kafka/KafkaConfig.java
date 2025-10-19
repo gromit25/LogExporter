@@ -17,18 +17,18 @@ import org.springframework.kafka.core.ProducerFactory;
 import com.jutools.StringUtil;
 
 /**
- * kafka exporter 및 kafkaTemplate 객체 생성 컴포넌트<br>
+ * kafka exporter 및 kafkaTemplate 객체 생성 클래스<br>
  * 설정값<br>
- * <li>app.common.kafka.use: 'y' 일 경우 활성화</li>
- * <li>app.common.kafka.servers: kafka server 목록</li>
- * <li>app.common.kafka.acks: kafka acks 설정</li>
- * <li>app.common.kafka.clientid: producer client id</li>
+ * <li>app.kafka.use: 'y' 일 경우 활성화</li>
+ * <li>app.kafka.servers: kafka server 목록</li>
+ * <li>app.kafka.acks: kafka acks 설정</li>
+ * <li>app.kafka.clientid: producer client id</li>
  *
  * @author jmsohn
  */
 @Configuration
 @ConditionalOnProperty(
-	name="app.common.kafka.use",
+	name="app.kafka.use",
 	havingValue="y"
 )
 public class KafkaConfig {
@@ -56,18 +56,18 @@ public class KafkaConfig {
 	 */
 	@Bean
 	ProducerFactory<String, String> producerFactory(
-		@Value("${app.common.kafka.servers}") String servers,
-		@Value("${app.common.kafka.acks}") String acks,
-		@Value("${app.common.kafka.clientid}") String clientId
+		@Value("${app.kafka.servers}") String servers,
+		@Value("${app.kafka.acks}") String acks,
+		@Value("${app.kafka.clientid}") String clientId
 	) {
 		
 		// 입력값 검증
 		if(StringUtil.isBlank(servers) == true) {
-			throw new IllegalArgumentException("app.exporter.kafka.servers is null or blank.");
+			throw new IllegalArgumentException("app.kafka.servers is null or blank.");
 		}
 		
 		if(StringUtil.isBlank(acks) == true) {
-			throw new IllegalArgumentException("app.exporter.kafka.acks is null or blank.");
+			throw new IllegalArgumentException("app.kafka.acks is null or blank.");
 		}
 
 		Map<String, Object> configProps = new HashMap<>();
@@ -78,6 +78,7 @@ public class KafkaConfig {
 		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		configProps.put(ProducerConfig.ACKS_CONFIG, acks);
 		
+		// 클라이언트 아이디 설정
 		if(StringUtil.isBlank(clientId) == false) {
 			configProps.put(ProducerConfig.CLIENT_ID_CONFIG, clientId);
 		}
