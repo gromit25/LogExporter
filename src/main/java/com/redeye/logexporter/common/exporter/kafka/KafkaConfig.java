@@ -70,9 +70,9 @@ public class KafkaConfig {
 			throw new IllegalArgumentException("app.kafka.acks is null or blank.");
 		}
 
+		// 연결 설정
 		Map<String, Object> configProps = new HashMap<>();
 
-		// 연결 설정
 		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
 		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
 		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
