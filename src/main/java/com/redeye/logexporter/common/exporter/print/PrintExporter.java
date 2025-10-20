@@ -9,17 +9,17 @@ import com.jutools.spring.workflow.annotation.Proc;
 /**
  * 화면 출력 Exporter (테스트용)<br>
  * 설정값<br>
- * <li>app.common.print.use: 'y' 일 경우 활성화</li>
- * <li>app.common.print.from: 이전 액티비티 명</li>
+ * <li>app.print.use: 'y' 일 경우 활성화</li>
+ * <li>app.print.from: 이전 액티비티 명</li>
  *
  * @author jmsohn
  */
 @Activity(
 	value="print",
-	from="${app.common.print.from}"
+	from="${app.print.from}"
 )
 @ConditionalOnProperty(
-	name="app.common.print.use",
+	name="app.print.use",
 	havingValue="y"
 )
 public class PrintExporter {
