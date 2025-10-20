@@ -53,7 +53,7 @@ public class LogExporterApplication implements CommandLineRunner {
 			log.info("start log exporter.");
 			this.workflow.run();
 	
-			// stop 파일이 생성되거 업데이트 될때까지 대기
+			// stop 파일이 생성되거나 업데이트 될때까지 대기
 			FileUtil.waitForFileTouched(this.stopFile);
 			
 		} finally {
