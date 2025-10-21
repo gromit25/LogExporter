@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import com.jutools.FileUtil;
 import com.jutools.StringUtil;
 import com.jutools.script.olexp.OLExp;
 import com.jutools.spring.workflow.Message;
@@ -23,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * <li>app.filter.from: 이전 액티비티 명</li>
  * <li>app.filter.thread.count: 스레드 수</li>
  * <li>app.filter.debug: 필터링 스크립트 디버깅 여부</li>
+ * <li>app.filter.script: 필터링 스크립트</li>
  * 
  * @author jmsohn
  */
@@ -38,12 +38,13 @@ import lombok.extern.slf4j.Slf4j;
 )
 public class LogFilter {
 	
-	/** 스크립트 파일 */
-	private static String SCRIPT_FILE = "script/filter.script";
-	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
 	@Value("${app.filter.debug}")
 	private boolean debug = false;
+	
+	/** 스크립트 문자열 */
+	@Value("${app.filter.script}")
+	private String scriptStr;
 	
 	/** 스크립트 실행 객체 */
 	private OLExp script;
@@ -55,17 +56,12 @@ public class LogFilter {
 	@Init
 	public void init() throws Exception {
 		
-		// 파일에서 스크립트 읽어옴
-		String scriptStr = new String(
-			FileUtil.readAllBytes(FileUtil.getInputStream(SCRIPT_FILE))
-		);
-		
 		// 스크립트 컴파일
-		log.info("script: " + scriptStr);
+		log.info("script: " + this.scriptStr);
 		
 		this.script =
-				(StringUtil.isBlank(scriptStr) == false)
-				? OLExp.compile(scriptStr):null;
+				(StringUtil.isBlank(this.scriptStr) == false)
+				? OLExp.compile(this.scriptStr):null;
 	}
 	
 	/**
