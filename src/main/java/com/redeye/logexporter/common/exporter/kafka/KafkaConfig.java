@@ -57,8 +57,8 @@ public class KafkaConfig {
 	@Bean
 	ProducerFactory<String, String> producerFactory(
 		@Value("${app.kafka.servers}") String servers,
-		@Value("${app.kafka.acks}") String acks,
-		@Value("${app.kafka.clientid}") String clientId
+		@Value("${app.kafka.acks:-1}") String acks,
+		@Value("${app.kafka.clientid:}") String clientId
 	) {
 		
 		// 입력값 검증

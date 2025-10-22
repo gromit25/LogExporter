@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Activity(
 	value="filter",
 	from="${app.filter.from}",
-	threadCount="${app.filter.thread.count}"
+	threadCount="${app.filter.thread.count:1}"
 )
 @ConditionalOnProperty(
 	name="app.common.filter.use",
@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LogFilter {
 	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
-	@Value("${app.filter.debug}")
+	@Value("${app.filter.debug:false}")
 	private boolean debug = false;
 	
 	/** 스크립트 문자열 */

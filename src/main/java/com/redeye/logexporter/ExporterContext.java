@@ -18,22 +18,22 @@ import lombok.Getter;
 public class ExporterContext {
 
 	/** 기관 코드 */
-	@Value("${app.context.organ")
+	@Value("${app.context.organ}")
 	@Getter
 	private String organCode;
 	
 	/** 도메인 코드 */
-	@Value("${app.context.domain")
+	@Value("${app.context.domain}")
 	@Getter
 	private String domainCode;
 	
 	/** 어플리케이션 코드 */
-	@Value("${app.context.hostname")
+	@Value("${app.context.hostname:}")
 	@Getter
 	private String hostname;
 	
 	/** 어플리케이션 코드 */
-	@Value("${app.context.app")
+	@Value("${app.context.app}")
 	@Getter
 	private String appCode;
 	

@@ -83,12 +83,12 @@ public class RestAPIExporter {
 	}
 	
 	/**
+	 * REST API 호출하여 메시지 전송
 	 * 
-	 * 
-	 * @param message
+	 * @param message 전송할 메시지
 	 */
 	@Proc
-	public void export(Message<?> message) throws Exception {
+	public void requestAPI(Message<?> message) throws Exception {
 		
 		try {
 			
