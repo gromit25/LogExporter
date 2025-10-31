@@ -54,7 +54,7 @@ public class AppAgentLogTracker {
 	private String topic;
 	
 	/** 로그 트랙커 객체 */
-	private FileTracker tracker;
+	private FileTracker<String> tracker;
 	
 	/** 로그 데이터 저장 큐 */
 	private BlockingQueue<String> logQueue = new LinkedBlockingQueue<>();

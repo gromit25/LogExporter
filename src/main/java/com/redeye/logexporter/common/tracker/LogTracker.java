@@ -43,7 +43,7 @@ public class LogTracker {
 	/** 필드 분리 문자 */
 	private static final String DELIMITER = "[ \t]+";
 	
-	/**로그 익스포터의 컨텍스트 */
+	/** 로그 익스포터의 컨텍스트 */
 	@Autowired
 	private ExporterContext context;
 	
@@ -55,7 +55,7 @@ public class LogTracker {
 	private String topic;
 	
 	/** 로그 트랙커 객체 */
-	private FileTracker tracker;
+	private FileTracker<String> tracker;
 	
 	/** 로그 데이터 저장 큐 */
 	private BlockingQueue<String> logQueue = new LinkedBlockingQueue<>();

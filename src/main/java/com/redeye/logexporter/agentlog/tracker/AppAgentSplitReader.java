@@ -12,7 +12,7 @@ import com.jutools.filetracker.SplitReader;
  * 
  * @author jmsohn
  */
-public class AppAgentSplitReader implements SplitReader {
+public class AppAgentSplitReader implements SplitReader<String> {
 	
 	/** Record Separator 의 바이트 배열 */
 	private static final byte[] RECORD_SEPARATOR = "\u001E\r\n".getBytes();
