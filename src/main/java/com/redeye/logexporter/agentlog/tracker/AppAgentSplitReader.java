@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.jutools.BytesUtil;
-import com.jutools.filetracker.SplitReader;
+import com.jutools.filetracker.Trimmer;
 
 /**
  * 앱 에이전트에서 출력되는 로그 파일의 메시지를 분할해서 읽는 Reader
  * 
  * @author jmsohn
  */
-public class AppAgentSplitReader implements SplitReader<String> {
+public class AppAgentSplitReader implements Trimmer<String> {
 	
 	/** Record Separator 의 바이트 배열 */
 	private static final byte[] RECORD_SEPARATOR = "\u001E\r\n".getBytes();
@@ -45,7 +45,7 @@ public class AppAgentSplitReader implements SplitReader<String> {
 	}
 
 	@Override
-	public synchronized void read(byte[] buffer, Consumer<String> action) throws Exception {
+	public synchronized void trim(byte[] buffer, Consumer<String> action) throws Exception {
 		
 		// 데이터 끝에 Record Separator 가 있는지 확인
 		boolean isEndsWithRecordSeparator = BytesUtil.endsWith(buffer, RECORD_SEPARATOR);

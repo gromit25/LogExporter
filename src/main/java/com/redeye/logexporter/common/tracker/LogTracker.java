@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import com.jutools.FileTracker;
 import com.jutools.StringUtil;
-import com.jutools.filetracker.LineSplitReader;
+import com.jutools.filetracker.FileTracker;
+import com.jutools.filetracker.trimmer.LineSplitTrimmer;
 import com.jutools.spring.workflow.Message;
 import com.jutools.spring.workflow.annotation.Activity;
 import com.jutools.spring.workflow.annotation.Init;
@@ -77,7 +77,7 @@ public class LogTracker {
 		);
 		
 		// 트랙커 객체 생성
-		this.tracker = FileTracker.create(logFile, new LineSplitReader());
+		this.tracker = FileTracker.create(logFile, new LineSplitTrimmer());
 		
 		// 트랙킹 스레드 생성 및 실행
 		// 트랙커에서 수집된 로그를 로그 큐에 저장
