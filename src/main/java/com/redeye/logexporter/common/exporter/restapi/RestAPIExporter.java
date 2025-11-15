@@ -23,7 +23,12 @@ import com.jutools.spring.workflow.annotation.Proc;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 
+ * Rest API 전송 Exporter<br>
+ * 설정값<br>
+ * <li>app.restapi.use: 'y' 일 경우 활성화</li>
+ * <li>app.restapi.subpath: Rest API subpath</li>
+ * <li>app.restapi.payload.formatfile: 바디 포맷 파일 위치</li>
+ * <li>app.restapi.payload.charset: 캐릭터셋</li>
  * 
  * @autor jmsohn
  */
@@ -34,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 )
 @Slf4j
 public class RestAPIExporter {
+	
 
 	/** API 클라이언트 */
 	@Autowired
@@ -54,7 +60,7 @@ public class RestAPIExporter {
 	/** 페이로드 퍼블리셔 */
 	private Publisher payloadPublisher;
 	
-	/** 페이로드 케릭터셋 문자열 */
+	/** 페이로드 케릭터셋 문자열, 디폴트 값: "" <- 시스템 캐릭터셋 사용 */
 	@Value("${app.restapi.payload.charset:}")
 	private String charsetStr;
 	
@@ -93,7 +99,7 @@ public class RestAPIExporter {
 		try {
 			
 			@SuppressWarnings("unchecked")
-			Map<String, Object> messageMap = (Map<String, Object>)message.getBody();
+			Map<String, Object> messageMap = message.getBody(Map.class);
 			
 			// 전송할 subpath 획득
 			String subpath = this.subpathGen.gen(messageMap);
@@ -102,7 +108,8 @@ public class RestAPIExporter {
 			String payload = this.payloadPublisher.publish(this.charset, messageMap);
 			
 			// API 호출
-			String result = this.apiClient
+			String result =
+				this.apiClient
 				.post()
 				.uri(subpath)
 				.header("Content-Type", "application/json")

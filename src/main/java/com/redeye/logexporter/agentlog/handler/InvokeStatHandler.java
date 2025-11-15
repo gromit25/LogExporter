@@ -34,17 +34,9 @@ import com.redeye.logexporter.agentlog.domain.TraceDTO;
 public class InvokeStatHandler {
 	
 	
-	/** 포맷 파일 명 */
-	private static final String FORMAT_FILE = "format/restapi/json_format.xml";
-	
-	/** API 호출 Subpath */
-	private static final String API_SUBPATH = "/api/agentlog/%s/%s/%s";
-	
+	/** */
 	@Autowired
 	private ExporterContext context;
-	
-	/** API 메시지 생성용 publisher */
-	private Publisher publisher;
 	
 	/** 앱 호출 트레이스 객체 - 통계 정보도 포함됨 */
 	private TraceDTO appTrace;
@@ -72,10 +64,6 @@ public class InvokeStatHandler {
 	@CronInit(method="send")
 	public void init(long nextTime) throws Exception {
 		
-	    // API 메시지 생성용 publisher 객체 생성
-		InputStream formatInputStream = FileUtil.getInputStream(FORMAT_FILE);
-		this.publisher = PublisherFactory.create(PublisherType.TEXT_FILE, formatInputStream);
-
 		//
 		this.appTrace = new TraceDTO(System.currentTimeMillis(), nextTime);
 	}
