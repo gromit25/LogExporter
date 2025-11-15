@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 	havingValue="y"
 )
 @Slf4j
-public class AppAgentLogTracker {
+public class LogfmtTracker {
 	
 	
 	/**로그 익스포터의 컨텍스트 */

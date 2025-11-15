@@ -16,6 +16,7 @@ import lombok.Getter;
  */
 @Component
 public class ExporterContext {
+	
 
 	/** 기관 코드 */
 	@Value("${app.context.organ}")

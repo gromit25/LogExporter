@@ -33,6 +33,7 @@ import com.redeye.logexporter.agentlog.domain.TraceDTO;
 )
 public class InvokeStatHandler {
 	
+	
 	/** 포맷 파일 명 */
 	private static final String FORMAT_FILE = "format/restapi/json_format.xml";
 	
