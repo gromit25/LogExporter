@@ -15,6 +15,7 @@ import lombok.Data;
  */
 @Data
 public class TraceDTO {
+	
 
 	/** 기간 시작 시간 */
 	private long startTime;
