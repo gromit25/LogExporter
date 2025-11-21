@@ -19,8 +19,8 @@ public class JoinPointDTO {
 	/** 메시지 - SQL 문 등 추가 메시지 */
 	private String message;
 
-	/** 조인 포인트의 수행 시간 모수(Parameter) 통계 객체 */
-	private Parameter elapsedParameter = new Parameter();
+	/** 조인 포인트의 수행 시간 모수 통계 객체 */
+	private Parameter elapsedStat = new Parameter();
 
 	/** 오류 발생 수 */
 	private int errorCount = 0;
@@ -43,7 +43,7 @@ public class JoinPointDTO {
 	 * @param elapsed
 	 */
 	public void add(long elapsed) throws Exception {
-		this.elapsedParameter.add((double)elapsed);
+		this.elapsedStat.add((double)elapsed);
 	}
 	
 	@Override
@@ -55,13 +55,13 @@ public class JoinPointDTO {
 			.append("\"").append(this.key).append("\": {")
 			.append("\"msg\": \"").append(this.message).append("\",")
 			.append("\"stat\": {").append(this.message).append("\",")
-				.append("\"cnt\": ").append(this.elapsedParameter.getCount()).append(",")
-				.append("\"sum\": ").append(this.elapsedParameter.getSum()).append(",")
-				.append("\"sqd\": ").append(this.elapsedParameter.getSquaredSum()).append(",")
-				.append("\"cbd\": ").append(this.elapsedParameter.getCubedSum()).append(",")
-				.append("\"4th\": ").append(this.elapsedParameter.getFourthPoweredSum()).append(",")
-				.append("\"min\": ").append(this.elapsedParameter.getMin()).append(",")
-				.append("\"max\": ").append(this.elapsedParameter.getMax()).append(",")
+				.append("\"cnt\": ").append(this.elapsedStat.getCount()).append(",")
+				.append("\"sum\": ").append(this.elapsedStat.getSum()).append(",")
+				.append("\"sqd\": ").append(this.elapsedStat.getSquaredSum()).append(",")
+				.append("\"cbd\": ").append(this.elapsedStat.getCubedSum()).append(",")
+				.append("\"4th\": ").append(this.elapsedStat.getFourthPoweredSum()).append(",")
+				.append("\"min\": ").append(this.elapsedStat.getMin()).append(",")
+				.append("\"max\": ").append(this.elapsedStat.getMax()).append(",")
 				.append("\"err\": ").append(this.errorCount)
 			.append("}")	// end of stat
 			.append("}");
