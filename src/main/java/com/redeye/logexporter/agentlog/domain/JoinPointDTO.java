@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class JoinPointDTO {
 
+	
 	/** 키 - 타입:클래스:메소드:LOC */
 	private String key;
 
@@ -19,7 +20,7 @@ public class JoinPointDTO {
 	private String message;
 
 	/** 조인 포인트의 수행 시간 모수(Parameter) 통계 객체 */
-	private Parameter elasedParameter = new Parameter();
+	private Parameter elapsedParameter = new Parameter();
 
 	/** 오류 발생 수 */
 	private int errorCount = 0;
@@ -42,7 +43,7 @@ public class JoinPointDTO {
 	 * @param elapsed
 	 */
 	public void add(long elapsed) throws Exception {
-		this.elasedParameter.add((double)elapsed);
+		this.elapsedParameter.add((double)elapsed);
 	}
 	
 	@Override
@@ -54,13 +55,13 @@ public class JoinPointDTO {
 			.append("\"").append(this.key).append("\": {")
 			.append("\"msg\": \"").append(this.message).append("\",")
 			.append("\"stat\": {").append(this.message).append("\",")
-				.append("\"cnt\": ").append(this.elasedParameter.getCount()).append(",")
-				.append("\"sum\": ").append(this.elasedParameter.getSum()).append(",")
-				.append("\"sqd\": ").append(this.elasedParameter.getSquaredSum()).append(",")
-				.append("\"cbd\": ").append(this.elasedParameter.getCubedSum()).append(",")
-				.append("\"4th\": ").append(this.elasedParameter.getFourthPoweredSum()).append(",")
-				.append("\"min\": ").append(this.elasedParameter.getMin()).append(",")
-				.append("\"max\": ").append(this.elasedParameter.getMax()).append(",")
+				.append("\"cnt\": ").append(this.elapsedParameter.getCount()).append(",")
+				.append("\"sum\": ").append(this.elapsedParameter.getSum()).append(",")
+				.append("\"sqd\": ").append(this.elapsedParameter.getSquaredSum()).append(",")
+				.append("\"cbd\": ").append(this.elapsedParameter.getCubedSum()).append(",")
+				.append("\"4th\": ").append(this.elapsedParameter.getFourthPoweredSum()).append(",")
+				.append("\"min\": ").append(this.elapsedParameter.getMin()).append(",")
+				.append("\"max\": ").append(this.elapsedParameter.getMax()).append(",")
 				.append("\"err\": ").append(this.errorCount)
 			.append("}")	// end of stat
 			.append("}");
