@@ -6,7 +6,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
@@ -14,17 +13,17 @@ import com.jutools.filetracker.FileTracker;
 import com.jutools.filetracker.trimmer.LogfmtTrimmer;
 import com.jutools.spring.workflow.Message;
 import com.jutools.spring.workflow.annotation.Activity;
-import com.jutools.spring.workflow.annotation.Init;
 import com.jutools.spring.workflow.annotation.Proc;
 import com.redeye.logexporter.ExporterContext;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * 앱 메이전트 로그 트랙커 클래스<br>
  * 설정 값<br>
- * <li>app.appagent.tracker.use: 'y' 일 경우 활성화</li>
- * <li>app.appagent.tracker.file: 로그 파일 명</li>
+ * <li>app.apptracker.use: 'y' 일 경우 활성화</li>
+ * <li>app.apptracker.file: 로그 파일 명</li>
  * 
  * @author jmsohn
  */
@@ -33,13 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 	name="app.apptracker.use",
 	havingValue="y"
 )
+@RequiredArgsConstructor
 @Slf4j
 public class LogfmtTracker {
 	
 	
 	/**로그 익스포터의 컨텍스트 */
-	@Autowired
-	private ExporterContext context;
+	private final ExporterContext context;
 	
 	/** 트래킹 앱 에이전트 로그 파일 */
 	@Value("${app.apptracker.file}")
@@ -56,9 +55,8 @@ public class LogfmtTracker {
 	
 	
 	/**
-	 * 초기화
+	 * 초기화 - traking 메소드의 Proc 어노테이션에 설정되어 있음
 	 */
-	@Init
 	public void init() throws Exception {
 		
 		// 메시지 제목 설정
@@ -100,7 +98,7 @@ public class LogfmtTracker {
 	 * 
 	 * @return 수집된 로그 메시지
 	 */
-	@Proc
+	@Proc(init="init")
 	public Message<?> traking() throws Exception {
 		
 		// 수집된 로그 데이터 획득

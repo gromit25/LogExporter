@@ -108,7 +108,7 @@ public class TraceStatDTO {
 	 * @return 유효성 여부(유효할 경우 true)
 	 */
 	public boolean isValid(Map<String, Object> messageMap) throws Exception {
-		long timestamp = TypeUtil.toLong(messageMap.get("timestamp"));
+		long timestamp = TypeUtil.toLong(messageMap.get("ts"));
 		return timestamp >= this.startTime && timestamp <= this.endTime;
 	}
 	

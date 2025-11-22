@@ -2,13 +2,11 @@ package com.redeye.logexporter.agentlog.handler;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.jutools.spring.workflow.Message;
 import com.jutools.spring.workflow.annotation.Activity;
 import com.jutools.spring.workflow.annotation.Cron;
-import com.jutools.spring.workflow.annotation.CronInit;
 import com.jutools.spring.workflow.annotation.Proc;
 import com.redeye.logexporter.ExporterContext;
 import com.redeye.logexporter.agentlog.domain.TraceStatDTO;

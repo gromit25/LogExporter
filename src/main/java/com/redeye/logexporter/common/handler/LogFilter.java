@@ -9,7 +9,6 @@ import com.jutools.StringUtil;
 import com.jutools.script.olexp.OLExp;
 import com.jutools.spring.workflow.Message;
 import com.jutools.spring.workflow.annotation.Activity;
-import com.jutools.spring.workflow.annotation.Init;
 import com.jutools.spring.workflow.annotation.Proc;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 )
 public class LogFilter {
 	
+	
 	/** 스크립트 디버깅 모드 true 이면 디버깅 모드로 동작 */
 	@Value("${app.filter.debug:false}")
 	private boolean debug = false;
@@ -51,9 +51,8 @@ public class LogFilter {
 	
 	
 	/**
-	 * 초기화 수행
+	 * 초기화 수행 - filter 메소드의 Proc 어노테이션에 설정되어 있음
 	 */
-	@Init
 	public void init() throws Exception {
 		
 		// 스크립트 컴파일
@@ -70,7 +69,7 @@ public class LogFilter {
 	 * @param message 수신 메시지
 	 * @return 필터링된 메시지
 	 */
-	@Proc
+	@Proc(init="init")
 	public Message<?> filter(Message<?> message) throws Exception {
 		
 		@SuppressWarnings("unchecked")
