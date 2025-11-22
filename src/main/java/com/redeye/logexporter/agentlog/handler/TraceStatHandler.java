@@ -13,6 +13,8 @@ import com.jutools.spring.workflow.annotation.Proc;
 import com.redeye.logexporter.ExporterContext;
 import com.redeye.logexporter.agentlog.domain.TraceStatDTO;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 호출 통계 핸들러 클래스
  * 
@@ -26,12 +28,12 @@ import com.redeye.logexporter.agentlog.domain.TraceStatDTO;
 	name="app.appstat.use",
 	havingValue="y"
 )
-public class InvokeStatHandler {
+@RequiredArgsConstructor
+public class TraceStatHandler {
 	
 	
 	/** 로그 익스포터의 컨텍스트 */
-	@Autowired
-	private ExporterContext context;
+	private final ExporterContext context;
 	
 	/** 앱 트레이스 통계 객체 */
 	private TraceStatDTO appTraceStatDTO;
@@ -56,8 +58,7 @@ public class InvokeStatHandler {
 	 *
 	 * @param nextTime 다음 수행 시간
 	 */
-	@CronInit(method="send")
-	public void init(long nextTime) throws Exception {
+	public void initCron(long nextTime) throws Exception {
 		
 		// 앱 트래이스 통계 객체 초기화
 		this.appTraceStatDTO = createTraceStatDTO(
@@ -73,7 +74,7 @@ public class InvokeStatHandler {
 	 * @param endTime 다음 수행 시간
 	 * @return 전송할 메시지
 	 */
-	@Cron(period="${app.appstat.period}")
+	@Cron(period="${app.appstat.period}", init="initCron")
 	public Message<?> send(long baseTime, long nextTime) throws Exception {
 
 		// 발송할 앱 트래이스 통계 정보 변수
