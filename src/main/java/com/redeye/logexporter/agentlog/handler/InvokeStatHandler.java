@@ -1,15 +1,10 @@
 package com.redeye.logexporter.agentlog.handler;
 
-import java.io.InputStream;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-import com.jutools.FileUtil;
-import com.jutools.publish.Publisher;
-import com.jutools.publish.PublisherFactory;
-import com.jutools.publish.PublisherType;
 import com.jutools.spring.workflow.Message;
 import com.jutools.spring.workflow.annotation.Activity;
 import com.jutools.spring.workflow.annotation.Cron;
@@ -34,7 +29,7 @@ import com.redeye.logexporter.agentlog.domain.TraceDTO;
 public class InvokeStatHandler {
 	
 	
-	/** */
+	/** 로그 익스포터의 컨텍스트 */
 	@Autowired
 	private ExporterContext context;
 	
