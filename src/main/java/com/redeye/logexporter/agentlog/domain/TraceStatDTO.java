@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.jutools.StringUtil;
 import com.jutools.TypeUtil;
 
 import lombok.Data;
@@ -14,8 +15,20 @@ import lombok.Data;
  * @author jmsohn
  */
 @Data
-public class TraceDTO {
+public class TraceStatDTO {
 	
+	
+	/** 기관 코드 */
+	private String organCode;
+	
+	/** 도메인 코드 */
+	private String domainCode;
+	
+	/** 호스트 명 */
+	private String hostname;
+	
+	/** 어플리케이션 코드 */
+	private String appCode;
 
 	/** 기간 시작 시간 */
 	private long startTime;
@@ -33,12 +46,39 @@ public class TraceDTO {
 	/**
 	 * 생성자
 	 *
-	 * @param startTime
-	 * @param endTime
+	 * @param organCode 기관 코드
+	 * @param domainCode 도메인 코드
+	 * @param hostname 호스트 명
+	 * @param appCode 어플리케이션 코드
+	 * @param startTime 통계 수집 시간
+	 * @param endTime 통계 종료 시간
 	 */
-	public TraceDTO(long startTime, long endTime) throws Exception {
+	public TraceStatDTO(
+		String organCode,
+		String domainCode,
+		String hostname,
+		String appCode,
+		long startTime,
+		long endTime
+	) throws Exception {
 
 		// 입력 값 검증
+		if(StringUtil.isBlank(organCode) == true) {
+			throw new IllegalArgumentException("'organCode' is null or blank.");
+		}
+		
+		if(StringUtil.isBlank(domainCode) == true) {
+			throw new IllegalArgumentException("'domainCode' is null or blank.");
+		}
+		
+		if(StringUtil.isBlank(hostname) == true) {
+			throw new IllegalArgumentException("'hostname' is null or blank.");
+		}
+		
+		if(StringUtil.isBlank(appCode) == true) {
+			throw new IllegalArgumentException("'appCode' is null or blank.");
+		}
+		
 		if(startTime < 0) {
 			throw new IllegalArgumentException("'startTime' must be greater than 0: " + startTime);
 		}
@@ -52,6 +92,11 @@ public class TraceDTO {
 		}
 
 		// 설정
+		this.organCode = organCode;
+		this.domainCode = domainCode;
+		this.hostname = hostname;
+		this.appCode = appCode;
+		
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}

@@ -11,7 +11,7 @@ import com.jutools.spring.workflow.annotation.Cron;
 import com.jutools.spring.workflow.annotation.CronInit;
 import com.jutools.spring.workflow.annotation.Proc;
 import com.redeye.logexporter.ExporterContext;
-import com.redeye.logexporter.agentlog.domain.TraceDTO;
+import com.redeye.logexporter.agentlog.domain.TraceStatDTO;
 
 /**
  * 호출 통계 핸들러 클래스
@@ -33,14 +33,14 @@ public class InvokeStatHandler {
 	@Autowired
 	private ExporterContext context;
 	
-	/** 앱 호출 트레이스 객체 - 통계 정보도 포함됨 */
-	private TraceDTO appTrace;
+	/** 앱 트레이스 통계 객체 */
+	private TraceStatDTO appTraceStatDTO;
 
 	
 	/**
-	 * 수신된 데이터로 통계 데이터 업데이트
+	 * 수집된 메시지로 부터 통계 데이터 업데이트
 	 * 
-	 * @param message
+	 * @param message 수집 메시지
 	 */
 	@Proc
 	public void record(Message<?> message) throws Exception {
@@ -48,7 +48,7 @@ public class InvokeStatHandler {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> messageMap = (Map<String, Object>)message.getBody();
 		
-		this.appTrace.add(messageMap);
+		this.appTraceStatDTO.add(messageMap);
 	}
 
 	/**
@@ -59,8 +59,11 @@ public class InvokeStatHandler {
 	@CronInit(method="send")
 	public void init(long nextTime) throws Exception {
 		
-		//
-		this.appTrace = new TraceDTO(System.currentTimeMillis(), nextTime);
+		// 앱 트래이스 통계 객체 초기화
+		this.appTraceStatDTO = createTraceStatDTO(
+			System.currentTimeMillis(),
+			nextTime
+		);
 	}
 	
 	/**
@@ -73,18 +76,39 @@ public class InvokeStatHandler {
 	@Cron(period="${app.appstat.period}")
 	public Message<?> send(long baseTime, long nextTime) throws Exception {
 
-		TraceDTO appTraceToSend = null;
+		// 발송할 앱 트래이스 통계 정보 변수
+		TraceStatDTO appTraceStatToSendDTO = null;
 
-		// 앱 트레이스 정보 객체 신규 생성 및 교체
+		// 앱 트레이스 통계 정보 객체 신규 생성 및 교체
 		synchronized(this) {
-			appTraceToSend = this.appTrace;
-			this.appTrace = new TraceDTO(baseTime, nextTime);
+			appTraceStatToSendDTO = this.appTraceStatDTO;
+			this.appTraceStatDTO = createTraceStatDTO(baseTime, nextTime);
 		}
 		
 		// 앱 트레이스 정보 메시지 생성 및 전송
-		Message<TraceDTO> message = new Message<>();
-		message.setBody(appTraceToSend);
+		Message<TraceStatDTO> message = new Message<>();
+		message.setBody(appTraceStatToSendDTO);
 		
+		// 전송 메시지 반환
 		return message;
+	}
+	
+	/**
+	 * 앱 트레이스 통계 객체 생성 및 반환 
+	 * 
+	 * @param startTime 시작 시간
+	 * @param endTime 종료 시간
+	 * @return 생성된 앱 트레이스 통계 객체
+	 */
+	private TraceStatDTO createTraceStatDTO(long startTime, long endTime) throws Exception {
+		
+		return new TraceStatDTO(
+				this.context.getOrganCode(),
+				this.context.getDomainCode(),
+				this.context.getHostname(),
+				this.context.getAppCode(),
+				startTime,
+				endTime
+			);
 	}
 }

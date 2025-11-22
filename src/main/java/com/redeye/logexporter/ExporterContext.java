@@ -28,7 +28,7 @@ public class ExporterContext {
 	@Getter
 	private String domainCode;
 	
-	/** 어플리케이션 코드 */
+	/** 호스트 명 */
 	@Value("${app.context.hostname:}")
 	@Getter
 	private String hostname;
