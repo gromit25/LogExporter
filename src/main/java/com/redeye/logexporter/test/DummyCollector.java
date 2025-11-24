@@ -6,7 +6,6 @@ import com.jutools.DateUtil;
 import com.jutools.spring.workflow.Message;
 import com.jutools.spring.workflow.annotation.Activity;
 import com.jutools.spring.workflow.annotation.Cron;
-import com.jutools.spring.workflow.annotation.Init;
 import com.jutools.spring.workflow.annotation.Proc;
 
 @Activity(value="dummyCollector")
@@ -16,12 +15,11 @@ import com.jutools.spring.workflow.annotation.Proc;
 )
 public class DummyCollector {
 	
-	@Init
 	public void init() throws Exception {
 		System.out.println("### Initialize DummyCollector. ###");
 	}
 
-	@Proc
+	@Proc(init="init")
 	public Message<?> collect() throws Exception {
 		
 		Thread.sleep(1 * 1000);
@@ -35,7 +33,7 @@ public class DummyCollector {
 		return dummy;
 	}
 	
-	@Cron(period = "${test.cron}")
+	@Cron(schedule = "${test.cron}")
 	public void cron() throws Exception {
 		System.out.println(" #### CRON JOB #### ");
 	}

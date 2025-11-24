@@ -72,7 +72,7 @@ public class TraceStatHandler {
 	 * @param endTime 다음 수행 시간
 	 * @return 전송할 메시지
 	 */
-	@Cron(period="${app.appstat.period}", init="initCron")
+	@Cron(schedule="${app.appstat.schedule}", init="initCron")
 	public Message<?> send(long baseTime, long nextTime) throws Exception {
 
 		// 발송할 앱 트래이스 통계 정보 변수
