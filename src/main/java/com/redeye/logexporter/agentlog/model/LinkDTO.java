@@ -1,4 +1,4 @@
-package com.redeye.logexporter.agentlog.domain;
+package com.redeye.logexporter.agentlog.model;
 
 import lombok.Data;
 

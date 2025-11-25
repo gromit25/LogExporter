@@ -9,7 +9,7 @@ import com.jutools.spring.workflow.annotation.Activity;
 import com.jutools.spring.workflow.annotation.Cron;
 import com.jutools.spring.workflow.annotation.Proc;
 import com.redeye.logexporter.ExporterContext;
-import com.redeye.logexporter.agentlog.domain.TraceStatDTO;
+import com.redeye.logexporter.agentlog.model.TraceStatDTO;
 
 import lombok.RequiredArgsConstructor;
 
